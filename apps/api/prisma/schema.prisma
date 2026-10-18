@@ -1,0 +1,383 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// =================================================================
+// 1. USERS & AUTHENTICATION
+// =================================================================
+
+model User {
+  id              String   @id @default(uuid()) @db.Uuid
+  supabaseId      String   @unique @map("supabase_id")
+  email           String   @unique
+  name            String
+  phone           String?
+  role            UserRole @default(DONOR)
+  isActive        Boolean  @default(true) @map("is_active")
+  emailVerified   Boolean  @default(false) @map("email_verified")
+  avatarUrl       String?  @map("avatar_url")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  organizationMemberships OrganizationMember[]
+  createdDonations        Donation[]          @relation("DonationCreator")
+  volunteerRescues        Rescue[]            @relation("RescueVolunteer")
+  notifications           Notification[]
+  auditEvents             AuditEvent[]        @relation("AuditActor")
+  incidentReports         IncidentReport[]    @relation("ReportCreator")
+  assignedReports         IncidentReport[]    @relation("ReportAssignee")
+  verifiedOrganizations   Organization[]      @relation("OrgVerifier")
+
+  @@map("users")
+}
+
+enum UserRole {
+  DONOR
+  RECIPIENT
+  VOLUNTEER
+  ADMIN
+}
+
+// =================================================================
+// 2. ORGANISATIONS
+// =================================================================
+
+model Organization {
+  id                 String             @id @default(uuid()) @db.Uuid
+  name               String
+  type               OrganizationType
+  description        String?
+  phone              String
+  email              String
+  address            String
+  city               String
+  state              String
+  pinCode            String             @map("pin_code")
+  latitude           Float?
+  longitude          Float?
+  operatingHoursJson String?            @map("operating_hours_json")
+  logoUrl            String?            @map("logo_url")
+  verificationStatus VerificationStatus @default(PENDING) @map("verification_status")
+  verifiedAt         DateTime?          @map("verified_at")
+  verifiedById       String?            @map("verified_by_id") @db.Uuid
+  rejectionReason    String?            @map("rejection_reason")
+  isActive           Boolean            @default(true) @map("is_active")
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+
+  verifiedBy       User?                @relation("OrgVerifier", fields: [verifiedById], references: [id])
+  members          OrganizationMember[]
+  donations        Donation[]
+  recipientNeeds   RecipientNeed[]
+  recipientRescues Rescue[]             @relation("RescueRecipient")
+  reports          IncidentReport[]     @relation("ReportOrg")
+
+  @@map("organizations")
+}
+
+enum OrganizationType {
+  RESTAURANT
+  HOTEL
+  CATERER
+  CANTEEN
+  EVENT_ORGANIZER
+  NGO
+  COMMUNITY_KITCHEN
+  FOOD_BANK
+  OTHER
+}
+
+enum VerificationStatus {
+  PENDING
+  UNDER_REVIEW
+  VERIFIED
+  REJECTED
+  SUSPENDED
+}
+
+model OrganizationMember {
+  id             String       @id @default(uuid()) @db.Uuid
+  userId         String       @map("user_id") @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  role           String       @default("MEMBER")
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@map("organization_members")
+}
+
+// =================================================================
+// 3. DONATIONS
+// =================================================================
+
+model Donation {
+  id                   String         @id @default(uuid()) @db.Uuid
+  title                String
+  description          String?
+  category             FoodCategory
+  quantity             Float
+  unit                 QuantityUnit
+  imageUrl             String?        @map("image_url")
+  preparedAt           DateTime?      @map("prepared_at")
+  pickupDeadline       DateTime       @map("pickup_deadline")
+  pickupWindowStart    DateTime?      @map("pickup_window_start")
+  pickupWindowEnd      DateTime?      @map("pickup_window_end")
+  pickupAddress        String         @map("pickup_address")
+  pickupCity           String         @map("pickup_city")
+  pickupLatitude       Float?         @map("pickup_latitude")
+  pickupLongitude      Float?         @map("pickup_longitude")
+  pickupInstructions   String?        @map("pickup_instructions")
+  storageRequirements  String?        @map("storage_requirements")
+  allergensJson        String         @default("[]") @map("allergens_json")
+  handlingNotes        String?        @map("handling_notes")
+  status               DonationStatus @default(AVAILABLE)
+  donorOrganizationId  String         @map("donor_organization_id") @db.Uuid
+  createdById          String         @map("created_by_id") @db.Uuid
+  cancelledAt          DateTime?      @map("cancelled_at")
+  cancellationReason   String?        @map("cancellation_reason")
+  createdAt            DateTime       @default(now()) @map("created_at")
+  updatedAt            DateTime       @updatedAt @map("updated_at")
+
+  donorOrganization Organization      @relation(fields: [donorOrganizationId], references: [id])
+  createdBy         User              @relation("DonationCreator", fields: [createdById], references: [id])
+  rescue            Rescue?
+  reports           IncidentReport[]  @relation("ReportDonation")
+
+  @@index([status, pickupDeadline])
+  @@index([donorOrganizationId])
+  @@index([category])
+  @@map("donations")
+}
+
+enum FoodCategory {
+  VEGETARIAN_MEALS
+  NON_VEGETARIAN_MEALS
+  VEGAN_MEALS
+  BAKED_GOODS
+  DAIRY
+  FRUITS_VEGETABLES
+  GRAINS_CEREALS
+  BEVERAGES
+  PACKAGED_FOOD
+  OTHER
+}
+
+enum QuantityUnit {
+  PORTIONS
+  KILOGRAMS
+  LITERS
+  BOXES
+  PACKETS
+  PIECES
+}
+
+enum DonationStatus {
+  DRAFT
+  AVAILABLE
+  RESERVED
+  IN_RESCUE
+  DELIVERED
+  CANCELLED
+  EXPIRED
+  FAILED
+}
+
+// =================================================================
+// 4. RECIPIENT NEEDS
+// =================================================================
+
+model RecipientNeed {
+  id                   String        @id @default(uuid()) @db.Uuid
+  organizationId       String        @map("organization_id") @db.Uuid
+  categoriesJson       String        @default("[]") @map("categories_json")
+  maxQuantity          Float?        @map("max_quantity")
+  maxQuantityUnit      QuantityUnit? @map("max_quantity_unit")
+  serviceRadius        Float?        @map("service_radius")
+  receivingWindowStart String?       @map("receiving_window_start")
+  receivingWindowEnd   String?       @map("receiving_window_end")
+  dietaryNotes         String?       @map("dietary_notes")
+  isActive             Boolean       @default(true) @map("is_active")
+  createdAt            DateTime      @default(now()) @map("created_at")
+  updatedAt            DateTime      @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId])
+  @@map("recipient_needs")
+}
+
+// =================================================================
+// 5. RESCUES
+// =================================================================
+
+model Rescue {
+  id                      String       @id @default(uuid()) @db.Uuid
+  donationId              String       @unique @map("donation_id") @db.Uuid
+  recipientOrganizationId String       @map("recipient_organization_id") @db.Uuid
+  volunteerId             String?      @map("volunteer_id") @db.Uuid
+  status                  RescueStatus @default(OPEN)
+  assignedAt              DateTime?    @map("assigned_at")
+  pickedUpAt              DateTime?    @map("picked_up_at")
+  deliveredAt             DateTime?    @map("delivered_at")
+  cancelledAt             DateTime?    @map("cancelled_at")
+  cancellationReason      String?      @map("cancellation_reason")
+  failureReason           String?      @map("failure_reason")
+  pickupNotes             String?      @map("pickup_notes")
+  deliveryNotes           String?      @map("delivery_notes")
+  deliveryEvidence        String?      @map("delivery_evidence")
+  createdAt               DateTime     @default(now()) @map("created_at")
+  updatedAt               DateTime     @updatedAt @map("updated_at")
+
+  donation              Donation         @relation(fields: [donationId], references: [id])
+  recipientOrganization Organization     @relation("RescueRecipient", fields: [recipientOrganizationId], references: [id])
+  volunteer             User?            @relation("RescueVolunteer", fields: [volunteerId], references: [id])
+  events                RescueEvent[]
+  reports               IncidentReport[] @relation("ReportRescue")
+
+  @@index([status])
+  @@index([volunteerId])
+  @@index([recipientOrganizationId])
+  @@map("rescues")
+}
+
+enum RescueStatus {
+  OPEN
+  ASSIGNED
+  PICKED_UP
+  DELIVERED
+  CANCELLED
+  FAILED
+  EXPIRED
+}
+
+model RescueEvent {
+  id        String   @id @default(uuid()) @db.Uuid
+  rescueId  String   @map("rescue_id") @db.Uuid
+  eventType String   @map("event_type")
+  actorId   String   @map("actor_id") @db.Uuid
+  actorRole String   @map("actor_role")
+  dataJson  String?  @map("data_json")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  rescue Rescue @relation(fields: [rescueId], references: [id], onDelete: Cascade)
+
+  @@index([rescueId])
+  @@map("rescue_events")
+}
+
+// =================================================================
+// 6. NOTIFICATIONS
+// =================================================================
+
+model Notification {
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  type         String
+  title        String
+  message      String
+  resourceType String?   @map("resource_type")
+  resourceId   String?   @map("resource_id") @db.Uuid
+  isRead       Boolean   @default(false) @map("is_read")
+  readAt       DateTime? @map("read_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// =================================================================
+// 7. AUDIT EVENTS
+// =================================================================
+
+model AuditEvent {
+  id           String   @id @default(uuid()) @db.Uuid
+  actorId      String   @map("actor_id") @db.Uuid
+  actorRole    String   @map("actor_role")
+  action       String
+  resourceType String   @map("resource_type")
+  resourceId   String   @map("resource_id")
+  detailsJson  String?  @map("details_json")
+  ipAddress    String?  @map("ip_address")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  actor User @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([resourceType, resourceId])
+  @@index([actorId])
+  @@index([createdAt])
+  @@map("audit_events")
+}
+
+// =================================================================
+// 8. INCIDENT REPORTS
+// =================================================================
+
+model IncidentReport {
+  id             String         @id @default(uuid()) @db.Uuid
+  reporterId     String         @map("reporter_id") @db.Uuid
+  category       ReportCategory
+  description    String
+  donationId     String?        @map("donation_id") @db.Uuid
+  rescueId       String?        @map("rescue_id") @db.Uuid
+  organizationId String?        @map("organization_id") @db.Uuid
+  status         ReportStatus   @default(OPEN)
+  assignedToId   String?        @map("assigned_to_id") @db.Uuid
+  resolution     String?
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  reporter     User          @relation("ReportCreator", fields: [reporterId], references: [id])
+  assignedTo   User?         @relation("ReportAssignee", fields: [assignedToId], references: [id])
+  donation     Donation?     @relation("ReportDonation", fields: [donationId], references: [id])
+  rescue       Rescue?       @relation("ReportRescue", fields: [rescueId], references: [id])
+  organization Organization? @relation("ReportOrg", fields: [organizationId], references: [id])
+
+  @@index([status])
+  @@map("incident_reports")
+}
+
+enum ReportCategory {
+  FOOD_SAFETY
+  OPERATIONAL
+  ABUSE
+  OTHER
+}
+
+enum ReportStatus {
+  OPEN
+  INVESTIGATING
+  RESOLVED
+  DISMISSED
+}
+
+// =================================================================
+// 9. VOLUNTEER AVAILABILITY
+// =================================================================
+
+model VolunteerAvailability {
+  id                String   @id @default(uuid()) @db.Uuid
+  userId            String   @unique @map("user_id") @db.Uuid
+  isAvailable       Boolean  @default(true) @map("is_available")
+  serviceRadius     Float?   @map("service_radius")
+  availableDaysJson String   @default("[]") @map("available_days_json")
+  transportMode     String?  @map("transport_mode")
+  maxCapacity       String?  @map("max_capacity")
+  latitude          Float?
+  longitude         Float?
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@map("volunteer_availability")
+}
