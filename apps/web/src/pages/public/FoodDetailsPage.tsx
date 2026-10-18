@@ -60,7 +60,7 @@ export function FoodDetailsPage() {
         {/* Back Link */}
         <Link
           to="/food"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-bridge-green hover:text-forest-night mb-6 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-text hover:text-neon-pulse mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Available Food
@@ -68,40 +68,40 @@ export function FoodDetailsPage() {
 
         <div className="space-y-6">
           {/* Header Card */}
-          <GlassCard variant="light" padding="lg" className="border-white/70 shadow-glass-md">
-            <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-black/5">
+          <GlassCard variant="light" padding="lg" className="border-fog-border shadow-md">
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-fog-border">
               <div className="flex items-center gap-2">
                 <Badge variant="neutral">{item.category}</Badge>
                 <Badge variant="success" dot>
                   {item.status}
                 </Badge>
               </div>
-              <span className="text-xs text-muted-text">Listing ID: #{item.id}</span>
+              <span className="text-xs text-slate-text">Listing ID: #{item.id}</span>
             </div>
 
             <div className="py-4 space-y-4">
-              <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+              <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
                 {item.title}
               </h1>
-              <p className="text-sm text-muted-text leading-relaxed">
+              <p className="text-sm text-slate-text leading-relaxed">
                 {item.description}
               </p>
 
               {/* Quantity Highlight */}
-              <div className="p-4 rounded-xl bg-fresh-mint/15 border border-fresh-mint/30 flex items-center justify-between">
+              <div className="p-4 rounded-card bg-neon-pulse/15 border border-neon-pulse/30 flex items-center justify-between">
                 <div>
-                  <span className="text-xs uppercase font-bold text-forest-night">
+                  <span className="text-[9px] uppercase font-medium tracking-[0.05em] text-obsidian-shell">
                     Available Quantity
                   </span>
-                  <div className="text-2xl font-extrabold text-forest-night mt-0.5">
+                  <div className="text-2xl font-bold text-obsidian-shell mt-0.5">
                     {item.quantity} {item.unit}
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs uppercase font-bold text-muted-text">
+                  <span className="text-[9px] uppercase font-medium tracking-[0.05em] text-slate-text">
                     Estimated Coverage
                   </span>
-                  <div className="text-sm font-semibold text-bridge-green mt-0.5">
+                  <div className="text-sm font-semibold text-obsidian-shell mt-0.5">
                     Feeds ~45 people
                   </div>
                 </div>
@@ -110,21 +110,21 @@ export function FoodDetailsPage() {
 
             {/* Time Constraints Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <div className="p-3.5 rounded-xl bg-white/60 border border-white/60 space-y-1">
-                <span className="text-[10px] uppercase font-bold text-muted-text block">
+              <div className="p-3.5 rounded-card bg-white/80 border border-fog-border space-y-1">
+                <span className="text-[9px] uppercase font-medium tracking-[0.05em] text-slate-text block">
                   Preparation Timestamp
                 </span>
-                <span className="text-sm font-bold text-forest-night flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-bridge-green" />
+                <span className="text-sm font-semibold text-obsidian-shell flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-neon-pulse" />
                   {item.preparedAt}
                 </span>
               </div>
-              <div className="p-3.5 rounded-xl bg-white/60 border border-white/60 space-y-1">
-                <span className="text-[10px] uppercase font-bold text-muted-text block">
+              <div className="p-3.5 rounded-card bg-white/80 border border-fog-border space-y-1">
+                <span className="text-[9px] uppercase font-medium tracking-[0.05em] text-slate-text block">
                   Strict Pickup Deadline
                 </span>
-                <span className="text-sm font-bold text-forest-night flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-harvest-gold" />
+                <span className="text-sm font-semibold text-obsidian-shell flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-signal-yellow" />
                   {item.pickupDeadline}
                 </span>
               </div>
@@ -132,15 +132,15 @@ export function FoodDetailsPage() {
           </GlassCard>
 
           {/* Safety & Handling Card */}
-          <GlassCard variant="light" padding="lg">
-            <h3 className="text-base font-bold text-forest-night mb-3 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-bridge-green" />
+          <GlassCard variant="light" padding="lg" className="border-fog-border shadow-md">
+            <h3 className="text-base font-medium text-obsidian-shell mb-3 flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-neon-pulse" />
               Food Safety & Allergen Information
             </h3>
 
             <div className="space-y-4 text-xs">
               <div>
-                <span className="font-semibold text-primary-text block mb-1">
+                <span className="font-semibold text-obsidian-shell block mb-1">
                   Declared Allergens
                 </span>
                 {item.allergens.length > 0 ? (
@@ -148,45 +148,45 @@ export function FoodDetailsPage() {
                     {item.allergens.map((alg) => (
                       <span
                         key={alg}
-                        className="px-2.5 py-1 rounded-full bg-soft-coral/20 text-[#7a2e20] border border-soft-coral/30 font-semibold"
+                        className="px-2.5 py-1 rounded-pill bg-soft-coral/15 text-soft-coral border border-soft-coral/30 font-medium"
                       >
                         {alg}
                       </span>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-muted-text">None explicitly reported by donor.</p>
+                  <p className="text-slate-text">None explicitly reported by donor.</p>
                 )}
-                <p className="text-[11px] text-muted-text/80 mt-1 italic">
+                <p className="text-[11px] text-slate-text mt-1 italic">
                   Note: Absence of allergen declarations does not guarantee allergen-free preparation.
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-black/5 space-y-1">
-                <span className="font-semibold text-primary-text block">
+              <div className="pt-2 border-t border-fog-border space-y-1">
+                <span className="font-semibold text-obsidian-shell block">
                   Storage & Handling Specifications
                 </span>
-                <p className="text-muted-text leading-relaxed">{item.storageRequirements}</p>
+                <p className="text-slate-text leading-relaxed">{item.storageRequirements}</p>
               </div>
 
-              <div className="pt-2 border-t border-black/5 space-y-1">
-                <span className="font-semibold text-primary-text block">
+              <div className="pt-2 border-t border-fog-border space-y-1">
+                <span className="font-semibold text-obsidian-shell block">
                   Packaging & Handover Instructions
                 </span>
-                <p className="text-muted-text leading-relaxed">{item.handlingNotes}</p>
+                <p className="text-slate-text leading-relaxed">{item.handlingNotes}</p>
               </div>
             </div>
           </GlassCard>
 
           {/* Donor Organisation Card */}
-          <GlassCard variant="light" padding="md">
+          <GlassCard variant="light" padding="md" className="border-fog-border shadow-md">
             <div className="flex items-start justify-between">
               <div className="space-y-1">
-                <span className="text-[10px] uppercase font-bold text-muted-text">
+                <span className="text-[9px] uppercase font-medium tracking-[0.05em] text-slate-text">
                   Donor Organisation
                 </span>
-                <h4 className="text-base font-bold text-forest-night flex items-center gap-1.5">
-                  <Building2 className="w-4 h-4 text-bridge-green" />
+                <h4 className="text-base font-semibold text-obsidian-shell flex items-center gap-1.5">
+                  <Building2 className="w-4 h-4 text-obsidian-shell/70" />
                   {item.donorOrg.name}
                   {item.donorOrg.verified && (
                     <Badge variant="success" size="sm">
@@ -194,22 +194,22 @@ export function FoodDetailsPage() {
                     </Badge>
                   )}
                 </h4>
-                <p className="text-xs text-muted-text flex items-center gap-1 mt-1">
+                <p className="text-xs text-slate-text flex items-center gap-1 mt-1">
                   <MapPin className="w-3.5 h-3.5" />
                   {item.donorOrg.locality}, {item.donorOrg.city}
                 </p>
               </div>
               <div className="text-right">
-                <span className="text-xs text-muted-text block">Completed Rescues</span>
-                <span className="text-sm font-bold text-forest-night">
+                <span className="text-xs text-slate-text block">Completed Rescues</span>
+                <span className="text-sm font-bold text-obsidian-shell">
                   {item.donorOrg.completedDonations}
                 </span>
               </div>
             </div>
 
             {/* Privacy Protection Note */}
-            <div className="mt-4 p-3 rounded-xl bg-black/[0.03] text-xs text-muted-text flex items-start gap-2">
-              <Lock className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+            <div className="mt-4 p-3 rounded-card bg-white/80 border border-fog-border text-xs text-slate-text flex items-start gap-2">
+              <Lock className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
               <span>
                 Exact gate entrance instructions and contact phone number will be revealed exclusively to the verified recipient organization upon claim confirmation.
               </span>
@@ -218,14 +218,14 @@ export function FoodDetailsPage() {
 
           {/* Action Callout */}
           {acceptedSuccess ? (
-            <GlassCard variant="mint" padding="lg" className="text-center space-y-3 animate-fade-in">
-              <div className="w-12 h-12 rounded-full bg-fresh-mint flex items-center justify-center mx-auto text-forest-night">
+            <GlassCard variant="light" padding="lg" className="text-center space-y-3 animate-fade-in border-neon-pulse/40">
+              <div className="w-12 h-12 rounded-full bg-neon-pulse flex items-center justify-center mx-auto text-obsidian-shell shadow-sm">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-forest-night">
+              <h3 className="text-lg font-medium text-obsidian-shell">
                 Donation Successfully Reserved!
               </h3>
-              <p className="text-xs text-primary-text/80 max-w-sm mx-auto">
+              <p className="text-xs text-slate-text max-w-sm mx-auto">
                 A volunteer rescue task has been generated for pickup. You can monitor the active delivery
                 timeline in your Recipient Dashboard.
               </p>
@@ -238,26 +238,26 @@ export function FoodDetailsPage() {
               </div>
             </GlassCard>
           ) : (
-            <GlassCard variant="light" padding="lg" className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <GlassCard variant="light" padding="lg" className="flex flex-col sm:flex-row items-center justify-between gap-4 border-fog-border shadow-md">
               <div className="space-y-1 text-center sm:text-left">
-                <h4 className="text-base font-bold text-forest-night">
+                <h4 className="text-base font-semibold text-obsidian-shell">
                   Are you an authorized Recipient NGO?
                 </h4>
-                <p className="text-xs text-muted-text">
+                <p className="text-xs text-slate-text">
                   Accepting commits your organization to receive this food before the deadline.
                 </p>
               </div>
 
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <Link to="/login" className="flex-1 sm:flex-initial">
-                  <Button variant="outline" size="md" className="w-full justify-center">
+                  <Button variant="outline" size="md" className="w-full justify-center text-obsidian-shell border-obsidian-shell/20 hover:border-obsidian-shell">
                     Sign In
                   </Button>
                 </Link>
                 <Button
                   variant="primary"
                   size="md"
-                  className="flex-1 sm:flex-initial justify-center shadow-md hover:shadow-glow-mint"
+                  className="flex-1 sm:flex-initial justify-center"
                   isLoading={isAccepting}
                   onClick={handleAcceptDonation}
                 >

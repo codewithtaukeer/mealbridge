@@ -18,17 +18,18 @@ export function FoodSafetyPage() {
     <div className="py-12">
       <PageContainer size="lg" withBloom>
         <SectionHeading
-          badge="Safety & Accountability"
-          title="Food Safety & Handling Guidelines"
+          theme="dark"
+          badge="Safety &amp; Accountability"
+          title="Food Safety &amp; Handling Guidelines"
           description="Surplus food redistribution must always prioritize health and dignity. Review the core operational protocols followed by donors, recipients, and couriers on MealBridge."
         />
 
-        {/* Regulatory & Platform Disclaimer */}
-        <div className="mb-10 p-5 rounded-2xl bg-harvest-gold/15 border border-harvest-gold/40 flex items-start gap-4">
-          <AlertTriangle className="w-6 h-6 text-harvest-gold shrink-0 mt-0.5" />
-          <div className="text-xs sm:text-sm text-forest-night leading-relaxed">
-            <strong className="block text-sm font-bold mb-1">
-              Important Safety & Regulatory Notice
+        {/* Regulatory &amp; Platform Disclaimer */}
+        <div className="mb-10 p-5 rounded-2xl bg-signal-yellow/10 border border-signal-yellow/30 flex items-start gap-4">
+          <AlertTriangle className="w-6 h-6 text-signal-yellow shrink-0 mt-0.5" />
+          <div className="text-xs sm:text-sm text-pure-white/80 leading-relaxed">
+            <strong className="block text-sm font-medium text-pure-white mb-1">
+              Important Safety &amp; Regulatory Notice
             </strong>
             MealBridge serves as an operational coordination platform. Platform verification verifies
             an organisation&apos;s identity and registration; it does not constitute certification of individual
@@ -42,55 +43,55 @@ export function FoodSafetyPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {/* Card 1: Donors */}
           <GlassCard variant="light" padding="lg" className="space-y-4">
-            <div className="w-10 h-10 rounded-xl bg-bridge-green/15 flex items-center justify-center text-bridge-green">
+            <div className="w-10 h-10 rounded-xl bg-neon-pulse/10 flex items-center justify-center text-neon-pulse">
               <Thermometer className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-forest-night">
+            <h3 className="text-lg font-medium text-obsidian-shell">
               1. Donor Standards
             </h3>
-            <ul className="space-y-2 text-xs text-muted-text">
+            <ul className="space-y-2 text-xs text-slate-text">
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Prepare in licensed, clean food-grade kitchens.</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Record accurate preparation timestamps. Do not donate food older than recommended shelf limits.</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Declare all known allergens explicitly (peanuts, dairy, wheat, gluten, shellfish).</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Maintain hot holding (&gt;60°C) or rapid chilling (&lt;4°C) prior to volunteer collection.</span>
               </li>
             </ul>
           </GlassCard>
 
-          {/* Card 2: Transport & Volunteer */}
-          <GlassCard variant="light" padding="lg" className="space-y-4 border-fresh-mint/40">
-            <div className="w-10 h-10 rounded-xl bg-fresh-mint/30 flex items-center justify-center text-forest-night">
+          {/* Card 2: Transport &amp; Volunteer */}
+          <GlassCard variant="light" padding="lg" className="space-y-4 border-neon-pulse/20">
+            <div className="w-10 h-10 rounded-xl bg-neon-pulse/10 flex items-center justify-center text-neon-pulse">
               <Clock className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-forest-night">
-              2. Transit & Handover
+            <h3 className="text-lg font-medium text-obsidian-shell">
+              2. Transit &amp; Handover
             </h3>
-            <ul className="space-y-2 text-xs text-muted-text">
+            <ul className="space-y-2 text-xs text-slate-text">
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Volunteers collect strictly within the posted pickup window.</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Food must be sealed in clean, spill-proof, insulated food containers.</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Keep delivery transit times under 60 minutes for cooked meals.</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Direct transit from donor to recipient with no intermediate stops or repacking.</span>
               </li>
             </ul>
@@ -98,27 +99,27 @@ export function FoodSafetyPage() {
 
           {/* Card 3: Recipient Inspection */}
           <GlassCard variant="light" padding="lg" className="space-y-4">
-            <div className="w-10 h-10 rounded-xl bg-harvest-gold/25 flex items-center justify-center text-[#735100]">
+            <div className="w-10 h-10 rounded-xl bg-signal-yellow/15 flex items-center justify-center text-signal-yellow">
               <FileCheck2 className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-forest-night">
+            <h3 className="text-lg font-medium text-obsidian-shell">
               3. Recipient Inspection
             </h3>
-            <ul className="space-y-2 text-xs text-muted-text">
+            <ul className="space-y-2 text-xs text-slate-text">
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Visually inspect packaging integrity upon volunteer arrival.</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Perform sensory smell and temperature checks before serving.</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Serve hot food immediately or reheat to a minimum core temperature of 74°C.</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0 mt-0.5" />
                 <span>Reject any food item showing signs of spoilage or compromised packaging.</span>
               </li>
             </ul>
@@ -128,12 +129,12 @@ export function FoodSafetyPage() {
         {/* Acceptable vs Unacceptable Criteria */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {/* Acceptable Food */}
-          <GlassCard variant="light" padding="lg" className="space-y-3 border-fresh-mint/40">
-            <h4 className="text-base font-bold text-forest-night flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-bridge-green" />
+          <GlassCard variant="light" padding="lg" className="space-y-3 border-neon-pulse/25">
+            <h4 className="text-base font-medium text-obsidian-shell flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-neon-pulse" />
               Eligible for Redistribution
             </h4>
-            <ul className="text-xs text-muted-text space-y-2 leading-relaxed">
+            <ul className="text-xs text-slate-text space-y-2 leading-relaxed">
               <li>• Excess banquet or mess hall food that has been stored covered under temperature control.</li>
               <li>• Unserved, unconsumed prepared dishes kept away from public self-service buffets.</li>
               <li>• Surplus baked goods, breads, buns, and sealed pastry items from registered bakeries.</li>
@@ -143,12 +144,12 @@ export function FoodSafetyPage() {
           </GlassCard>
 
           {/* Unacceptable Food */}
-          <GlassCard variant="light" padding="lg" className="space-y-3 border-soft-coral/40">
-            <h4 className="text-base font-bold text-forest-night flex items-center gap-2">
+          <GlassCard variant="light" padding="lg" className="space-y-3 border-soft-coral/30">
+            <h4 className="text-base font-medium text-obsidian-shell flex items-center gap-2">
               <XCircle className="w-5 h-5 text-soft-coral" />
               Strictly Prohibited
             </h4>
-            <ul className="text-xs text-muted-text space-y-2 leading-relaxed">
+            <ul className="text-xs text-slate-text space-y-2 leading-relaxed">
               <li>• Partially consumed food from customer dining tables or open self-serve buffet plates.</li>
               <li>• Cooked food held in the danger zone (5°C to 60°C) for more than 2 hours.</li>
               <li>• Food with unsealed, punctured, or swollen commercial packaging.</li>
@@ -161,10 +162,10 @@ export function FoodSafetyPage() {
         {/* Reporting an Incident */}
         <GlassCard variant="light" padding="lg" className="flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1">
-            <h4 className="text-base font-bold text-forest-night">
+            <h4 className="text-base font-medium text-obsidian-shell">
               Encountered an issue with food condition or handover?
             </h4>
-            <p className="text-xs text-muted-text">
+            <p className="text-xs text-slate-text">
               Our safety review team inspects all flagged reports. You can file an incident report referencing any active or past rescue.
             </p>
           </div>
