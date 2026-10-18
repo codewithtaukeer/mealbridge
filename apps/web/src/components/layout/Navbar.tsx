@@ -6,7 +6,6 @@ import { ROLE_DASHBOARD_PATHS } from '@mealbridge/shared';
 import {
   Menu,
   X,
-  HeartHandshake,
   UtensilsCrossed,
   Sparkles,
   LayoutDashboard,
@@ -60,16 +59,12 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group select-none">
-            <div className="relative w-10 h-10 rounded-xl bg-deep-abyss border border-neon-pulse/30 flex items-center justify-center shadow-md overflow-hidden p-1.5 transition-transform duration-200 group-hover:scale-105">
+            <div className="relative w-10 h-10 rounded-xl bg-deep-abyss border border-neon-pulse/30 flex items-center justify-center shadow-md overflow-hidden p-1 transition-transform duration-200 group-hover:scale-105">
               <img
                 src="/mealbridge-logo.png"
                 alt="MealBridge Logo"
-                className="w-full h-full object-contain filter invert brightness-200"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
+                className="w-full h-full object-contain"
               />
-              <HeartHandshake className="w-5 h-5 text-neon-pulse absolute" />
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-display font-medium tracking-tight text-pure-white group-hover:text-neon-pulse transition-colors">

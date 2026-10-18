@@ -24,6 +24,18 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
+// Root index
+app.get('/', (_req, res) => {
+  res.json({
+    service: 'MealBridge Coordination API',
+    status: 'online',
+    version: '1.0.0',
+    documentation: '/api/v1',
+    health: '/health',
+    realtime: 'Socket.IO active on /socket.io'
+  });
+});
+
 // Health check
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'mealbridge-api', timestamp: new Date().toISOString() });

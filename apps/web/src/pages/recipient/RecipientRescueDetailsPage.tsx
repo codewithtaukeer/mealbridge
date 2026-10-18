@@ -11,6 +11,9 @@ import {
   Clock,
   CheckCircle2,
   ArrowLeft,
+  Phone,
+  Mail,
+  Building,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -136,6 +139,48 @@ export function RecipientRescueDetailsPage() {
               {rescue.volunteerId ? 'Assigned' : 'Open'}
             </Badge>
           </div>
+
+          {/* Direct Connect to Food Donor / Restaurant */}
+          {rescue.donation?.donorOrganization && (
+            <div className="p-4 rounded-xl bg-obsidian-shell/5 border border-fog-border space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-neon-pulse/15 flex items-center justify-center text-neon-pulse">
+                    <Building className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-slate-text block">
+                      Direct Donor Coordination
+                    </span>
+                    <span className="font-bold text-sm text-obsidian-shell">
+                      {rescue.donation.donorOrganization.name}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  {rescue.donation.donorOrganization.phone && (
+                    <a
+                      href={`tel:${rescue.donation.donorOrganization.phone}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pill bg-neon-pulse text-obsidian-shell text-xs font-semibold hover:bg-neon-pulse/90 shadow-sm"
+                    >
+                      <Phone className="w-3.5 h-3.5" /> Call Donor
+                    </a>
+                  )}
+                  {rescue.donation.donorOrganization.email && (
+                    <a
+                      href={`mailto:${rescue.donation.donorOrganization.email}?subject=MealBridge Inquiry: ${rescue.donation.title}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pill bg-obsidian-shell text-pure-white text-xs font-semibold hover:bg-obsidian-shell/90 shadow-sm"
+                    >
+                      <Mail className="w-3.5 h-3.5" /> Email
+                    </a>
+                  )}
+                </div>
+              </div>
+              <p className="text-xs text-slate-text">
+                Pickup Address: {rescue.donation.pickupAddress}, {rescue.donation.pickupCity}
+              </p>
+            </div>
+          )}
 
           {/* Action to confirm intake if picked up */}
           {rescue.status === 'PICKED_UP' && (

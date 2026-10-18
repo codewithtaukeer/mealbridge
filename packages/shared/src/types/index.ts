@@ -84,6 +84,7 @@ export interface Donation {
   status: DonationStatus;
   donorOrganizationId: string;
   donorOrganization?: Organization;
+  rescue?: Rescue;
   createdById: string;
   cancelledAt?: string;
   cancellationReason?: string;

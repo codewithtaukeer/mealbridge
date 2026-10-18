@@ -15,6 +15,9 @@ import {
   Building,
   CheckCircle2,
   XCircle,
+  Phone,
+  Mail,
+  MessageSquare,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -254,6 +257,59 @@ export function DonationDetailsPage() {
                 </div>
               )}
             </GlassCard>
+
+            {/* Direct Connect to Recipient NGO */}
+            {donation.rescue?.recipientOrganization && (
+              <GlassCard variant="light" padding="lg" className="border-neon-pulse/40 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-neon-pulse/15 flex items-center justify-center text-neon-pulse">
+                      <MessageSquare className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold uppercase tracking-[0.05em] text-obsidian-shell">
+                        Direct Connect: Recipient NGO
+                      </h3>
+                      <p className="text-[11px] text-slate-text">Direct coordination channel established for this rescue</p>
+                    </div>
+                  </div>
+                  <Badge variant="success" size="sm" dot>
+                    Connected
+                  </Badge>
+                </div>
+
+                <div className="p-4 rounded-xl bg-obsidian-shell/5 border border-fog-border space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <span className="text-sm font-bold text-obsidian-shell">
+                        {donation.rescue.recipientOrganization.name}
+                      </span>
+                      <p className="text-xs text-slate-text">
+                        {donation.rescue.recipientOrganization.address}, {donation.rescue.recipientOrganization.city}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {donation.rescue.recipientOrganization.phone && (
+                        <a
+                          href={`tel:${donation.rescue.recipientOrganization.phone}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pill bg-neon-pulse text-obsidian-shell text-xs font-semibold hover:bg-neon-pulse/90 shadow-sm"
+                        >
+                          <Phone className="w-3.5 h-3.5" /> Call NGO
+                        </a>
+                      )}
+                      {donation.rescue.recipientOrganization.email && (
+                        <a
+                          href={`mailto:${donation.rescue.recipientOrganization.email}?subject=MealBridge Coordination: ${donation.title}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pill bg-obsidian-shell text-pure-white text-xs font-semibold hover:bg-obsidian-shell/90 shadow-sm"
+                        >
+                          <Mail className="w-3.5 h-3.5" /> Email
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </GlassCard>
+            )}
           </div>
 
           {/* Right Column: Algorithmic Match Suggestions */}

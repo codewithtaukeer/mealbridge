@@ -131,8 +131,8 @@ export function AppLayout() {
           {/* Logo Brand */}
           <div className="flex items-center justify-between px-2 pt-1">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-neon-pulse/15 flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 border border-neon-pulse/30">
-                <HeartHandshake className="w-5 h-5 text-neon-pulse" />
+              <div className="w-10 h-10 rounded-xl bg-deep-abyss flex items-center justify-center p-1 transition-transform group-hover:scale-105 border border-neon-pulse/30 overflow-hidden">
+                <img src="/mealbridge-logo.png" alt="MealBridge" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="text-lg font-display font-bold tracking-tight text-white">

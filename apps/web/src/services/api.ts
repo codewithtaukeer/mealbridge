@@ -5,8 +5,12 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/
 
 async function getAuthHeader(): Promise<Record<string, string>> {
   const { data } = await supabase.auth.getSession();
-  const token = data.session?.access_token;
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  const token = data.session?.access_token || localStorage.getItem('mealbridge_demo_token');
+  const demoRole = localStorage.getItem('mealbridge_demo_role');
+  const headers: Record<string, string> = {};
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (demoRole) headers['x-demo-role'] = demoRole;
+  return headers;
 }
 
 export async function apiRequest<T>(
