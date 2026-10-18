@@ -1,0 +1,229 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { api } from '@/services/api';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import type { Donation, DonationStatus } from '@mealbridge/shared';
+import {
+  UtensilsCrossed,
+  PlusCircle,
+  Search,
+  Clock,
+  ArrowRight,
+  Calendar,
+} from 'lucide-react';
+import toast from 'react-hot-toast';
+
+export function DonationsListPage() {
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [filteredDonations, setFilteredDonations] = useState<Donation[]>([]);
+  const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchDonations = async () => {
+    try {
+      setIsLoading(true);
+      const res = await api.get<Donation[]>('/donations?mine=true&limit=50');
+      if (res.data) {
+        setDonations(res.data);
+        setFilteredDonations(res.data);
+      }
+    } catch {
+      toast.error('Failed to load donations');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDonations();
+  }, []);
+
+  // Filter effect
+  useEffect(() => {
+    let result = [...donations];
+
+    if (selectedStatus !== 'ALL') {
+      result = result.filter((d) => d.status === selectedStatus);
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (d) =>
+          d.title.toLowerCase().includes(q) ||
+          d.category.toLowerCase().includes(q) ||
+          d.pickupCity.toLowerCase().includes(q)
+      );
+    }
+
+    setFilteredDonations(result);
+  }, [donations, selectedStatus, searchQuery]);
+
+  const statusFilters = [
+    { label: 'All Listings', value: 'ALL' },
+    { label: 'Available', value: 'AVAILABLE' },
+    { label: 'Reserved', value: 'RESERVED' },
+    { label: 'In Transit', value: 'IN_RESCUE' },
+    { label: 'Delivered', value: 'DELIVERED' },
+    { label: 'Cancelled', value: 'CANCELLED' },
+  ];
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+            My Food Donations
+          </h1>
+          <p className="text-xs sm:text-sm text-muted-text mt-1">
+            Manage your surplus food donations, inspect recipient claims, and track volunteer pickups.
+          </p>
+        </div>
+
+        <Link to="/donor/donations/create">
+          <Button
+            variant="primary"
+            size="md"
+            leftIcon={<PlusCircle className="w-4 h-4 text-forest-night" />}
+            className="shadow-md hover:shadow-glow-mint whitespace-nowrap"
+          >
+            Create Food Listing
+          </Button>
+        </Link>
+      </div>
+
+      {/* Filter and Search Bar */}
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+        {/* Status Filters */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 lg:pb-0 custom-scrollbar">
+          {statusFilters.map((sf) => (
+            <button
+              key={sf.value}
+              onClick={() => setSelectedStatus(sf.value)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                selectedStatus === sf.value
+                  ? 'bg-bridge-green text-white shadow-sm'
+                  : 'bg-white/60 text-muted-text hover:bg-white/90 border border-black/5'
+              }`}
+            >
+              {sf.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Search */}
+        <div className="w-full lg:w-72">
+          <Input
+            placeholder="Search listings..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            leftIcon={<Search className="w-4 h-4 text-muted-text" />}
+          />
+        </div>
+      </div>
+
+      {/* Listings Grid */}
+      {isLoading ? (
+        <div className="py-20 text-center text-muted-text text-sm">Loading your donations...</div>
+      ) : filteredDonations.length === 0 ? (
+        <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-4 border-dashed">
+          <div className="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center mx-auto text-muted-text">
+            <UtensilsCrossed className="w-6 h-6" />
+          </div>
+          <div>
+            <h3 className="font-display font-bold text-forest-night text-base">
+              No matching listings found
+            </h3>
+            <p className="text-xs text-muted-text max-w-sm mx-auto mt-1">
+              {searchQuery || selectedStatus !== 'ALL'
+                ? 'Try resetting your status or search filters.'
+                : 'Post today’s surplus food to feed local communities.'}
+            </p>
+          </div>
+          <Link to="/donor/donations/create">
+            <Button variant="primary" size="sm">
+              Create New Listing
+            </Button>
+          </Link>
+        </GlassCard>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredDonations.map((donation) => {
+            const getStatusVariant = (status: DonationStatus) => {
+              switch (status) {
+                case 'AVAILABLE':
+                  return 'success';
+                case 'RESERVED':
+                case 'IN_RESCUE':
+                  return 'warning';
+                case 'DELIVERED':
+                  return 'neutral';
+                case 'CANCELLED':
+                case 'EXPIRED':
+                  return 'danger';
+                default:
+                  return 'neutral';
+              }
+            };
+
+            return (
+              <GlassCard
+                key={donation.id}
+                variant="light"
+                padding="md"
+                className="border-white/70 flex flex-col justify-between hover:shadow-glass-md transition-shadow"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <Badge variant="outline" size="sm" className="text-[10px]">
+                      {donation.category.replace(/_/g, ' ')}
+                    </Badge>
+                    <Badge variant={getStatusVariant(donation.status)} size="sm" dot>
+                      {donation.status}
+                    </Badge>
+                  </div>
+
+                  <div>
+                    <h3 className="font-display font-bold text-forest-night text-base line-clamp-1">
+                      {donation.title}
+                    </h3>
+                    <p className="text-xs font-semibold text-bridge-green mt-1">
+                      {donation.quantity} {donation.unit.toLowerCase()}
+                    </p>
+                  </div>
+
+                  <div className="space-y-1 text-xs text-muted-text pt-1">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-muted-text" />
+                      <span>
+                        Deadline: {new Date(donation.pickupDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ({new Date(donation.pickupDeadline).toLocaleDateString()})
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-muted-text" />
+                      <span>Listed: {new Date(donation.createdAt).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4 mt-4 border-t border-black/5 flex items-center justify-between">
+                  <Link
+                    to={`/donor/donations/${donation.id}`}
+                    className="text-xs font-bold text-bridge-green hover:underline flex items-center gap-1"
+                  >
+                    View Details & Matches <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </GlassCard>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}

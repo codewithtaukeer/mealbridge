@@ -9,7 +9,8 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
     | 'info'
     | 'neutral'
     | 'mint'
-    | 'forest';
+    | 'forest'
+    | 'outline';
   size?: 'sm' | 'md';
   dot?: boolean;
 }
@@ -27,37 +28,41 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
     ref
   ) => {
     const variants = {
-      // Success / Available / Delivered (Mint green)
+      // Success / Available / Delivered (Neon Pulse)
       success:
-        'bg-fresh-mint/20 text-[#154633] border border-fresh-mint/40',
-      // Warning / Reserved / In Rescue (Harvest gold)
+        'bg-neon-pulse/15 text-neon-pulse border border-neon-pulse/30',
+      // Warning / Reserved / In Rescue (Signal Yellow)
       warning:
-        'bg-harvest-gold/25 text-[#6c4800] border border-harvest-gold/50',
+        'bg-signal-yellow/15 text-signal-yellow border border-signal-yellow/30',
       // Danger / Cancelled / Expired / Failed (Soft coral)
       danger:
-        'bg-soft-coral/25 text-[#732a1a] border border-soft-coral/50',
+        'bg-soft-coral/20 text-soft-coral border border-soft-coral/40',
       // Info / Under Review
       info:
-        'bg-sky-50 text-sky-800 border border-sky-200',
+        'bg-neon-pulse/10 text-mint-whisper border border-neon-pulse/20',
       // Neutral / Category tags
       neutral:
-        'bg-black/5 text-muted-text border border-black/10',
-      // Fresh Mint highlight
+        'bg-white/5 text-slate-text border border-white/10',
+      // Neon highlight
       mint:
-        'bg-fresh-mint text-forest-night font-semibold border border-transparent shadow-sm',
-      // Forest deep green
+        'bg-neon-pulse text-obsidian-shell font-semibold border border-transparent shadow-sm',
+      // Forest / Obsidian deep
       forest:
-        'bg-forest-night text-warm-ivory border border-white/20',
+        'bg-obsidian-shell text-pure-white border border-white/20',
+      // Outline
+      outline:
+        'bg-transparent text-pure-white border border-white/20',
     };
 
     const dotColors = {
-      success: 'bg-emerald-600',
-      warning: 'bg-amber-600',
-      danger: 'bg-rose-600',
-      info: 'bg-sky-600',
-      neutral: 'bg-stone-500',
-      mint: 'bg-forest-night',
-      forest: 'bg-fresh-mint',
+      success: 'bg-neon-pulse shadow-[0_0_8px_#3ddc91]',
+      warning: 'bg-signal-yellow shadow-[0_0_6px_#ffcd48]',
+      danger: 'bg-soft-coral shadow-[0_0_6px_#e9705a]',
+      info: 'bg-mint-whisper',
+      neutral: 'bg-slate-text',
+      mint: 'bg-obsidian-shell',
+      forest: 'bg-neon-pulse',
+      outline: 'bg-slate-text',
     };
 
     const sizes = {

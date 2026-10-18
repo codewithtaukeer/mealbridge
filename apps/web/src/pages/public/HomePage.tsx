@@ -81,21 +81,19 @@ export function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Content Column */}
             <div className="lg:col-span-7 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-light border border-white/60 shadow-glass-sm">
-                <Sparkles className="w-4 h-4 text-bridge-green shrink-0" />
-                <span className="text-xs font-semibold text-bridge-green tracking-wide">
-                  A better way to connect surplus food with local needs
-                </span>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-neon-pulse/15 border border-neon-pulse/30 text-[9px] uppercase tracking-[0.05em] font-medium text-neon-pulse">
+                <Sparkles className="w-3.5 h-3.5 text-neon-pulse shrink-0" />
+                <span>Deterministic surplus food routing & redistribution console</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-forest-night tracking-tight leading-[1.12]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-medium text-pure-white tracking-tight leading-[1.12]">
                 Good food deserves a{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-bridge-green via-[#256c50] to-forest-night">
+                <span className="text-neon-pulse">
                   second destination.
                 </span>
               </h1>
 
-              <p className="text-lg sm:text-xl text-muted-text font-normal max-w-2xl leading-relaxed">
+              <p className="text-lg sm:text-xl text-slate-text font-normal max-w-2xl leading-relaxed">
                 Connect surplus food with communities that need it. Every meal matters.
                 MealBridge coordinates restaurants, caterers, verified NGOs, and volunteers
                 with verified timestamps and transparent accountability.
@@ -107,8 +105,7 @@ export function HomePage() {
                   <Button
                     size="lg"
                     variant="primary"
-                    leftIcon={<UtensilsCrossed className="w-5 h-5 text-forest-night" />}
-                    className="shadow-md hover:shadow-glow-mint"
+                    leftIcon={<UtensilsCrossed className="w-5 h-5 text-obsidian-shell" />}
                   >
                     Donate Food
                   </Button>
@@ -116,8 +113,8 @@ export function HomePage() {
                 <Link to="/food">
                   <Button
                     size="lg"
-                    variant="glass"
-                    leftIcon={<Search className="w-5 h-5 text-forest-night" />}
+                    variant="outline"
+                    leftIcon={<Search className="w-5 h-5 text-pure-white" />}
                   >
                     Find Food
                   </Button>
@@ -125,17 +122,17 @@ export function HomePage() {
               </div>
 
               {/* Trust Indicators */}
-              <div className="pt-6 border-t border-black/10 flex flex-wrap items-center gap-6 text-xs text-muted-text">
+              <div className="pt-6 border-t border-white/10 flex flex-wrap items-center gap-6 text-xs text-slate-text">
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-bridge-green" />
+                  <CheckCircle2 className="w-4 h-4 text-neon-pulse" />
                   <span>Verified NGO Directory</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-bridge-green" />
+                  <CheckCircle2 className="w-4 h-4 text-neon-pulse" />
                   <span>Mandatory Allergen Disclosures</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-bridge-green" />
+                  <CheckCircle2 className="w-4 h-4 text-neon-pulse" />
                   <span>Atomic Volunteer Claiming</span>
                 </div>
               </div>
@@ -149,18 +146,18 @@ export function HomePage() {
                   variant="light"
                   blurLevel="heavy"
                   padding="lg"
-                  className="border border-white/60 shadow-glass-lg relative z-10"
+                  className="border border-fog-border shadow-md relative z-10"
                 >
-                  <div className="flex items-center justify-between pb-4 border-b border-black/5">
+                  <div className="flex items-center justify-between pb-4 border-b border-fog-border">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-bridge-green/10 flex items-center justify-center">
-                        <UtensilsCrossed className="w-4 h-4 text-bridge-green" />
+                      <div className="w-8 h-8 rounded-xl bg-obsidian-shell flex items-center justify-center shadow-sm">
+                        <UtensilsCrossed className="w-4 h-4 text-neon-pulse" />
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-forest-night leading-none">
+                        <h4 className="text-sm font-semibold text-obsidian-shell leading-none">
                           Active Surplus Rescue
                         </h4>
-                        <span className="text-[11px] text-muted-text">Verified Workflow · ID #MB-8204</span>
+                        <span className="text-[11px] text-slate-text">Live Telemetry · ID #MB-8204</span>
                       </div>
                     </div>
                     <Badge variant="success" dot size="sm">
@@ -171,56 +168,56 @@ export function HomePage() {
                   <div className="py-4 space-y-3">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-base font-bold text-forest-night">
+                        <h3 className="text-base font-medium text-obsidian-shell">
                           40 Fresh Hot Meals (Dal + Roti + Sabzi)
                         </h3>
-                        <p className="text-xs text-muted-text flex items-center gap-1 mt-0.5">
-                          <Building2 className="w-3.5 h-3.5" />
+                        <p className="text-xs text-slate-text flex items-center gap-1 mt-0.5">
+                          <Building2 className="w-3.5 h-3.5 text-obsidian-shell/70" />
                           Annapurna Campus Mess
                         </p>
                       </div>
-                      <span className="text-lg font-bold text-bridge-green">
-                        40 <span className="text-xs font-normal text-muted-text">portions</span>
+                      <span className="text-lg font-bold text-obsidian-shell">
+                        40 <span className="text-xs font-normal text-slate-text">portions</span>
                       </span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 text-xs pt-2">
-                      <div className="bg-white/60 p-2.5 rounded-card border border-white/50">
-                        <span className="text-[10px] uppercase font-bold text-muted-text block">
+                      <div className="bg-white/80 p-2.5 rounded-card border border-fog-border">
+                        <span className="text-[9px] uppercase font-medium tracking-[0.05em] text-slate-text block">
                           Pickup Deadline
                         </span>
-                        <span className="font-semibold text-forest-night flex items-center gap-1 mt-0.5">
-                          <Clock className="w-3.5 h-3.5 text-harvest-gold" />
+                        <span className="font-semibold text-obsidian-shell flex items-center gap-1 mt-0.5">
+                          <Clock className="w-3.5 h-3.5 text-signal-yellow" />
                           Today, 3:30 PM
                         </span>
                       </div>
-                      <div className="bg-white/60 p-2.5 rounded-card border border-white/50">
-                        <span className="text-[10px] uppercase font-bold text-muted-text block">
+                      <div className="bg-white/80 p-2.5 rounded-card border border-fog-border">
+                        <span className="text-[9px] uppercase font-medium tracking-[0.05em] text-slate-text block">
                           Service Area
                         </span>
-                        <span className="font-semibold text-forest-night flex items-center gap-1 mt-0.5">
-                          <MapPin className="w-3.5 h-3.5 text-bridge-green" />
+                        <span className="font-semibold text-obsidian-shell flex items-center gap-1 mt-0.5">
+                          <MapPin className="w-3.5 h-3.5 text-neon-pulse" />
                           Within 4.2 km
                         </span>
                       </div>
                     </div>
 
-                    <div className="p-2.5 rounded-card bg-fresh-mint/15 border border-fresh-mint/30 flex items-center justify-between text-xs">
-                      <span className="text-forest-night font-medium">Eligible Recipient Matches</span>
-                      <span className="font-bold text-forest-night bg-fresh-mint px-2 py-0.5 rounded-full text-[11px]">
+                    <div className="p-2.5 rounded-card bg-neon-pulse/15 border border-neon-pulse/30 flex items-center justify-between text-xs">
+                      <span className="text-obsidian-shell font-medium">Eligible Recipient Matches</span>
+                      <span className="font-semibold text-obsidian-shell bg-neon-pulse px-2 py-0.5 rounded-pill text-[11px] shadow-sm">
                         3 NGOs Waiting
                       </span>
                     </div>
                   </div>
 
                   {/* Flow Simulation Progress */}
-                  <div className="pt-3 border-t border-black/5">
-                    <div className="flex items-center justify-between text-[11px] font-semibold text-forest-night mb-2">
+                  <div className="pt-3 border-t border-fog-border">
+                    <div className="flex items-center justify-between text-[11px] font-semibold text-obsidian-shell mb-2">
                       <span>Rescue Lifecycle Status</span>
-                      <span className="text-bridge-green">Awaiting Recipient Claim</span>
+                      <span className="text-neon-pulse font-medium">Awaiting Recipient Claim</span>
                     </div>
                     <div className="w-full bg-black/10 rounded-full h-1.5 overflow-hidden">
-                      <div className="bg-bridge-green h-full rounded-full w-2/5" />
+                      <div className="bg-neon-pulse h-full rounded-full w-2/5 shadow-[0_0_8px_#3ddc91]" />
                     </div>
                   </div>
                 </GlassCard>
@@ -230,17 +227,17 @@ export function HomePage() {
                   <GlassCard
                     variant="light"
                     padding="sm"
-                    className="border border-white/70 shadow-glass flex items-center gap-3 animate-fade-up"
+                    className="border border-fog-border shadow-md flex items-center gap-3 animate-fade-up"
                   >
-                    <div className="w-9 h-9 rounded-full bg-fresh-mint/30 flex items-center justify-center text-bridge-green">
-                      <HeartHandshake className="w-5 h-5" />
+                    <div className="w-8 h-8 rounded-full bg-neon-pulse/20 flex items-center justify-center text-neon-pulse">
+                      <HeartHandshake className="w-4 h-4" />
                     </div>
                     <div className="text-left pr-2">
-                      <span className="text-xs font-bold text-forest-night block">
+                      <span className="text-xs font-semibold text-obsidian-shell block">
                         Deterministic Match
                       </span>
-                      <span className="text-[10px] text-muted-text">
-                        No AI guesswork · Safe rules
+                      <span className="text-[10px] text-slate-text">
+                        Zero guesswork · Strict rules
                       </span>
                     </div>
                   </GlassCard>
@@ -251,10 +248,10 @@ export function HomePage() {
                   <GlassCard
                     variant="dark"
                     padding="sm"
-                    className="shadow-glass flex items-center gap-2.5"
+                    className="shadow-md flex items-center gap-2.5 border border-white/10"
                   >
-                    <Truck className="w-4 h-4 text-fresh-mint" />
-                    <span className="text-xs font-medium text-warm-ivory">
+                    <Truck className="w-4 h-4 text-neon-pulse" />
+                    <span className="text-xs font-medium text-pure-white">
                       Volunteer Handover
                     </span>
                   </GlassCard>
@@ -268,67 +265,67 @@ export function HomePage() {
       {/* ======================================================== */}
       {/* 2. TRUST & IMPACT STRIP                                  */}
       {/* ======================================================== */}
-      <section className="py-10 bg-forest-night text-warm-ivory border-y border-white/10 relative overflow-hidden">
+      <section className="py-12 bg-obsidian-shell text-pure-white border-y border-white/10 relative overflow-hidden">
         <PageContainer size="lg">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-fresh-mint">
+              <span className="text-[9px] font-medium uppercase tracking-[0.05em] text-neon-pulse">
                 Platform Accountability
               </span>
-              <h3 className="text-lg font-bold text-warm-ivory mt-0.5">
+              <h3 className="text-lg font-medium text-pure-white mt-0.5">
                 Transparent milestones backed by immutable audit history
               </h3>
             </div>
-            <span className="text-xs bg-white/10 px-3 py-1.5 rounded-full text-warm-ivory/80 border border-white/10 self-start md:self-auto">
-              Pilot Stage: Live tracking ready
+            <span className="text-[11px] font-medium bg-white/5 px-3 py-1.5 rounded-pill text-slate-text border border-white/10 self-start md:self-auto">
+              Command Stage: Live tracking active
             </span>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-6">
             <div className="space-y-1">
-              <span className="text-3xl sm:text-4xl font-display font-extrabold text-fresh-mint">
+              <span className="text-3xl sm:text-4xl font-display font-medium text-neon-pulse">
                 100%
               </span>
-              <p className="text-xs sm:text-sm font-medium text-warm-ivory/80">
+              <p className="text-xs sm:text-sm font-medium text-pure-white/90">
                 Traceable Handover
               </p>
-              <p className="text-[11px] text-warm-ivory/50">
+              <p className="text-[11px] text-slate-text">
                 Confirmed via digital timestamps
               </p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-3xl sm:text-4xl font-display font-extrabold text-warm-ivory">
+              <span className="text-3xl sm:text-4xl font-display font-medium text-pure-white">
                 0
               </span>
-              <p className="text-xs sm:text-sm font-medium text-warm-ivory/80">
+              <p className="text-xs sm:text-sm font-medium text-pure-white/90">
                 Double Claim Races
               </p>
-              <p className="text-[11px] text-warm-ivory/50">
+              <p className="text-[11px] text-slate-text">
                 Atomic database transactions
               </p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-3xl sm:text-4xl font-display font-extrabold text-harvest-gold">
+              <span className="text-3xl sm:text-4xl font-display font-medium text-signal-yellow">
                 &lt; 500ms
               </span>
-              <p className="text-xs sm:text-sm font-medium text-warm-ivory/80">
+              <p className="text-xs sm:text-sm font-medium text-pure-white/90">
                 P95 API Response
               </p>
-              <p className="text-[11px] text-warm-ivory/50">
+              <p className="text-[11px] text-slate-text">
                 Optimized matching queries
               </p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-3xl sm:text-4xl font-display font-extrabold text-soft-coral">
+              <span className="text-3xl sm:text-4xl font-display font-medium text-neon-pulse">
                 100%
               </span>
-              <p className="text-xs sm:text-sm font-medium text-warm-ivory/80">
+              <p className="text-xs sm:text-sm font-medium text-pure-white/90">
                 Verified Organisations
               </p>
-              <p className="text-[11px] text-warm-ivory/50">
+              <p className="text-[11px] text-slate-text">
                 Admin vetting required
               </p>
             </div>
@@ -342,6 +339,7 @@ export function HomePage() {
       <section className="py-20 md:py-28 relative">
         <PageContainer size="lg" withBloom>
           <SectionHeading
+            theme="dark"
             align="center"
             badge="Simple 3-Step Coordination"
             title="How food rescue works on MealBridge"
@@ -356,29 +354,29 @@ export function HomePage() {
               className="relative flex flex-col justify-between"
             >
               <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-bridge-green/10 flex items-center justify-center text-bridge-green font-bold text-lg">
+                <div className="w-12 h-12 rounded-2xl bg-obsidian-shell flex items-center justify-center text-neon-pulse font-semibold text-lg shadow-sm">
                   1
                 </div>
-                <h3 className="text-xl font-bold text-forest-night">
+                <h3 className="text-xl font-medium text-obsidian-shell">
                   Donor Lists Surplus
                 </h3>
-                <p className="text-sm text-muted-text leading-relaxed">
+                <p className="text-sm text-slate-text leading-relaxed">
                   Mess canteens, restaurants, and caterers post excess food with exact quantities,
                   preparation time, pickup deadline, and known allergens.
                 </p>
-                <ul className="text-xs text-primary-text/80 space-y-1.5 pt-2">
+                <ul className="text-xs text-obsidian-shell/80 space-y-1.5 pt-2">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-bridge-green shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-neon-pulse shrink-0" />
                     Standardized units (portions / kg / boxes)
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-bridge-green shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-neon-pulse shrink-0" />
                     Explicit storage and handling notes
                   </li>
                 </ul>
               </div>
-              <div className="pt-6 mt-4 border-t border-black/5">
-                <Link to="/signup?role=DONOR" className="text-xs font-bold text-bridge-green hover:underline flex items-center gap-1">
+              <div className="pt-6 mt-4 border-t border-fog-border">
+                <Link to="/signup?role=DONOR" className="text-xs font-semibold text-obsidian-shell hover:text-neon-pulse flex items-center gap-1 transition-colors">
                   Register as Donor <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -388,32 +386,32 @@ export function HomePage() {
             <GlassCard
               variant="light"
               padding="lg"
-              className="relative flex flex-col justify-between border-fresh-mint/40"
+              className="relative flex flex-col justify-between border-neon-pulse/40"
             >
               <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-fresh-mint/30 flex items-center justify-center text-forest-night font-bold text-lg">
+                <div className="w-12 h-12 rounded-2xl bg-neon-pulse flex items-center justify-center text-obsidian-shell font-bold text-lg shadow-sm">
                   2
                 </div>
-                <h3 className="text-xl font-bold text-forest-night">
+                <h3 className="text-xl font-medium text-obsidian-shell">
                   Eligible Recipient Accepts
                 </h3>
-                <p className="text-sm text-muted-text leading-relaxed">
+                <p className="text-sm text-slate-text leading-relaxed">
                   Verified NGOs and community kitchens review matching offers that meet their capacity
                   and dietary parameters. Acceptance reserves the food atomically.
                 </p>
-                <ul className="text-xs text-primary-text/80 space-y-1.5 pt-2">
+                <ul className="text-xs text-obsidian-shell/80 space-y-1.5 pt-2">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-bridge-green shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-neon-pulse shrink-0" />
                     Capacity & receiving window validation
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-bridge-green shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-neon-pulse shrink-0" />
                     Single-winner concurrency protection
                   </li>
                 </ul>
               </div>
-              <div className="pt-6 mt-4 border-t border-black/5">
-                <Link to="/signup?role=RECIPIENT" className="text-xs font-bold text-bridge-green hover:underline flex items-center gap-1">
+              <div className="pt-6 mt-4 border-t border-fog-border">
+                <Link to="/signup?role=RECIPIENT" className="text-xs font-semibold text-obsidian-shell hover:text-neon-pulse flex items-center gap-1 transition-colors">
                   Register as Recipient NGO <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -426,29 +424,29 @@ export function HomePage() {
               className="relative flex flex-col justify-between"
             >
               <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-harvest-gold/25 flex items-center justify-center text-[#735100] font-bold text-lg">
+                <div className="w-12 h-12 rounded-2xl bg-signal-yellow/20 flex items-center justify-center text-[#876000] font-bold text-lg shadow-sm">
                   3
                 </div>
-                <h3 className="text-xl font-bold text-forest-night">
+                <h3 className="text-xl font-medium text-obsidian-shell">
                   Volunteer Delivers
                 </h3>
-                <p className="text-sm text-muted-text leading-relaxed">
+                <p className="text-sm text-slate-text leading-relaxed">
                   Vetted volunteers claim the rescue task, navigate to pickup, confirm collection, and
                   record verified delivery to the recipient organization.
                 </p>
-                <ul className="text-xs text-primary-text/80 space-y-1.5 pt-2">
+                <ul className="text-xs text-obsidian-shell/80 space-y-1.5 pt-2">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-bridge-green shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-neon-pulse shrink-0" />
                     Step-by-step active rescue workflow
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-bridge-green shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-neon-pulse shrink-0" />
                     Audit timestamps at pickup & delivery
                   </li>
                 </ul>
               </div>
-              <div className="pt-6 mt-4 border-t border-black/5">
-                <Link to="/signup?role=VOLUNTEER" className="text-xs font-bold text-bridge-green hover:underline flex items-center gap-1">
+              <div className="pt-6 mt-4 border-t border-fog-border">
+                <Link to="/signup?role=VOLUNTEER" className="text-xs font-semibold text-obsidian-shell hover:text-neon-pulse flex items-center gap-1 transition-colors">
                   Join as Volunteer <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -460,9 +458,10 @@ export function HomePage() {
       {/* ======================================================== */}
       {/* 4. FEATURED AVAILABLE FOOD PREVIEW                       */}
       {/* ======================================================== */}
-      <section className="py-16 bg-white/40 border-y border-black/5">
+      <section className="py-20 bg-deep-abyss border-y border-white/10">
         <PageContainer size="lg">
           <SectionHeading
+            theme="dark"
             badge="Live Surplus Network"
             title="Available Food Listings"
             description="Explore surplus offers ready for immediate redistribution. Exact operational contact and pickup addresses are revealed to verified participants upon acceptance."
@@ -494,34 +493,34 @@ export function HomePage() {
                     </Badge>
                   </div>
 
-                  <h3 className="text-lg font-bold text-forest-night leading-snug">
+                  <h3 className="text-lg font-medium text-obsidian-shell leading-snug">
                     {donation.title}
                   </h3>
 
-                  <div className="space-y-1.5 text-xs text-muted-text">
-                    <p className="flex items-center gap-1.5 font-medium text-primary-text">
-                      <Building2 className="w-3.5 h-3.5 text-bridge-green" />
+                  <div className="space-y-1.5 text-xs text-slate-text">
+                    <p className="flex items-center gap-1.5 font-medium text-obsidian-shell">
+                      <Building2 className="w-3.5 h-3.5 text-obsidian-shell/70" />
                       {donation.donorName}
                     </p>
                     <p className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-muted-text" />
+                      <MapPin className="w-3.5 h-3.5 text-slate-text" />
                       {donation.city}
                     </p>
                     <p className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-harvest-gold" />
-                      Pickup Deadline: <span className="font-semibold text-forest-night">{donation.deadline}</span>
+                      <Clock className="w-3.5 h-3.5 text-signal-yellow" />
+                      Pickup Deadline: <span className="font-semibold text-obsidian-shell">{donation.deadline}</span>
                     </p>
                   </div>
 
                   {donation.allergens.length > 0 && (
                     <div className="pt-2 flex flex-wrap items-center gap-1">
-                      <span className="text-[10px] uppercase font-bold text-muted-text mr-1">
+                      <span className="text-[10px] uppercase font-medium tracking-[0.05em] text-slate-text mr-1">
                         Allergens:
                       </span>
                       {donation.allergens.map((alg) => (
                         <span
                           key={alg}
-                          className="text-[10px] px-2 py-0.5 rounded-full bg-soft-coral/20 text-[#7a2e20] border border-soft-coral/30 font-medium"
+                          className="text-[10px] px-2 py-0.5 rounded-full bg-soft-coral/20 text-soft-coral border border-soft-coral/30 font-medium"
                         >
                           {alg}
                         </span>
@@ -530,10 +529,10 @@ export function HomePage() {
                   )}
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-black/5 flex items-center justify-between">
+                <div className="pt-4 mt-4 border-t border-fog-border flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-muted-text block">Quantity</span>
-                    <span className="text-base font-extrabold text-forest-night">
+                    <span className="text-xs text-slate-text block">Quantity</span>
+                    <span className="text-base font-bold text-obsidian-shell">
                       {donation.quantity} {donation.unit}
                     </span>
                   </div>
@@ -555,22 +554,22 @@ export function HomePage() {
       <section className="py-16">
         <PageContainer size="lg">
           <GlassCard
-            variant="mint"
+            variant="light"
             padding="lg"
-            className="border-fresh-mint/40"
+            className="border-neon-pulse/40 bg-mint-frost"
           >
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div className="space-y-2 max-w-2xl">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-bridge-green" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-bridge-green">
+                  <ShieldCheck className="w-5 h-5 text-neon-pulse" />
+                  <span className="text-[9px] font-medium uppercase tracking-[0.05em] text-obsidian-shell/80">
                     Food Safety Standards & Accountability
                   </span>
                 </div>
-                <h3 className="text-2xl font-bold text-forest-night">
+                <h3 className="text-2xl font-medium text-obsidian-shell">
                   Clear guidelines for safe, responsible surplus redistribution
                 </h3>
-                <p className="text-sm text-primary-text/80 leading-relaxed">
+                <p className="text-sm text-slate-text leading-relaxed">
                   MealBridge coordinates food rescue logistics. Donors provide accurate preparation
                   timestamps and allergen declarations, while recipient organizations inspect food prior
                   to community distribution in accordance with applicable food safety standards.
@@ -589,44 +588,45 @@ export function HomePage() {
       {/* ======================================================== */}
       {/* 6. AUDIENCE CARDS (DONORS / RECIPIENTS / VOLUNTEERS)      */}
       {/* ======================================================== */}
-      <section className="py-16 bg-white/50 border-t border-black/5">
+      <section className="py-20 bg-obsidian-shell border-t border-white/10">
         <PageContainer size="lg">
           <SectionHeading
+            theme="dark"
             badge="Join the Mission"
-            title="A tailored experience for every participant"
+            title="A tailored console for every participant"
             description="Whether you have surplus to share, represent a community kitchen, or have time to deliver, MealBridge equips you with dedicated tools."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Donors Card */}
             <GlassCard variant="light" padding="lg" className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-bridge-green/15 flex items-center justify-center text-bridge-green">
+              <div className="w-10 h-10 rounded-xl bg-obsidian-shell flex items-center justify-center text-neon-pulse shadow-sm">
                 <UtensilsCrossed className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-bold text-forest-night">Food Donors</h3>
-              <p className="text-sm text-muted-text leading-relaxed">
+              <h3 className="text-xl font-medium text-obsidian-shell">Food Donors</h3>
+              <p className="text-sm text-slate-text leading-relaxed">
                 Restaurants, caterers, mess halls, and event hosts can eliminate disposal costs,
                 track verified social impact, and connect directly with local charities.
               </p>
               <Link to="/signup?role=DONOR">
-                <Button variant="outline" size="sm" className="w-full justify-center mt-2">
+                <Button variant="secondary" size="sm" className="w-full justify-center mt-2">
                   Start Donating Food
                 </Button>
               </Link>
             </GlassCard>
 
             {/* Recipient NGOs Card */}
-            <GlassCard variant="light" padding="lg" className="space-y-4 border-fresh-mint/40">
-              <div className="w-10 h-10 rounded-xl bg-fresh-mint/30 flex items-center justify-center text-forest-night">
+            <GlassCard variant="light" padding="lg" className="space-y-4 border-neon-pulse/40">
+              <div className="w-10 h-10 rounded-xl bg-obsidian-shell flex items-center justify-center text-neon-pulse shadow-sm">
                 <Building2 className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-bold text-forest-night">Recipient NGOs</h3>
-              <p className="text-sm text-muted-text leading-relaxed">
+              <h3 className="text-xl font-medium text-obsidian-shell">Recipient NGOs</h3>
+              <p className="text-sm text-slate-text leading-relaxed">
                 Shelters, food banks, and soup kitchens set capacity requirements, filter by dietary
                 preferences, and accept food with real-time volunteer delivery tracking.
               </p>
               <Link to="/signup?role=RECIPIENT">
-                <Button variant="outline" size="sm" className="w-full justify-center mt-2">
+                <Button variant="secondary" size="sm" className="w-full justify-center mt-2">
                   Register Your Organization
                 </Button>
               </Link>
@@ -634,16 +634,16 @@ export function HomePage() {
 
             {/* Volunteers Card */}
             <GlassCard variant="light" padding="lg" className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-harvest-gold/25 flex items-center justify-center text-[#735100]">
+              <div className="w-10 h-10 rounded-xl bg-obsidian-shell flex items-center justify-center text-signal-yellow shadow-sm">
                 <Truck className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-bold text-forest-night">Volunteers</h3>
-              <p className="text-sm text-muted-text leading-relaxed">
+              <h3 className="text-xl font-medium text-obsidian-shell">Volunteers</h3>
+              <p className="text-sm text-slate-text leading-relaxed">
                 Local drivers and helpers claim single-route rescue tasks with clear instructions,
                 direct navigation, and digital proof-of-handover recording.
               </p>
               <Link to="/signup?role=VOLUNTEER">
-                <Button variant="outline" size="sm" className="w-full justify-center mt-2">
+                <Button variant="secondary" size="sm" className="w-full justify-center mt-2">
                   Sign Up as Volunteer
                 </Button>
               </Link>
@@ -655,19 +655,19 @@ export function HomePage() {
       {/* ======================================================== */}
       {/* 7. FINAL CALL TO ACTION                                  */}
       {/* ======================================================== */}
-      <section className="py-20 bg-forest-night text-warm-ivory relative overflow-hidden">
-        <div className="pointer-events-none absolute -top-40 right-1/4 w-[500px] h-[500px] bg-gradient-to-b from-fresh-mint/20 to-transparent rounded-full blur-[120px]" />
+      <section className="py-24 bg-deep-abyss text-pure-white relative overflow-hidden border-t border-white/10">
+        <div className="pointer-events-none absolute -top-40 right-1/4 w-[500px] h-[500px] bg-gradient-to-b from-neon-pulse/15 to-transparent rounded-full blur-[120px]" />
 
         <PageContainer size="md" className="text-center relative z-10 space-y-6">
           <Badge variant="mint" size="md">
             Every Meal Counts
           </Badge>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-warm-ivory tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-medium text-pure-white tracking-tight">
             Turn surplus into something meaningful.
           </h2>
 
-          <p className="text-warm-ivory/70 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-slate-text text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
             Join the verified platform that ensures quality surplus food never goes to waste.
             Together, we bridge the gap between abundance and need.
           </p>
@@ -679,12 +679,12 @@ export function HomePage() {
               </Button>
             </Link>
             <Link to="/signup?role=RECIPIENT">
-              <Button size="lg" variant="secondary" className="bg-white/10 hover:bg-white/20 text-warm-ivory border border-white/20">
+              <Button size="lg" variant="secondary" className="bg-white/10 hover:bg-white/20 text-pure-white border border-white/20">
                 Join as a Recipient
               </Button>
             </Link>
             <Link to="/signup?role=VOLUNTEER">
-              <Button size="lg" variant="ghost" className="text-warm-ivory hover:bg-white/10">
+              <Button size="lg" variant="ghost" className="text-pure-white hover:text-neon-pulse hover:bg-white/10">
                 Become a Volunteer
               </Button>
             </Link>

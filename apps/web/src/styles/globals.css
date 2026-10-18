@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Sauce Labs Theme Tokens */
+  --color-obsidian-shell: #132322;
+  --color-pure-white: #ffffff;
+  --color-mint-frost: #edf7f5;
+  --color-deep-abyss: #0e1a19;
+  --color-charcoal: #070f0f;
+  --color-fog-border: #d0d3d3;
+  --color-stone-border: #b2b6b4;
+  --color-slate-text: #828786;
+  --color-graphite-fill: #424f4f;
+  --color-pure-black: #000000;
+  --color-neon-pulse: #3ddc91;
+  --color-mint-whisper: #97ddbc;
+  --color-signal-yellow: #ffcd48;
+
+  /* Typography */
+  --font-aeonik: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-aeonikfono: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* Shadows */
+  --shadow-md: rgba(0, 0, 0, 0.04) 1px 0px 9px 2px;
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -9,19 +33,24 @@
 
   html {
     scroll-behavior: smooth;
+    background-color: #132322;
+    color: #ffffff;
   }
 
   body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-aeonik);
+    background-color: #132322;
+    color: #ffffff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.08px;
   }
 
   /* Focus visible for accessibility */
   :focus-visible {
-    outline: 2px solid #B8F28B;
+    outline: 2px solid #3ddc91;
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 56px;
   }
 
   /* Reduced motion */
@@ -36,29 +65,65 @@
 }
 
 @layer components {
-  /* Glass effect utilities */
+  /* Obsidian console surface */
+  .surface-obsidian {
+    background: #132322;
+    color: #ffffff;
+  }
+
+  /* Deep abyss surface (for nested containers & cards) */
+  .surface-deep {
+    background: #0e1a19;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Mint frost content card (light contrast card) */
+  .surface-mint {
+    background: #edf7f5;
+    color: #132322;
+    border: 1px solid #d0d3d3;
+    box-shadow: rgba(0, 0, 0, 0.04) 1px 0px 9px 2px;
+  }
+
+  /* Glass effect utilities with obsidian depth */
   .glass {
-    background: rgba(255, 255, 255, 0.10);
+    background: rgba(14, 26, 25, 0.85);
     backdrop-filter: blur(20px) saturate(140%);
     -webkit-backdrop-filter: blur(20px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: 0 12px 36px rgba(9, 35, 25, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
   }
 
   .glass-light {
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.45);
-    box-shadow: 0 8px 32px rgba(9, 35, 25, 0.08);
+    background: #edf7f5;
+    color: #132322;
+    border: 1px solid #d0d3d3;
+    box-shadow: rgba(0, 0, 0, 0.04) 1px 0px 9px 2px;
   }
 
   .glass-dark {
-    background: rgba(16, 45, 37, 0.75);
+    background: #0e1a19;
     backdrop-filter: blur(20px) saturate(140%);
     -webkit-backdrop-filter: blur(20px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 12px 36px rgba(9, 35, 25, 0.24);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Eyebrow structural label (9px tracked-out caps) */
+  .eyebrow {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: var(--font-aeonikfono);
+  }
+
+  /* Pill button styling (56px) */
+  .btn-pill {
+    border-radius: 56px;
+    padding: 12px 28px;
+    font-weight: 500;
+    transition: all 0.2s ease;
   }
 
   /* Scrollbar styling */
@@ -71,12 +136,12 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(30, 91, 67, 0.2);
+    background: rgba(61, 220, 145, 0.2);
     border-radius: 3px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(30, 91, 67, 0.4);
+    background: rgba(61, 220, 145, 0.4);
   }
 }
 

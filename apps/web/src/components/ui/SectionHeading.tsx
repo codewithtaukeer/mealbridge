@@ -41,10 +41,10 @@ export function SectionHeading({
         {badge && (
           <span
             className={cn(
-              'inline-flex items-center text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3',
+              'inline-flex items-center text-[9px] font-medium uppercase tracking-[0.05em] px-2.5 py-0.5 rounded-full mb-3',
               isDark
-                ? 'bg-fresh-mint/15 text-fresh-mint border border-fresh-mint/30'
-                : 'bg-bridge-green/10 text-bridge-green border border-bridge-green/20'
+                ? 'bg-neon-pulse/15 text-neon-pulse border border-neon-pulse/30'
+                : 'bg-obsidian-shell/10 text-obsidian-shell border border-obsidian-shell/20'
             )}
           >
             {badge}
@@ -52,8 +52,8 @@ export function SectionHeading({
         )}
         <h2
           className={cn(
-            'text-3xl md:text-4xl lg:text-5xl font-display font-bold tracking-tight',
-            isDark ? 'text-warm-ivory' : 'text-forest-night'
+            'text-3xl md:text-4xl lg:text-5xl font-display font-medium tracking-tight',
+            isDark ? 'text-pure-white' : 'text-obsidian-shell'
           )}
         >
           {title}

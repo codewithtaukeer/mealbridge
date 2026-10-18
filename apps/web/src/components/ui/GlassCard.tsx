@@ -7,40 +7,37 @@ export interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
   blurLevel?: 'normal' | 'heavy';
   padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   glow?: boolean;
+  size?: 'normal' | 'large';
 }
 
 export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
   (
     {
       className,
-      variant = 'light',
+      variant = 'dark',
       hoverEffect = false,
-      blurLevel = 'normal',
       padding = 'md',
       glow = false,
+      size = 'normal',
       children,
       ...props
     },
     ref
   ) => {
+    // Luminance contrast surfaces per Sauce Labs engineering console specs
     const variants = {
-      // Light frosted glass for warm-ivory background
-      light:
-        'bg-white/70 border border-white/50 text-primary-text shadow-glass',
-      // Deep forest translucent glass for dark sections
+      // Dark surface (Deep Abyss #0e1a19 on Obsidian Canvas)
       dark:
-        'bg-[#102D25]/85 border border-white/15 text-warm-ivory shadow-glass-lg',
-      // Mint tinted glass for highlights & active items
+        'bg-deep-abyss/90 border border-white/10 text-pure-white shadow-md',
+      // Light content card (Mint Frost #edf7f5)
+      light:
+        'bg-mint-frost text-obsidian-shell border border-fog-border shadow-md',
+      // Mint Whisper wash for highlights
       mint:
-        'bg-fresh-mint/15 border border-fresh-mint/30 text-forest-night shadow-glass-sm',
-      // Harvest gold tinted glass for warnings/urgent cards
+        'bg-mint-frost border border-neon-pulse/50 text-obsidian-shell shadow-md',
+      // Signal yellow accent card
       gold:
-        'bg-harvest-gold/15 border border-harvest-gold/30 text-forest-night shadow-glass-sm',
-    };
-
-    const blurs = {
-      normal: 'backdrop-blur-glass backdrop-saturate-150',
-      heavy: 'backdrop-blur-glass-heavy backdrop-saturate-180',
+        'bg-[#232014] border border-signal-yellow/40 text-pure-white shadow-md',
     };
 
     const paddings = {
@@ -48,26 +45,29 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
       sm: 'p-4',
       md: 'p-6',
       lg: 'p-8',
-      xl: 'p-10',
+      xl: 'p-12',
+    };
+
+    const radii = {
+      normal: 'rounded-card', // 20px
+      large: 'rounded-large-card', // 60px
     };
 
     return (
       <div
         ref={ref}
         className={cn(
-          'relative rounded-card transition-all duration-300',
+          'relative transition-all duration-200',
+          radii[size],
           variants[variant],
-          blurs[blurLevel],
           paddings[padding],
-          glow && 'shadow-glow-mint',
+          glow && 'shadow-neon border-neon-pulse/60',
           hoverEffect &&
-            'hover:-translate-y-1 hover:shadow-glass-lg hover:border-white/70 cursor-pointer',
+            'hover:-translate-y-0.5 hover:border-neon-pulse/40 transition-all cursor-pointer',
           className
         )}
         {...props}
       >
-        {/* Subtle top specular highlight */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none rounded-t-card" />
         {children}
       </div>
     );

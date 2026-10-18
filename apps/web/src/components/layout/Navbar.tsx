@@ -52,7 +52,7 @@ export function Navbar() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'py-3 bg-white/80 backdrop-blur-glass border-b border-white/50 shadow-glass-sm'
+          ? 'py-3 bg-obsidian-shell/90 backdrop-blur-md border-b border-white/10 shadow-md'
           : 'py-5 bg-transparent'
       )}
     >
@@ -60,7 +60,7 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group select-none">
-            <div className="relative w-10 h-10 rounded-xl bg-forest-night flex items-center justify-center shadow-md overflow-hidden p-1.5 transition-transform duration-200 group-hover:scale-105">
+            <div className="relative w-10 h-10 rounded-xl bg-deep-abyss border border-neon-pulse/30 flex items-center justify-center shadow-md overflow-hidden p-1.5 transition-transform duration-200 group-hover:scale-105">
               <img
                 src="/mealbridge-logo.png"
                 alt="MealBridge Logo"
@@ -69,20 +69,20 @@ export function Navbar() {
                   e.currentTarget.style.display = 'none';
                 }}
               />
-              <HeartHandshake className="w-5 h-5 text-fresh-mint absolute" />
+              <HeartHandshake className="w-5 h-5 text-neon-pulse absolute" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-display font-extrabold tracking-tight text-forest-night group-hover:text-bridge-green transition-colors">
-                Meal<span className="text-bridge-green">Bridge</span>
+              <span className="text-xl font-display font-medium tracking-tight text-pure-white group-hover:text-neon-pulse transition-colors">
+                Meal<span className="text-neon-pulse">Bridge</span>
               </span>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-muted-text -mt-1 hidden sm:block">
+              <span className="text-[9px] uppercase font-medium tracking-[0.05em] text-slate-text -mt-0.5 hidden sm:block">
                 Good Food · No Waste
               </span>
             </div>
           </Link>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-1 glass-light px-3 py-1.5 rounded-full border border-white/40 shadow-glass-sm">
+          <nav className="hidden md:flex items-center gap-1 bg-deep-abyss/90 px-3 py-1.5 rounded-pill border border-white/10 shadow-md">
             {navLinks.map((link) => {
               const active = isActive(link.href);
               return (
@@ -90,10 +90,10 @@ export function Navbar() {
                   key={link.name}
                   to={link.href}
                   className={cn(
-                    'text-sm font-medium px-4 py-1.5 rounded-full transition-all duration-200',
+                    'text-xs font-medium px-4 py-1.5 rounded-pill transition-all duration-200',
                     active
-                      ? 'bg-bridge-green text-white shadow-sm font-semibold'
-                      : 'text-primary-text hover:text-bridge-green hover:bg-black/5'
+                      ? 'bg-neon-pulse text-obsidian-shell font-semibold shadow-neon'
+                      : 'text-slate-text hover:text-pure-white hover:bg-white/5'
                   )}
                 >
                   {link.name}
@@ -110,17 +110,16 @@ export function Navbar() {
                   <Button
                     variant="primary"
                     size="sm"
-                    leftIcon={<LayoutDashboard className="w-4 h-4 text-forest-night" />}
-                    className="shadow-sm hover:shadow-glow-mint"
+                    leftIcon={<LayoutDashboard className="w-4 h-4 text-obsidian-shell" />}
                   >
-                    Dashboard
+                    Console
                   </Button>
                 </Link>
                 <button
                   type="button"
                   onClick={() => signOut()}
                   title="Sign Out"
-                  className="p-2 rounded-xl text-muted-text hover:text-soft-coral hover:bg-soft-coral/10 transition-colors"
+                  className="p-2 rounded-xl text-slate-text hover:text-soft-coral hover:bg-soft-coral/10 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -128,7 +127,7 @@ export function Navbar() {
             ) : (
               <>
                 <Link to="/login">
-                  <Button variant="ghost" size="sm" className="font-medium text-forest-night">
+                  <Button variant="ghost" size="sm" className="font-medium text-pure-white hover:text-neon-pulse">
                     Sign In
                   </Button>
                 </Link>
@@ -136,8 +135,7 @@ export function Navbar() {
                   <Button
                     variant="primary"
                     size="sm"
-                    leftIcon={<UtensilsCrossed className="w-4 h-4 text-forest-night" />}
-                    className="shadow-sm hover:shadow-glow-mint"
+                    leftIcon={<UtensilsCrossed className="w-4 h-4 text-obsidian-shell" />}
                   >
                     Donate Food
                   </Button>
@@ -151,7 +149,7 @@ export function Navbar() {
             {user ? (
               <Link to={dashboardPath}>
                 <Button variant="primary" size="sm" className="text-xs px-2.5 py-1">
-                  Dashboard
+                  Console
                 </Button>
               </Link>
             ) : (
@@ -163,7 +161,7 @@ export function Navbar() {
             )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-forest-night bg-white/60 hover:bg-white/90 border border-white/40 shadow-sm transition-colors focus-visible:outline-none"
+              className="p-2 rounded-xl text-pure-white bg-deep-abyss/80 hover:bg-deep-abyss border border-white/10 shadow-sm transition-colors focus-visible:outline-none"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -174,32 +172,32 @@ export function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="sm:hidden glass-light border-b border-white/50 px-4 pt-4 pb-6 mt-3 shadow-glass animate-fade-in">
+        <div className="sm:hidden bg-deep-abyss border-b border-white/10 px-4 pt-4 pb-6 mt-3 shadow-lg animate-fade-in">
           <div className="flex flex-col space-y-2">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.href}
                 className={cn(
-                  'px-4 py-2.5 rounded-button text-sm font-medium transition-colors',
+                  'px-4 py-2.5 rounded-pill text-sm font-medium transition-colors',
                   isActive(link.href)
-                    ? 'bg-bridge-green text-white font-semibold'
-                    : 'text-primary-text hover:bg-black/5'
+                    ? 'bg-neon-pulse text-obsidian-shell font-semibold'
+                    : 'text-slate-text hover:text-pure-white hover:bg-white/5'
                 )}
               >
                 {link.name}
               </Link>
             ))}
-            <div className="pt-3 border-t border-black/10 flex flex-col gap-2">
+            <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
               {user ? (
                 <>
-                  <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-forest-night bg-black/5 rounded-button">
-                    <UserIcon className="w-4 h-4 text-bridge-green" />
+                  <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-pure-white bg-white/5 rounded-pill border border-white/10">
+                    <UserIcon className="w-4 h-4 text-neon-pulse" />
                     <span>{user.name} ({role})</span>
                   </div>
                   <Link to={dashboardPath} className="w-full">
                     <Button variant="primary" className="w-full justify-center">
-                      Go to Dashboard
+                      Open Console
                     </Button>
                   </Link>
                   <Button
@@ -221,7 +219,7 @@ export function Navbar() {
                     <Button
                       variant="primary"
                       className="w-full justify-center"
-                      leftIcon={<Sparkles className="w-4 h-4 text-forest-night" />}
+                      leftIcon={<Sparkles className="w-4 h-4 text-obsidian-shell" />}
                     >
                       Join MealBridge
                     </Button>
