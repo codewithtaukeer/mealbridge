@@ -1,13 +1,27 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
-import { Menu, X, HeartHandshake, UtensilsCrossed, Sparkles } from 'lucide-react';
+import { ROLE_DASHBOARD_PATHS } from '@mealbridge/shared';
+import {
+  Menu,
+  X,
+  HeartHandshake,
+  UtensilsCrossed,
+  Sparkles,
+  LayoutDashboard,
+  LogOut,
+  User as UserIcon,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function Navbar() {
+  const { user, role, signOut } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+
+  const dashboardPath = (role && ROLE_DASHBOARD_PATHS[role]) || '/donor/dashboard';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,7 +52,7 @@ export function Navbar() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'py-3 bg-white/75 backdrop-blur-glass border-b border-white/50 shadow-glass-sm'
+          ? 'py-3 bg-white/80 backdrop-blur-glass border-b border-white/50 shadow-glass-sm'
           : 'py-5 bg-transparent'
       )}
     >
@@ -52,7 +66,6 @@ export function Navbar() {
                 alt="MealBridge Logo"
                 className="w-full h-full object-contain filter invert brightness-200"
                 onError={(e) => {
-                  // Fallback icon if image path issue occurs
                   e.currentTarget.style.display = 'none';
                 }}
               />
@@ -91,30 +104,63 @@ export function Navbar() {
 
           {/* Action CTAs */}
           <div className="hidden sm:flex items-center gap-3">
-            <Link to="/login">
-              <Button variant="ghost" size="sm" className="font-medium text-forest-night">
-                Sign In
-              </Button>
-            </Link>
-            <Link to="/signup?role=DONOR">
-              <Button
-                variant="primary"
-                size="sm"
-                leftIcon={<UtensilsCrossed className="w-4 h-4 text-forest-night" />}
-                className="shadow-sm hover:shadow-glow-mint"
-              >
-                Donate Food
-              </Button>
-            </Link>
+            {user ? (
+              <div className="flex items-center gap-2">
+                <Link to={dashboardPath}>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    leftIcon={<LayoutDashboard className="w-4 h-4 text-forest-night" />}
+                    className="shadow-sm hover:shadow-glow-mint"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  title="Sign Out"
+                  className="p-2 rounded-xl text-muted-text hover:text-soft-coral hover:bg-soft-coral/10 transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="ghost" size="sm" className="font-medium text-forest-night">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/signup?role=DONOR">
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    leftIcon={<UtensilsCrossed className="w-4 h-4 text-forest-night" />}
+                    className="shadow-sm hover:shadow-glow-mint"
+                  >
+                    Donate Food
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
           <div className="flex sm:hidden items-center gap-2">
-            <Link to="/signup?role=DONOR">
-              <Button variant="primary" size="sm" className="text-xs px-2.5 py-1">
-                Donate
-              </Button>
-            </Link>
+            {user ? (
+              <Link to={dashboardPath}>
+                <Button variant="primary" size="sm" className="text-xs px-2.5 py-1">
+                  Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/signup?role=DONOR">
+                <Button variant="primary" size="sm" className="text-xs px-2.5 py-1">
+                  Donate
+                </Button>
+              </Link>
+            )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-xl text-forest-night bg-white/60 hover:bg-white/90 border border-white/40 shadow-sm transition-colors focus-visible:outline-none"
@@ -145,20 +191,43 @@ export function Navbar() {
               </Link>
             ))}
             <div className="pt-3 border-t border-black/10 flex flex-col gap-2">
-              <Link to="/login" className="w-full">
-                <Button variant="outline" className="w-full justify-center">
-                  Sign In
-                </Button>
-              </Link>
-              <Link to="/signup" className="w-full">
-                <Button
-                  variant="primary"
-                  className="w-full justify-center"
-                  leftIcon={<Sparkles className="w-4 h-4 text-forest-night" />}
-                >
-                  Join MealBridge
-                </Button>
-              </Link>
+              {user ? (
+                <>
+                  <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-forest-night bg-black/5 rounded-button">
+                    <UserIcon className="w-4 h-4 text-bridge-green" />
+                    <span>{user.name} ({role})</span>
+                  </div>
+                  <Link to={dashboardPath} className="w-full">
+                    <Button variant="primary" className="w-full justify-center">
+                      Go to Dashboard
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-center text-soft-coral hover:bg-soft-coral/10"
+                    onClick={() => signOut()}
+                  >
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="w-full">
+                    <Button variant="outline" className="w-full justify-center">
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link to="/signup" className="w-full">
+                    <Button
+                      variant="primary"
+                      className="w-full justify-center"
+                      leftIcon={<Sparkles className="w-4 h-4 text-forest-night" />}
+                    >
+                      Join MealBridge
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { authRouter } from './auth';
+import { organizationRouter } from './organizations';
 
 export const apiRouter = Router();
 
@@ -11,11 +13,12 @@ apiRouter.get('/', (_req, res) => {
   });
 });
 
-// Route modules will be added in subsequent phases:
-// apiRouter.use('/auth', authRouter);
-// apiRouter.use('/organizations', organizationRouter);
+// Mounted modules
+apiRouter.use('/auth', authRouter);
+apiRouter.use('/organizations', organizationRouter);
 // apiRouter.use('/donations', donationRouter);
 // apiRouter.use('/rescues', rescueRouter);
 // apiRouter.use('/notifications', notificationRouter);
 // apiRouter.use('/admin', adminRouter);
 // apiRouter.use('/analytics', analyticsRouter);
+

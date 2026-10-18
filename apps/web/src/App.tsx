@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './context/AuthContext';
 import { PublicLayout } from './layouts/PublicLayout';
 
 // Public Pages
@@ -16,9 +17,15 @@ import { HelpPage } from './pages/public/HelpPage';
 import { UnauthorizedPage } from './pages/public/UnauthorizedPage';
 import { NotFoundPage } from './pages/public/NotFoundPage';
 
+// Auth Pages
+import { LoginPage } from './pages/auth/LoginPage';
+import { SignUpPage } from './pages/auth/SignUpPage';
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
+import { VerifyAccountPage } from './pages/auth/VerifyAccountPage';
+
 export function App() {
   return (
-    <>
+    <AuthProvider>
       <Toaster
         position="top-right"
         toastOptions={{
@@ -46,11 +53,17 @@ export function App() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+          {/* Authentication Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/verify-account" element={<VerifyAccountPage />} />
         </Route>
 
         {/* 404 Not Found Catch-All */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
