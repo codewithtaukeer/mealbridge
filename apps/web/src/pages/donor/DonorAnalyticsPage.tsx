@@ -42,7 +42,7 @@ export function DonorAnalyticsPage() {
 
   if (isLoading) {
     return (
-      <div className="py-20 text-center text-muted-text text-sm">
+      <div className="py-20 text-center text-slate-text text-sm">
         Calculating environmental impact metrics...
       </div>
     );
@@ -51,10 +51,10 @@ export function DonorAnalyticsPage() {
   return (
     <div className="space-y-8 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
           Impact & Sustainability Analytics
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Detailed metrics evaluating food waste diversion, greenhouse gas reduction, and community contributions.
         </p>
       </div>
@@ -63,55 +63,55 @@ export function DonorAnalyticsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <GlassCard variant="light" padding="md" className="border-white/70">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-muted-text">Total Weight Diverted</span>
-            <div className="w-8 h-8 rounded-xl bg-fresh-mint/30 flex items-center justify-center">
-              <UtensilsCrossed className="w-4 h-4 text-forest-night" />
+            <span className="text-xs font-semibold text-slate-text">Total Weight Diverted</span>
+            <div className="w-8 h-8 rounded-xl bg-neon-pulse/30 flex items-center justify-center">
+              <UtensilsCrossed className="w-4 h-4 text-obsidian-shell" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-3xl font-display font-bold text-forest-night">{totalKgDiverted} kg</span>
-            <span className="text-[11px] text-muted-text block mt-0.5">Surplus saved from landfills</span>
+            <span className="text-3xl font-display font-bold text-obsidian-shell">{totalKgDiverted} kg</span>
+            <span className="text-[11px] text-slate-text block mt-0.5">Surplus saved from landfills</span>
           </div>
         </GlassCard>
 
         <GlassCard variant="light" padding="md" className="border-white/70">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-muted-text">Emissions Mitigated</span>
-            <div className="w-8 h-8 rounded-xl bg-bridge-green/15 flex items-center justify-center">
-              <Leaf className="w-4 h-4 text-bridge-green" />
+            <span className="text-xs font-semibold text-slate-text">Emissions Mitigated</span>
+            <div className="w-8 h-8 rounded-xl bg-neon-pulse/15 flex items-center justify-center">
+              <Leaf className="w-4 h-4 text-neon-pulse" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-3xl font-display font-bold text-bridge-green">{co2AvoidedKg} kg CO₂e</span>
-            <span className="text-[11px] text-muted-text block mt-0.5">Greenhouse gas equivalent</span>
+            <span className="text-3xl font-display font-bold text-neon-pulse">{co2AvoidedKg} kg CO₂e</span>
+            <span className="text-[11px] text-slate-text block mt-0.5">Greenhouse gas equivalent</span>
           </div>
         </GlassCard>
 
         <GlassCard variant="light" padding="md" className="border-white/70">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-muted-text">Meals Provided</span>
-            <div className="w-8 h-8 rounded-xl bg-fresh-mint/20 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-forest-night" />
+            <span className="text-xs font-semibold text-slate-text">Meals Provided</span>
+            <div className="w-8 h-8 rounded-xl bg-neon-pulse/20 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-obsidian-shell" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-3xl font-display font-bold text-forest-night">{totalPortions}</span>
-            <span className="text-[11px] text-muted-text block mt-0.5">Nutritious community portions</span>
+            <span className="text-3xl font-display font-bold text-obsidian-shell">{totalPortions}</span>
+            <span className="text-[11px] text-slate-text block mt-0.5">Nutritious community portions</span>
           </div>
         </GlassCard>
 
         <GlassCard variant="light" padding="md" className="border-white/70">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-muted-text">Redistribution Rate</span>
+            <span className="text-xs font-semibold text-slate-text">Redistribution Rate</span>
             <div className="w-8 h-8 rounded-xl bg-harvest-gold/25 flex items-center justify-center">
-              <Award className="w-4 h-4 text-[#8a5d1b]" />
+              <Award className="w-4 h-4 text-signal-yellow" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-3xl font-display font-bold text-forest-night">
+            <span className="text-3xl font-display font-bold text-obsidian-shell">
               {donations.length > 0 ? Math.round((deliveredCount / donations.length) * 100) : 100}%
             </span>
-            <span className="text-[11px] text-muted-text block mt-0.5">Successful rescue fulfillment</span>
+            <span className="text-[11px] text-slate-text block mt-0.5">Successful rescue fulfillment</span>
           </div>
         </GlassCard>
       </div>
@@ -119,13 +119,13 @@ export function DonorAnalyticsPage() {
       {/* Category Breakdown & Impact Methodology */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <GlassCard variant="light" padding="lg" className="border-white/70 space-y-4">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-forest-night flex items-center gap-1.5">
-            <BarChart3 className="w-4 h-4 text-bridge-green" />
+          <h2 className="text-sm font-bold uppercase tracking-[0.05em] text-obsidian-shell flex items-center gap-1.5">
+            <BarChart3 className="w-4 h-4 text-neon-pulse" />
             Top Rescued Categories
           </h2>
 
           {Object.keys(categoryCounts).length === 0 ? (
-            <div className="py-12 text-center text-xs text-muted-text">
+            <div className="py-12 text-center text-xs text-slate-text">
               No redistribution data recorded yet.
             </div>
           ) : (
@@ -134,7 +134,7 @@ export function DonorAnalyticsPage() {
                 const percentage = totalPortions > 0 ? Math.round((qty / totalPortions) * 100) : 0;
                 return (
                   <div key={cat} className="space-y-1">
-                    <div className="flex items-center justify-between text-xs font-semibold text-forest-night">
+                    <div className="flex items-center justify-between text-xs font-semibold text-obsidian-shell">
                       <span>{cat.replace(/_/g, ' ')}</span>
                       <span>
                         {qty} portions ({percentage}%)
@@ -142,7 +142,7 @@ export function DonorAnalyticsPage() {
                     </div>
                     <div className="h-2 rounded-full bg-black/5 overflow-hidden">
                       <div
-                        className="h-full bg-bridge-green rounded-full transition-all duration-500"
+                        className="h-full bg-neon-pulse rounded-full transition-all duration-500"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -154,25 +154,25 @@ export function DonorAnalyticsPage() {
         </GlassCard>
 
         <GlassCard variant="light" padding="lg" className="border-white/70 space-y-4">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-forest-night flex items-center gap-1.5">
-            <TrendingUp className="w-4 h-4 text-bridge-green" />
+          <h2 className="text-sm font-bold uppercase tracking-[0.05em] text-obsidian-shell flex items-center gap-1.5">
+            <TrendingUp className="w-4 h-4 text-neon-pulse" />
             Impact Methodology & Standards
           </h2>
 
-          <div className="text-xs text-muted-text space-y-3 leading-relaxed">
+          <div className="text-xs text-slate-text space-y-3 leading-relaxed">
             <p>
               MealBridge applies certified carbon-accounting benchmarks aligned with the{' '}
-              <span className="font-semibold text-forest-night">Food and Agriculture Organization (FAO)</span> and WRAP protocols:
+              <span className="font-semibold text-obsidian-shell">Food and Agriculture Organization (FAO)</span> and WRAP protocols:
             </p>
             <div className="p-3 rounded-card bg-white/60 border border-black/5 space-y-1.5">
-              <span className="font-bold text-forest-night block">CO₂ Calculation Standard</span>
+              <span className="font-bold text-obsidian-shell block">CO₂ Calculation Standard</span>
               <p className="text-[11px]">
                 1 portion is standardized to 0.40 kg. Each kilogram of prepared food diverted from organic landfill prevents approximately 2.50 kg CO₂ equivalent emissions.
               </p>
             </div>
-            <div className="p-3 rounded-card bg-fresh-mint/15 border border-fresh-mint/30 space-y-1.5">
-              <span className="font-bold text-forest-night block">Corporate ESG Certificate</span>
-              <p className="text-[11px] text-forest-night">
+            <div className="p-3 rounded-card bg-neon-pulse/10 border border-neon-pulse/30 space-y-1.5">
+              <span className="font-bold text-obsidian-shell block">Corporate ESG Certificate</span>
+              <p className="text-[11px] text-obsidian-shell">
                 Your quarterly impact metrics are exportable as verified corporate social responsibility and sustainability audit reports.
               </p>
             </div>

@@ -14,10 +14,10 @@ export function ProtectedRoute({ allowedRoles, children }: ProtectedRouteProps) 
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-warm-ivory flex flex-col items-center justify-center p-4">
-        <div className="glass-light p-8 rounded-card border border-white/60 shadow-glass flex flex-col items-center gap-4">
-          <Loader2 className="w-8 h-8 text-bridge-green animate-spin" />
-          <p className="text-sm font-semibold text-forest-night">
+      <div className="min-h-screen bg-obsidian-shell flex flex-col items-center justify-center p-4">
+        <div className="p-8 rounded-card bg-deep-abyss border border-white/10 shadow-lg flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 text-neon-pulse animate-spin" />
+          <p className="text-sm font-medium text-slate-text">
             Verifying MealBridge credentials...
           </p>
         </div>

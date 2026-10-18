@@ -36,21 +36,21 @@ export function IncidentReportsPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
-          Incident & Food Safety Tickets
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
+          Incident &amp; Food Safety Tickets
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Review operational disputes, hygiene concerns, or delivery exceptions reported by platform members.
         </p>
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Loading incident reports...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Loading incident reports...</div>
       ) : reports.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
-          <ShieldCheck className="w-10 h-10 mx-auto text-bridge-green" />
-          <h3 className="font-bold text-forest-night text-base">Zero open incident tickets</h3>
-          <p className="text-xs text-muted-text max-w-sm mx-auto">
+          <ShieldCheck className="w-10 h-10 mx-auto text-neon-pulse" />
+          <h3 className="font-medium text-obsidian-shell text-base">Zero open incident tickets</h3>
+          <p className="text-xs text-slate-text max-w-sm mx-auto">
             All food safety and courier operations are running smoothly with zero active disputes.
           </p>
         </GlassCard>
@@ -63,7 +63,7 @@ export function IncidentReportsPage() {
                   <Badge variant="outline" size="sm">
                     {report.category}
                   </Badge>
-                  <span className="font-bold text-forest-night text-sm">
+                  <span className="font-medium text-obsidian-shell text-sm">
                     Report #{report.id.slice(0, 8)}
                   </span>
                 </div>
@@ -71,7 +71,7 @@ export function IncidentReportsPage() {
                   {report.status}
                 </Badge>
               </div>
-              <p className="text-xs text-muted-text">{report.description}</p>
+              <p className="text-xs text-slate-text">{report.description}</p>
             </GlassCard>
           ))}
         </div>

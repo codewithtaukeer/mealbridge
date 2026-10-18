@@ -59,13 +59,13 @@ export function RecipientFoodDetailsPage() {
   };
 
   if (isLoading) {
-    return <div className="py-20 text-center text-muted-text text-sm">Loading food details...</div>;
+    return <div className="py-20 text-center text-slate-text text-sm">Loading food details...</div>;
   }
 
   if (!donation) {
     return (
       <div className="text-center py-20 space-y-4">
-        <h2 className="text-xl font-bold text-forest-night">Food listing not found</h2>
+        <h2 className="text-xl font-bold text-obsidian-shell">Food listing not found</h2>
         <Link to="/recipient/food">
           <Button variant="outline" size="sm">
             Back to Available Food
@@ -87,7 +87,7 @@ export function RecipientFoodDetailsPage() {
       <div className="mb-6 flex items-center justify-between">
         <Link
           to="/recipient/food"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-bridge-green hover:underline"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-neon-pulse hover:underline"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Available Food
         </Link>
@@ -103,22 +103,22 @@ export function RecipientFoodDetailsPage() {
               <Badge variant="outline" size="sm" className="mb-2">
                 {donation.category.replace(/_/g, ' ')}
               </Badge>
-              <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+              <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
                 {donation.title}
               </h1>
-              <p className="text-xs text-muted-text mt-1 flex items-center gap-1.5">
-                <Building className="w-3.5 h-3.5 text-bridge-green" />
+              <p className="text-xs text-slate-text mt-1 flex items-center gap-1.5">
+                <Building className="w-3.5 h-3.5 text-neon-pulse" />
                 <span>{donation.donorOrganization?.name} • {donation.pickupCity}</span>
               </p>
             </div>
 
             <div className="text-right sm:border-l sm:border-black/10 sm:pl-6">
-              <span className="text-xs font-bold text-muted-text uppercase tracking-wider block">
+              <span className="text-xs font-bold text-slate-text uppercase tracking-[0.05em] block">
                 Quantity
               </span>
-              <span className="text-3xl font-display font-bold text-bridge-green">
+              <span className="text-3xl font-display font-bold text-neon-pulse">
                 {donation.quantity}{' '}
-                <span className="text-sm font-semibold text-forest-night">
+                <span className="text-sm font-semibold text-obsidian-shell">
                   {donation.unit.toLowerCase()}
                 </span>
               </span>
@@ -127,15 +127,15 @@ export function RecipientFoodDetailsPage() {
 
           {/* Description */}
           {donation.description && (
-            <p className="text-xs text-muted-text leading-relaxed p-3 rounded-card bg-white/60 border border-black/5">
+            <p className="text-xs text-slate-text leading-relaxed p-3 rounded-card bg-white/60 border border-black/5">
               {donation.description}
             </p>
           )}
 
           {/* Pickup & Expiry Alert */}
-          <div className="p-3.5 rounded-card bg-harvest-gold/20 border border-harvest-gold/40 flex items-start gap-3">
-            <Clock className="w-5 h-5 text-[#8a5d1b] shrink-0 mt-0.5" />
-            <div className="text-xs text-forest-night space-y-0.5">
+          <div className="p-3.5 rounded-card bg-signal-yellow/10 border border-signal-yellow/30 flex items-start gap-3">
+            <Clock className="w-5 h-5 text-signal-yellow shrink-0 mt-0.5" />
+            <div className="text-xs text-obsidian-shell space-y-0.5">
               <span className="font-bold">Must Be Collected Before:</span>
               <p className="font-semibold text-sm">
                 {new Date(donation.pickupDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},{' '}
@@ -146,17 +146,17 @@ export function RecipientFoodDetailsPage() {
 
           {/* Location & Access */}
           <div className="space-y-3">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-forest-night">
+            <h2 className="text-xs font-bold uppercase tracking-[0.05em] text-obsidian-shell">
               Pickup Location & Instructions
             </h2>
             <div className="p-3.5 rounded-card bg-white/60 border border-black/5 space-y-2 text-xs">
-              <div className="flex items-center gap-1.5 font-bold text-forest-night">
-                <MapPin className="w-4 h-4 text-bridge-green" />
+              <div className="flex items-center gap-1.5 font-bold text-obsidian-shell">
+                <MapPin className="w-4 h-4 text-neon-pulse" />
                 <span>{donation.pickupAddress}, {donation.pickupCity}</span>
               </div>
               {donation.pickupInstructions && (
-                <p className="text-muted-text">
-                  <span className="font-semibold text-forest-night">Access Note: </span>
+                <p className="text-slate-text">
+                  <span className="font-semibold text-obsidian-shell">Access Note: </span>
                   {donation.pickupInstructions}
                 </p>
               )}
@@ -165,31 +165,31 @@ export function RecipientFoodDetailsPage() {
 
           {/* Allergens & Storage */}
           <div className="space-y-3">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-forest-night">
+            <h2 className="text-xs font-bold uppercase tracking-[0.05em] text-obsidian-shell">
               Allergen & Storage Specifications
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div className="p-3 rounded-card bg-white/60 border border-black/5 space-y-1">
-                <span className="font-bold text-forest-night block">Contained Allergens:</span>
+                <span className="font-bold text-obsidian-shell block">Contained Allergens:</span>
                 {allergens.length > 0 ? (
                   <div className="flex flex-wrap gap-1 mt-1">
                     {allergens.map((a) => (
                       <span
                         key={a}
-                        className="px-2 py-0.5 rounded-full bg-soft-coral/20 text-[#842e1d] font-semibold text-[10px]"
+                        className="px-2 py-0.5 rounded-full bg-soft-coral/20 text-soft-coral font-semibold text-[10px]"
                       >
                         {a}
                       </span>
                     ))}
                   </div>
                 ) : (
-                  <span className="text-muted-text">None declared by donor</span>
+                  <span className="text-slate-text">None declared by donor</span>
                 )}
               </div>
 
               <div className="p-3 rounded-card bg-white/60 border border-black/5 space-y-1">
-                <span className="font-bold text-forest-night block">Storage Temperature:</span>
-                <span className="text-muted-text">{donation.storageRequirements || 'Standard ambient / chilled'}</span>
+                <span className="font-bold text-obsidian-shell block">Storage Temperature:</span>
+                <span className="text-slate-text">{donation.storageRequirements || 'Standard ambient / chilled'}</span>
               </div>
             </div>
           </div>
@@ -203,20 +203,20 @@ export function RecipientFoodDetailsPage() {
                 className="w-full justify-center shadow-md hover:shadow-glow-mint"
                 isLoading={isReserving}
                 onClick={handleReserve}
-                leftIcon={<HeartHandshake className="w-5 h-5 text-forest-night" />}
+                leftIcon={<HeartHandshake className="w-5 h-5 text-obsidian-shell" />}
               >
                 Claim This Food Listing Now
               </Button>
             </div>
           ) : (
-            <div className="p-3 rounded-card bg-black/5 text-center text-xs text-muted-text">
+            <div className="p-3 rounded-card bg-black/5 text-center text-xs text-slate-text">
               This listing has already been reserved or distributed.
             </div>
           )}
         </GlassCard>
 
-        <div className="text-center text-[11px] text-muted-text flex items-center justify-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-bridge-green" />
+        <div className="text-center text-[11px] text-slate-text flex items-center justify-center gap-1.5">
+          <ShieldCheck className="w-3.5 h-3.5 text-neon-pulse" />
           <span>MealBridge guarantees audit logs for all claimed and redistributed batches</span>
         </div>
       </div>

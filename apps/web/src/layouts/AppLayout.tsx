@@ -90,15 +90,15 @@ export function AppLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-warm-ivory flex flex-col md:flex-row">
+    <div className="min-h-screen bg-obsidian-shell flex flex-col md:flex-row">
       {/* Mobile Header */}
-      <div className="md:hidden glass-dark bg-forest-night px-4 py-3 flex items-center justify-between text-white border-b border-white/10 z-40 sticky top-0">
+      <div className="md:hidden bg-deep-abyss px-4 py-3 flex items-center justify-between text-white border-b border-white/10 z-40 sticky top-0">
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-fresh-mint/20 flex items-center justify-center p-1">
-            <HeartHandshake className="w-4 h-4 text-fresh-mint" />
+          <div className="w-8 h-8 rounded-lg bg-neon-pulse/20 flex items-center justify-center p-1">
+            <HeartHandshake className="w-4 h-4 text-neon-pulse" />
           </div>
           <span className="font-display font-bold text-base tracking-tight text-white">
-            Meal<span className="text-fresh-mint">Bridge</span>
+            Meal<span className="text-neon-pulse">Bridge</span>
           </span>
         </Link>
 
@@ -120,10 +120,10 @@ export function AppLayout() {
         </div>
       </div>
 
-      {/* Desktop Deep-Green Glass Sidebar */}
+      {/* Desktop Deep-Green Obsidian Sidebar */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 w-64 glass-dark bg-forest-night text-white flex flex-col justify-between p-4 transition-transform duration-300 md:translate-x-0 md:static md:h-screen md:shrink-0 border-r border-white/10 shadow-glass-lg',
+          'fixed inset-y-0 left-0 z-50 w-64 bg-deep-abyss text-white flex flex-col justify-between p-4 transition-transform duration-300 md:translate-x-0 md:static md:h-screen md:shrink-0 border-r border-white/8 shadow-lg',
           mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -131,14 +131,14 @@ export function AppLayout() {
           {/* Logo Brand */}
           <div className="flex items-center justify-between px-2 pt-1">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-fresh-mint/15 flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 border border-fresh-mint/30 shadow-inner">
-                <HeartHandshake className="w-5 h-5 text-fresh-mint" />
+              <div className="w-10 h-10 rounded-xl bg-neon-pulse/15 flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 border border-neon-pulse/30">
+                <HeartHandshake className="w-5 h-5 text-neon-pulse" />
               </div>
               <div className="flex flex-col">
                 <span className="text-lg font-display font-bold tracking-tight text-white">
-                  Meal<span className="text-fresh-mint">Bridge</span>
+                  Meal<span className="text-neon-pulse">Bridge</span>
                 </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest text-fresh-mint/70">
+                <span className="text-[9px] font-medium uppercase tracking-[0.05em] text-neon-pulse/60">
                   {role ? ROLE_LABELS[role] : 'Platform'}
                 </span>
               </div>
@@ -148,18 +148,18 @@ export function AppLayout() {
           {/* User & Organization Pill */}
           <div className="p-3 rounded-card bg-white/5 border border-white/10 space-y-1">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-white truncate max-w-[140px]">
+              <span className="text-xs font-medium text-white truncate max-w-[140px]">
                 {organization?.name || user?.name || 'My Account'}
               </span>
-              <span className="text-[9px] uppercase font-bold px-2 py-0.5 rounded-full bg-fresh-mint text-forest-night">
+              <span className="text-[9px] font-medium uppercase tracking-[0.05em] px-2 py-0.5 rounded-full bg-neon-pulse text-obsidian-shell">
                 {role}
               </span>
             </div>
-            <p className="text-[11px] text-white/60 truncate">{user?.email}</p>
+            <p className="text-[11px] text-white/50 truncate">{user?.email}</p>
           </div>
 
           {/* Navigation Links */}
-          <nav className="space-y-1">
+          <nav className="space-y-0.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
@@ -171,11 +171,11 @@ export function AppLayout() {
                   className={cn(
                     'flex items-center gap-3 px-3.5 py-2.5 rounded-button text-xs font-medium transition-all duration-200',
                     isActive
-                      ? 'bg-fresh-mint text-forest-night font-bold shadow-md shadow-fresh-mint/20'
-                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                      ? 'bg-neon-pulse text-obsidian-shell font-semibold shadow-sm'
+                      : 'text-white/70 hover:text-white hover:bg-white/8'
                   )}
                 >
-                  <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-forest-night' : 'text-fresh-mint/80')} />
+                  <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-obsidian-shell' : 'text-neon-pulse/60')} />
                   <span>{item.label}</span>
                 </Link>
               );
@@ -184,14 +184,14 @@ export function AppLayout() {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="pt-4 border-t border-white/10 space-y-1">
+        <div className="pt-4 border-t border-white/10 space-y-0.5">
           <Link
             to="/notifications"
             onClick={() => setMobileSidebarOpen(false)}
-            className="flex items-center justify-between px-3.5 py-2 rounded-button text-xs text-white/80 hover:text-white hover:bg-white/10"
+            className="flex items-center justify-between px-3.5 py-2 rounded-button text-xs text-white/70 hover:text-white hover:bg-white/8 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <Bell className="w-4 h-4 text-fresh-mint/80" />
+              <Bell className="w-4 h-4 text-neon-pulse/60" />
               <span>Notifications</span>
             </div>
           </Link>
@@ -199,9 +199,9 @@ export function AppLayout() {
           <Link
             to="/settings"
             onClick={() => setMobileSidebarOpen(false)}
-            className="flex items-center gap-3 px-3.5 py-2 rounded-button text-xs text-white/80 hover:text-white hover:bg-white/10"
+            className="flex items-center gap-3 px-3.5 py-2 rounded-button text-xs text-white/70 hover:text-white hover:bg-white/8 transition-colors"
           >
-            <Settings className="w-4 h-4 text-fresh-mint/80" />
+            <Settings className="w-4 h-4 text-neon-pulse/60" />
             <span>Settings</span>
           </Link>
 
@@ -217,13 +217,13 @@ export function AppLayout() {
       </aside>
 
       {/* Main Content Canvas */}
-      <main className="flex-1 overflow-y-auto min-h-screen">
-        {/* Top Floating Glass Header (Desktop) */}
-        <header className="hidden md:flex items-center justify-between px-8 py-4 glass-light border-b border-black/5 sticky top-0 z-30">
-          <div className="flex items-center gap-2 text-xs font-medium text-muted-text">
+      <main className="flex-1 overflow-y-auto min-h-screen bg-obsidian-shell">
+        {/* Top Header (Desktop) */}
+        <header className="hidden md:flex items-center justify-between px-8 py-4 bg-deep-abyss border-b border-white/8 sticky top-0 z-30">
+          <div className="flex items-center gap-2 text-xs font-medium text-slate-text">
             <span>MealBridge</span>
             <span>/</span>
-            <span className="font-semibold text-forest-night capitalize">
+            <span className="font-medium text-pure-white capitalize">
               {location.pathname.split('/')[2]?.replace('-', ' ') || 'Dashboard'}
             </span>
           </div>
@@ -231,21 +231,21 @@ export function AppLayout() {
           <div className="flex items-center gap-4">
             <Link
               to="/notifications"
-              className="p-2 rounded-xl text-forest-night hover:bg-black/5 transition-colors relative"
+              className="p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-colors relative"
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
             </Link>
 
-            <div className="h-4 w-[1px] bg-black/10" />
+            <div className="h-4 w-[1px] bg-white/10" />
 
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-bridge-green/15 flex items-center justify-center font-bold text-xs text-forest-night">
+              <div className="w-8 h-8 rounded-full bg-neon-pulse/15 border border-neon-pulse/30 flex items-center justify-center font-bold text-xs text-neon-pulse">
                 {user?.name?.[0]?.toUpperCase() || 'U'}
               </div>
               <div className="flex flex-col text-left">
-                <span className="text-xs font-bold text-forest-night leading-tight">{user?.name}</span>
-                <span className="text-[10px] text-muted-text">{organization?.name || role}</span>
+                <span className="text-xs font-medium text-pure-white leading-tight">{user?.name}</span>
+                <span className="text-[10px] text-slate-text">{organization?.name || role}</span>
               </div>
             </div>
           </div>

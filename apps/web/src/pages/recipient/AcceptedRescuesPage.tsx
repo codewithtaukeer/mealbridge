@@ -77,10 +77,10 @@ export function AcceptedRescuesPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
             Incoming Rescues & Deliveries
           </h1>
-          <p className="text-xs sm:text-sm text-muted-text mt-1">
+          <p className="text-xs sm:text-sm text-slate-text mt-1">
             Track volunteer assignments, vehicle transit status, and confirm intake upon arrival.
           </p>
         </div>
@@ -100,8 +100,8 @@ export function AcceptedRescuesPage() {
             onClick={() => setSelectedStatus(sf.value)}
             className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
               selectedStatus === sf.value
-                ? 'bg-bridge-green text-white shadow-sm'
-                : 'bg-white/60 text-muted-text hover:bg-white/90 border border-black/5'
+                ? 'bg-neon-pulse text-white shadow-sm'
+                : 'bg-white/60 text-slate-text hover:bg-white/90 border border-black/5'
             }`}
           >
             {sf.label}
@@ -110,12 +110,12 @@ export function AcceptedRescuesPage() {
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Loading rescue missions...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Loading rescue missions...</div>
       ) : filteredRescues.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
-          <HeartHandshake className="w-10 h-10 mx-auto text-muted-text" />
-          <h3 className="font-bold text-forest-night text-base">No rescue records found</h3>
-          <p className="text-xs text-muted-text max-w-sm mx-auto">
+          <HeartHandshake className="w-10 h-10 mx-auto text-slate-text" />
+          <h3 className="font-bold text-obsidian-shell text-base">No rescue records found</h3>
+          <p className="text-xs text-slate-text max-w-sm mx-auto">
             Reserve surplus food from the available listings to create and dispatch a new rescue mission.
           </p>
         </GlassCard>
@@ -126,13 +126,13 @@ export function AcceptedRescuesPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-forest-night text-base">
+                    <span className="font-bold text-obsidian-shell text-base">
                       {rescue.donation?.title || 'Claimed Food Listing'}
                     </span>
                     {getStatusBadge(rescue.status)}
                   </div>
-                  <p className="text-xs text-muted-text flex items-center gap-1.5">
-                    <Building className="w-3.5 h-3.5 text-bridge-green" />
+                  <p className="text-xs text-slate-text flex items-center gap-1.5">
+                    <Building className="w-3.5 h-3.5 text-neon-pulse" />
                     <span>Donor: {rescue.donation?.donorOrganization?.name || 'Local Donor'}</span>
                   </p>
                 </div>
@@ -148,30 +148,30 @@ export function AcceptedRescuesPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
                 <div className="p-2.5 rounded-card bg-white/60 border border-black/5 flex items-center gap-2">
-                  <Bike className="w-4 h-4 text-bridge-green shrink-0" />
+                  <Bike className="w-4 h-4 text-neon-pulse shrink-0" />
                   <div>
-                    <span className="text-[10px] text-muted-text block">Volunteer Assigned</span>
-                    <span className="font-semibold text-forest-night">
+                    <span className="text-[10px] text-slate-text block">Volunteer Assigned</span>
+                    <span className="font-semibold text-obsidian-shell">
                       {rescue.volunteer?.name || 'Awaiting volunteer claim'}
                     </span>
                   </div>
                 </div>
 
                 <div className="p-2.5 rounded-card bg-white/60 border border-black/5 flex items-center gap-2">
-                  <UtensilsCrossed className="w-4 h-4 text-bridge-green shrink-0" />
+                  <UtensilsCrossed className="w-4 h-4 text-neon-pulse shrink-0" />
                   <div>
-                    <span className="text-[10px] text-muted-text block">Total Portions</span>
-                    <span className="font-semibold text-forest-night">
+                    <span className="text-[10px] text-slate-text block">Total Portions</span>
+                    <span className="font-semibold text-obsidian-shell">
                       {rescue.donation?.quantity} {rescue.donation?.unit.toLowerCase()}
                     </span>
                   </div>
                 </div>
 
                 <div className="p-2.5 rounded-card bg-white/60 border border-black/5 flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-bridge-green shrink-0" />
+                  <MapPin className="w-4 h-4 text-neon-pulse shrink-0" />
                   <div>
-                    <span className="text-[10px] text-muted-text block">Pickup City</span>
-                    <span className="font-semibold text-forest-night">
+                    <span className="text-[10px] text-slate-text block">Pickup City</span>
+                    <span className="font-semibold text-obsidian-shell">
                       {rescue.donation?.pickupCity}
                     </span>
                   </div>

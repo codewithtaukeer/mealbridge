@@ -24,10 +24,10 @@ export function PlatformSettingsPage() {
   return (
     <div className="max-w-2xl space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
-          Platform Governance & Controls
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
+          Platform Governance &amp; Controls
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           System-wide operational parameters, expiry timers, and food security thresholds.
         </p>
       </div>
@@ -35,8 +35,8 @@ export function PlatformSettingsPage() {
       <GlassCard variant="light" padding="lg" className="border-white/70 shadow-glass-md space-y-6">
         <form onSubmit={handleSave} className="space-y-6">
           <div className="space-y-4">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-forest-night">
-              Redistribution Timers & Perimeter
+            <h2 className="text-xs font-medium uppercase tracking-[0.05em] text-obsidian-shell">
+              Redistribution Timers &amp; Perimeter
             </h2>
 
             <Input
@@ -59,16 +59,16 @@ export function PlatformSettingsPage() {
           </div>
 
           <div className="pt-4 border-t border-black/5 space-y-4">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-forest-night">
+            <h2 className="text-xs font-medium uppercase tracking-[0.05em] text-obsidian-shell">
               Compliance Enforcement
             </h2>
 
-            <div className="p-3.5 rounded-card bg-white/60 border border-black/5 flex items-center justify-between">
+            <div className="p-3.5 rounded-card bg-obsidian-shell/5 border border-fog-border flex items-center justify-between">
               <div>
-                <span className="font-bold text-xs text-forest-night block">
+                <span className="font-medium text-xs text-obsidian-shell block">
                   Mandatory Organization Verification
                 </span>
-                <span className="text-[11px] text-muted-text">
+                <span className="text-[11px] text-slate-text">
                   Require manual administrative approval before allowing direct recipient food allocation.
                 </span>
               </div>
@@ -76,16 +76,16 @@ export function PlatformSettingsPage() {
                 type="checkbox"
                 checked={requireOrgVerification}
                 onChange={(e) => setRequireOrgVerification(e.target.checked)}
-                className="rounded border-black/20 text-bridge-green focus:ring-bridge-green"
+                className="rounded border-black/20 text-neon-pulse focus:ring-neon-pulse"
               />
             </div>
 
-            <div className="p-3.5 rounded-card bg-white/60 border border-black/5 flex items-center justify-between">
+            <div className="p-3.5 rounded-card bg-obsidian-shell/5 border border-fog-border flex items-center justify-between">
               <div>
-                <span className="font-bold text-xs text-forest-night block">
+                <span className="font-medium text-xs text-obsidian-shell block">
                   Socket.IO Real-Time Dispatch Alerts
                 </span>
-                <span className="text-[11px] text-muted-text">
+                <span className="text-[11px] text-slate-text">
                   Broadcast instant push updates to eligible recipients and couriers upon listing creation.
                 </span>
               </div>
@@ -93,7 +93,7 @@ export function PlatformSettingsPage() {
                 type="checkbox"
                 checked={enableRealtimeAlerts}
                 onChange={(e) => setEnableRealtimeAlerts(e.target.checked)}
-                className="rounded border-black/20 text-bridge-green focus:ring-bridge-green"
+                className="rounded border-black/20 text-neon-pulse focus:ring-neon-pulse"
               />
             </div>
           </div>
@@ -104,7 +104,7 @@ export function PlatformSettingsPage() {
               variant="primary"
               size="md"
               isLoading={isLoading}
-              leftIcon={<Save className="w-4 h-4 text-forest-night" />}
+              leftIcon={<Save className="w-4 h-4 text-obsidian-shell" />}
             >
               Save Configuration
             </Button>
@@ -112,8 +112,8 @@ export function PlatformSettingsPage() {
         </form>
       </GlassCard>
 
-      <div className="text-center text-[11px] text-muted-text flex items-center justify-center gap-1.5">
-        <ShieldCheck className="w-3.5 h-3.5 text-bridge-green" />
+      <div className="text-center text-[11px] text-slate-text flex items-center justify-center gap-1.5">
+        <ShieldCheck className="w-3.5 h-3.5 text-neon-pulse" />
         <span>Platform settings are cryptographically logged to the immutable audit database</span>
       </div>
     </div>

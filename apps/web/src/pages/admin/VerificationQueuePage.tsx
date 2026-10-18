@@ -78,21 +78,21 @@ export function VerificationQueuePage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
           Organization Verification Queue
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Review commercial food donors and non-profit recipient applications before approving live redistribution clearance.
         </p>
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Loading verification applications...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Loading verification applications...</div>
       ) : organizations.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
-          <ShieldCheck className="w-10 h-10 mx-auto text-bridge-green" />
-          <h3 className="font-bold text-forest-night text-base">Verification queue is clear</h3>
-          <p className="text-xs text-muted-text max-w-sm mx-auto">
+          <ShieldCheck className="w-10 h-10 mx-auto text-neon-pulse" />
+          <h3 className="font-medium text-obsidian-shell text-base">Verification queue is clear</h3>
+          <p className="text-xs text-slate-text max-w-sm mx-auto">
             All submitted food donor and recipient organizations have been verified.
           </p>
         </GlassCard>
@@ -102,12 +102,12 @@ export function VerificationQueuePage() {
             <GlassCard key={org.id} variant="light" padding="lg" className="border-white/70 shadow-glass-md space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-forest-night flex items-center justify-center text-fresh-mint font-bold text-base">
+                  <div className="w-10 h-10 rounded-xl bg-obsidian-shell flex items-center justify-center text-neon-pulse font-bold text-base">
                     {org.name[0]}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h2 className="font-display font-bold text-base text-forest-night">
+                      <h2 className="font-display font-medium text-base text-obsidian-shell">
                         {org.name}
                       </h2>
                       <Badge variant="outline" size="sm">
@@ -117,7 +117,7 @@ export function VerificationQueuePage() {
                         {org.verificationStatus}
                       </Badge>
                     </div>
-                    <span className="text-[11px] text-muted-text">
+                    <span className="text-[11px] text-slate-text">
                       Registered on {new Date(org.createdAt).toLocaleDateString()}
                     </span>
                   </div>
@@ -137,24 +137,24 @@ export function VerificationQueuePage() {
                     size="sm"
                     isLoading={activeOrgId === org.id}
                     onClick={() => handleApprove(org.id)}
-                    leftIcon={<CheckCircle2 className="w-4 h-4 text-forest-night" />}
+                    leftIcon={<CheckCircle2 className="w-4 h-4 text-obsidian-shell" />}
                   >
-                    Approve & Verify
+                    Approve &amp; Verify
                   </Button>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
-                <div className="p-2.5 rounded-card bg-white/60 border border-black/5 flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-bridge-green shrink-0" />
+                <div className="p-2.5 rounded-card bg-obsidian-shell/5 border border-fog-border flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-neon-pulse shrink-0" />
                   <span className="truncate">{org.address}, {org.city}</span>
                 </div>
-                <div className="p-2.5 rounded-card bg-white/60 border border-black/5 flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-bridge-green shrink-0" />
+                <div className="p-2.5 rounded-card bg-obsidian-shell/5 border border-fog-border flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-neon-pulse shrink-0" />
                   <span>{org.phone || 'N/A'}</span>
                 </div>
-                <div className="p-2.5 rounded-card bg-white/60 border border-black/5 flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-bridge-green shrink-0" />
+                <div className="p-2.5 rounded-card bg-obsidian-shell/5 border border-fog-border flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-neon-pulse shrink-0" />
                   <span className="truncate">{org.email}</span>
                 </div>
               </div>
@@ -167,21 +167,21 @@ export function VerificationQueuePage() {
       {rejectModalOrg && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
           <GlassCard variant="light" padding="lg" className="max-w-md w-full border-white/80 space-y-4">
-            <h3 className="font-display font-bold text-lg text-forest-night">
+            <h3 className="font-display font-medium text-lg text-obsidian-shell">
               Reject Verification: {rejectModalOrg.name}
             </h3>
-            <p className="text-xs text-muted-text">
+            <p className="text-xs text-slate-text">
               Provide a clear compliance reason to the organization applicant.
             </p>
             <div className="space-y-1.5">
-              <label className="block text-xs font-medium text-forest-night">Rejection Reason</label>
+              <label className="block text-xs font-medium text-obsidian-shell">Rejection Reason</label>
               <textarea
                 rows={3}
                 required
                 placeholder="e.g. Unverified FSSAI license number, missing trade license document..."
                 value={rejectReason}
                 onChange={(e) => setRejectReason(e.target.value)}
-                className="w-full px-3 py-2 rounded-card bg-white/80 border border-black/10 text-xs text-primary-text focus:outline-none focus:ring-2 focus:ring-bridge-green/30"
+                className="w-full px-3 py-2 rounded-card bg-white/80 border border-black/10 text-xs text-obsidian-shell focus:outline-none focus:ring-2 focus:ring-neon-pulse/30"
               />
             </div>
             <div className="pt-2 flex items-center justify-end gap-3">

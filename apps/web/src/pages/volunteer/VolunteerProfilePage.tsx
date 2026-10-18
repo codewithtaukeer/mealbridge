@@ -34,10 +34,10 @@ export function VolunteerProfilePage() {
   return (
     <div className="max-w-2xl space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
           Volunteer Courier Profile
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Configure your vehicle parameters, maximum travel radius, and live mission dispatch availability.
         </p>
       </div>
@@ -45,12 +45,12 @@ export function VolunteerProfilePage() {
       <GlassCard variant="light" padding="lg" className="border-white/70 shadow-glass-md space-y-6">
         <form onSubmit={handleSave} className="space-y-6">
           {/* Availability Toggle */}
-          <div className="p-4 rounded-xl bg-white/60 border border-black/5 flex items-center justify-between">
+          <div className="p-4 rounded-xl bg-obsidian-shell/5 border border-fog-border flex items-center justify-between">
             <div>
-              <span className="font-bold text-sm text-forest-night block">
+              <span className="font-medium text-sm text-obsidian-shell block">
                 Active Dispatch Availability
               </span>
-              <span className="text-xs text-muted-text">
+              <span className="text-xs text-slate-text">
                 When active, you receive live Socket.IO push alerts for nearby surplus pickups.
               </span>
             </div>
@@ -58,7 +58,7 @@ export function VolunteerProfilePage() {
               type="button"
               onClick={() => setIsAvailable(!isAvailable)}
               className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors ${
-                isAvailable ? 'bg-bridge-green justify-end' : 'bg-black/20 justify-start'
+                isAvailable ? 'bg-neon-pulse justify-end' : 'bg-black/20 justify-start'
               }`}
             >
               <div className="bg-white w-4 h-4 rounded-full shadow-md" />
@@ -67,7 +67,7 @@ export function VolunteerProfilePage() {
 
           {/* Transport Mode */}
           <div className="space-y-3">
-            <label className="block text-xs font-bold uppercase tracking-wider text-forest-night">
+            <label className="block text-xs font-medium uppercase tracking-[0.05em] text-obsidian-shell">
               Primary Vehicle / Transport Mode
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -78,12 +78,12 @@ export function VolunteerProfilePage() {
                   onClick={() => setTransportMode(opt.value)}
                   className={`p-3 rounded-card text-left text-xs transition-all border ${
                     transportMode === opt.value
-                      ? 'bg-bridge-green/10 border-bridge-green font-semibold text-forest-night shadow-sm'
-                      : 'bg-white/50 border-black/5 text-muted-text hover:bg-white/80'
+                      ? 'bg-neon-pulse/10 border-neon-pulse font-semibold text-obsidian-shell shadow-sm'
+                      : 'bg-obsidian-shell/5 border-fog-border text-slate-text hover:bg-white/80'
                   }`}
                 >
-                  <span className="font-bold block">{opt.label}</span>
-                  <span className="text-[11px] text-muted-text mt-0.5 block">{opt.desc}</span>
+                  <span className="font-medium block">{opt.label}</span>
+                  <span className="text-[11px] text-slate-text mt-0.5 block">{opt.desc}</span>
                 </button>
               ))}
             </div>
@@ -91,7 +91,7 @@ export function VolunteerProfilePage() {
 
           {/* Service Radius */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs font-bold text-forest-night">
+            <div className="flex items-center justify-between text-xs font-medium text-obsidian-shell">
               <span>Service Radius: {serviceRadius} km</span>
             </div>
             <input
@@ -101,9 +101,9 @@ export function VolunteerProfilePage() {
               step="1"
               value={serviceRadius}
               onChange={(e) => setServiceRadius(Number(e.target.value))}
-              className="w-full accent-bridge-green"
+              className="w-full accent-neon-pulse"
             />
-            <span className="text-[11px] text-muted-text block">
+            <span className="text-[11px] text-slate-text block">
               You will only be matched with pickup locations within {serviceRadius} km of your operating base.
             </span>
           </div>
@@ -121,7 +121,7 @@ export function VolunteerProfilePage() {
               variant="primary"
               size="md"
               isLoading={isLoading}
-              leftIcon={<Save className="w-4 h-4 text-forest-night" />}
+              leftIcon={<Save className="w-4 h-4 text-obsidian-shell" />}
             >
               Save Volunteer Profile
             </Button>
@@ -129,8 +129,8 @@ export function VolunteerProfilePage() {
         </form>
       </GlassCard>
 
-      <div className="text-center text-[11px] text-muted-text flex items-center justify-center gap-1.5">
-        <ShieldCheck className="w-3.5 h-3.5 text-bridge-green" />
+      <div className="text-center text-[11px] text-slate-text flex items-center justify-center gap-1.5">
+        <ShieldCheck className="w-3.5 h-3.5 text-neon-pulse" />
         <span>Volunteer accounts adhere to Good Samaritan protection guidelines for food redistribution</span>
       </div>
     </div>

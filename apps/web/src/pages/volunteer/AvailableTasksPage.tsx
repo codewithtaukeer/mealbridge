@@ -48,21 +48,21 @@ export function AvailableTasksPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
           Available Rescue Missions
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Open missions claimed by recipient NGOs requiring transport from donor kitchens.
         </p>
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Searching for open missions...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Searching for open missions...</div>
       ) : openRescues.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
-          <Bike className="w-10 h-10 mx-auto text-muted-text" />
-          <h3 className="font-bold text-forest-night text-base">No open missions available</h3>
-          <p className="text-xs text-muted-text max-w-sm mx-auto">
+          <Bike className="w-10 h-10 mx-auto text-slate-text" />
+          <h3 className="font-medium text-obsidian-shell text-base">No open missions available</h3>
+          <p className="text-xs text-slate-text max-w-sm mx-auto">
             All current surplus food claims have been assigned to couriers. We will notify you when a new mission is listed.
           </p>
         </GlassCard>
@@ -80,47 +80,47 @@ export function AvailableTasksPage() {
                   <Badge variant="outline" size="sm" className="text-[10px]">
                     {rescue.donation?.category.replace(/_/g, ' ')}
                   </Badge>
-                  <span className="text-xs font-extrabold text-bridge-green bg-fresh-mint/30 px-2 py-0.5 rounded-full">
+                  <span className="text-xs font-medium text-neon-pulse bg-neon-pulse/30 px-2 py-0.5 rounded-full">
                     {rescue.donation?.quantity} {rescue.donation?.unit.toLowerCase()}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-display font-bold text-forest-night text-base line-clamp-1">
+                  <h3 className="font-display font-medium text-obsidian-shell text-base line-clamp-1">
                     {rescue.donation?.title}
                   </h3>
-                  <span className="text-xs text-muted-text">
+                  <span className="text-xs text-slate-text">
                     Mission #{rescue.id.slice(0, 8)}
                   </span>
                 </div>
 
-                <div className="space-y-2 text-xs text-muted-text pt-1">
-                  <div className="p-2 rounded-card bg-white/60 border border-black/5 space-y-1">
-                    <span className="text-[10px] uppercase font-bold text-forest-night block">
+                <div className="space-y-2 text-xs text-slate-text pt-1">
+                  <div className="p-2 rounded-card bg-obsidian-shell/5 border border-fog-border space-y-1">
+                    <span className="text-[9px] font-medium uppercase tracking-[0.05em] text-obsidian-shell block">
                       Pickup From:
                     </span>
-                    <p className="font-semibold text-forest-night">
+                    <p className="font-semibold text-obsidian-shell">
                       {rescue.donation?.donorOrganization?.name}
                     </p>
-                    <p className="text-muted-text truncate">
+                    <p className="text-slate-text truncate">
                       {rescue.donation?.pickupAddress}, {rescue.donation?.pickupCity}
                     </p>
                   </div>
 
-                  <div className="p-2 rounded-card bg-white/60 border border-black/5 space-y-1">
-                    <span className="text-[10px] uppercase font-bold text-forest-night block">
+                  <div className="p-2 rounded-card bg-obsidian-shell/5 border border-fog-border space-y-1">
+                    <span className="text-[9px] font-medium uppercase tracking-[0.05em] text-obsidian-shell block">
                       Deliver To:
                     </span>
-                    <p className="font-semibold text-forest-night">
+                    <p className="font-semibold text-obsidian-shell">
                       {rescue.recipientOrganization?.name}
                     </p>
-                    <p className="text-muted-text truncate">
+                    <p className="text-slate-text truncate">
                       {rescue.recipientOrganization?.address}, {rescue.recipientOrganization?.city}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-xs text-[#842e1d] font-medium pt-1">
+                <div className="flex items-center gap-1.5 text-xs text-soft-coral font-medium pt-1">
                   <Clock className="w-3.5 h-3.5 shrink-0" />
                   <span>
                     Deadline:{' '}
@@ -139,7 +139,7 @@ export function AvailableTasksPage() {
                   isLoading={claimingId === rescue.id}
                   onClick={() => handleClaim(rescue.id)}
                 >
-                  Claim & Start Mission
+                  Claim &amp; Start Mission
                 </Button>
               </div>
             </GlassCard>

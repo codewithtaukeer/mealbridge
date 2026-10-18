@@ -85,11 +85,11 @@ export function RecipientNeedsPage() {
     <PageContainer size="md" withBloom>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
             Food Intake Criteria & Preferences
           </h1>
-          <p className="text-xs sm:text-sm text-muted-text mt-1">
-            Configure your organization’s capacity and dietary preferences to improve automated matching.
+          <p className="text-xs sm:text-sm text-slate-text mt-1">
+            Configure your organization's capacity and dietary preferences to improve automated matching.
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export function RecipientNeedsPage() {
           <form onSubmit={handleSave} className="space-y-6">
             {/* Accepted Categories */}
             <div className="space-y-3">
-              <label className="block text-xs font-bold uppercase tracking-wider text-forest-night">
+              <label className="block text-xs font-bold uppercase tracking-[0.05em] text-obsidian-shell">
                 Food Categories Accepted
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -110,12 +110,12 @@ export function RecipientNeedsPage() {
                       onClick={() => toggleCategory(cat.value)}
                       className={`p-3 rounded-card text-left text-xs transition-all border flex items-center justify-between ${
                         isChecked
-                          ? 'bg-bridge-green/10 border-bridge-green font-semibold text-forest-night shadow-sm'
-                          : 'bg-white/50 border-black/5 text-muted-text hover:bg-white/80'
+                          ? 'bg-neon-pulse/10 border-neon-pulse font-semibold text-obsidian-shell shadow-sm'
+                          : 'bg-white/50 border-black/5 text-slate-text hover:bg-white/80'
                       }`}
                     >
                       <span>{cat.label}</span>
-                      {isChecked && <CheckCircle2 className="w-4 h-4 text-bridge-green shrink-0" />}
+                      {isChecked && <CheckCircle2 className="w-4 h-4 text-neon-pulse shrink-0" />}
                     </button>
                   );
                 })}
@@ -124,7 +124,7 @@ export function RecipientNeedsPage() {
 
             {/* Batch Capacity */}
             <div className="pt-4 border-t border-black/5 space-y-3">
-              <label className="block text-xs font-bold uppercase tracking-wider text-forest-night">
+              <label className="block text-xs font-bold uppercase tracking-[0.05em] text-obsidian-shell">
                 Maximum Intake Capacity Per Batch
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -138,11 +138,11 @@ export function RecipientNeedsPage() {
                 />
 
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-medium text-forest-night">Unit</label>
+                  <label className="block text-xs font-medium text-obsidian-shell">Unit</label>
                   <select
                     value={maxUnit}
                     onChange={(e) => setMaxUnit(e.target.value as QuantityUnit)}
-                    className="w-full px-3.5 py-2.5 rounded-card bg-white/70 border border-black/10 text-primary-text text-sm focus:outline-none focus:ring-2 focus:ring-bridge-green/30"
+                    className="w-full px-3.5 py-2.5 rounded-card bg-white/70 border border-black/10 text-obsidian-shell text-sm focus:outline-none focus:ring-2 focus:ring-neon-pulse/30"
                   >
                     {QUANTITY_UNITS.map((u) => (
                       <option key={u.value} value={u.value}>
@@ -156,7 +156,7 @@ export function RecipientNeedsPage() {
 
             {/* Service Radius */}
             <div className="pt-4 border-t border-black/5 space-y-3">
-              <label className="block text-xs font-bold uppercase tracking-wider text-forest-night">
+              <label className="block text-xs font-bold uppercase tracking-[0.05em] text-obsidian-shell">
                 Acceptable Distance / Service Radius: {serviceRadius} km
               </label>
               <input
@@ -166,16 +166,16 @@ export function RecipientNeedsPage() {
                 step="1"
                 value={serviceRadius}
                 onChange={(e) => setServiceRadius(Number(e.target.value))}
-                className="w-full accent-bridge-green"
+                className="w-full accent-neon-pulse"
               />
-              <span className="text-[11px] text-muted-text block">
+              <span className="text-[11px] text-slate-text block">
                 Food listings within {serviceRadius} km of your facility will be prioritized in matching feeds.
               </span>
             </div>
 
             {/* Dietary Constraints */}
             <div className="pt-4 border-t border-black/5 space-y-2">
-              <label className="block text-xs font-medium text-forest-night">
+              <label className="block text-xs font-medium text-obsidian-shell">
                 Community Dietary Constraints or Special Requirements
               </label>
               <textarea
@@ -183,7 +183,7 @@ export function RecipientNeedsPage() {
                 placeholder="e.g. We exclusively serve vegetarian hot meals to an elderly shelter. No raw poultry or expired baked goods."
                 value={dietaryNotes}
                 onChange={(e) => setDietaryNotes(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-card bg-white/70 border border-black/10 text-primary-text text-sm focus:outline-none focus:ring-2 focus:ring-bridge-green/30"
+                className="w-full px-3.5 py-2.5 rounded-card bg-white/70 border border-black/10 text-obsidian-shell text-sm focus:outline-none focus:ring-2 focus:ring-neon-pulse/30"
               />
             </div>
 
@@ -193,7 +193,7 @@ export function RecipientNeedsPage() {
                 variant="primary"
                 size="md"
                 isLoading={isLoading}
-                leftIcon={<Save className="w-4 h-4 text-forest-night" />}
+                leftIcon={<Save className="w-4 h-4 text-obsidian-shell" />}
               >
                 Save Preferences
               </Button>
@@ -201,8 +201,8 @@ export function RecipientNeedsPage() {
           </form>
         </GlassCard>
 
-        <div className="text-center text-[11px] text-muted-text flex items-center justify-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-bridge-green" />
+        <div className="text-center text-[11px] text-slate-text flex items-center justify-center gap-1.5">
+          <ShieldCheck className="w-3.5 h-3.5 text-neon-pulse" />
           <span>Accurate capacity criteria avoids food waste from unclaimed surplus batches</span>
         </div>
       </div>

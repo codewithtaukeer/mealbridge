@@ -75,10 +75,10 @@ export function AvailableFoodPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
           Available Surplus Food
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Real-time food listings posted by verified donor restaurants, caterers, and hotels.
         </p>
       </div>
@@ -90,8 +90,8 @@ export function AvailableFoodPage() {
             onClick={() => setSelectedCategory('ALL')}
             className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
               selectedCategory === 'ALL'
-                ? 'bg-bridge-green text-white shadow-sm'
-                : 'bg-white/60 text-muted-text hover:bg-white/90 border border-black/5'
+                ? 'bg-neon-pulse text-white shadow-sm'
+                : 'bg-white/60 text-slate-text hover:bg-white/90 border border-black/5'
             }`}
           >
             All Categories
@@ -102,8 +102,8 @@ export function AvailableFoodPage() {
               onClick={() => setSelectedCategory(cat.value)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === cat.value
-                  ? 'bg-bridge-green text-white shadow-sm'
-                  : 'bg-white/60 text-muted-text hover:bg-white/90 border border-black/5'
+                  ? 'bg-neon-pulse text-white shadow-sm'
+                  : 'bg-white/60 text-slate-text hover:bg-white/90 border border-black/5'
               }`}
             >
               {cat.label}
@@ -116,19 +116,19 @@ export function AvailableFoodPage() {
             placeholder="Search food or city..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            leftIcon={<Search className="w-4 h-4 text-muted-text" />}
+            leftIcon={<Search className="w-4 h-4 text-slate-text" />}
           />
         </div>
       </div>
 
       {/* Food Listings Grid */}
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Searching for surplus food...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Searching for surplus food...</div>
       ) : filtered.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
-          <UtensilsCrossed className="w-10 h-10 mx-auto text-muted-text" />
-          <h3 className="font-bold text-forest-night text-base">No matching food listings available</h3>
-          <p className="text-xs text-muted-text max-w-sm mx-auto">
+          <UtensilsCrossed className="w-10 h-10 mx-auto text-slate-text" />
+          <h3 className="font-bold text-obsidian-shell text-base">No matching food listings available</h3>
+          <p className="text-xs text-slate-text max-w-sm mx-auto">
             Try adjusting your search criteria. New food donations are posted throughout the day.
           </p>
         </GlassCard>
@@ -146,27 +146,27 @@ export function AvailableFoodPage() {
                   <Badge variant="outline" size="sm" className="text-[10px]">
                     {donation.category.replace(/_/g, ' ')}
                   </Badge>
-                  <span className="text-xs font-extrabold text-bridge-green bg-fresh-mint/30 px-2.5 py-0.5 rounded-full">
+                  <span className="text-xs font-medium text-neon-pulse bg-neon-pulse/30 px-2.5 py-0.5 rounded-full">
                     {donation.quantity} {donation.unit.toLowerCase()}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-display font-bold text-forest-night text-base line-clamp-1">
+                  <h3 className="font-display font-bold text-obsidian-shell text-base line-clamp-1">
                     {donation.title}
                   </h3>
-                  <div className="flex items-center gap-1.5 text-xs text-muted-text mt-1">
-                    <Building className="w-3.5 h-3.5 text-bridge-green shrink-0" />
+                  <div className="flex items-center gap-1.5 text-xs text-slate-text mt-1">
+                    <Building className="w-3.5 h-3.5 text-neon-pulse shrink-0" />
                     <span className="truncate">{donation.donorOrganization?.name || 'Local Kitchen'}</span>
                   </div>
                 </div>
 
-                <div className="space-y-1 text-xs text-muted-text">
+                <div className="space-y-1 text-xs text-slate-text">
                   <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-muted-text shrink-0" />
+                    <MapPin className="w-3.5 h-3.5 text-slate-text shrink-0" />
                     <span className="truncate">{donation.pickupAddress}, {donation.pickupCity}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-[#842e1d] font-medium">
+                  <div className="flex items-center gap-1.5 text-soft-coral font-medium">
                     <Clock className="w-3.5 h-3.5 shrink-0" />
                     <span>
                       Deadline: {new Date(donation.pickupDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ({new Date(donation.pickupDeadline).toLocaleDateString()})
@@ -178,7 +178,7 @@ export function AvailableFoodPage() {
               <div className="pt-4 mt-4 border-t border-black/5 flex items-center justify-between gap-2">
                 <Link
                   to={`/recipient/food/${donation.id}`}
-                  className="text-xs font-semibold text-bridge-green hover:underline"
+                  className="text-xs font-semibold text-neon-pulse hover:underline"
                 >
                   Full Safety Specs
                 </Link>
@@ -201,18 +201,18 @@ export function AvailableFoodPage() {
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
           <GlassCard variant="light" padding="lg" className="max-w-md w-full border-white/80 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-fresh-mint/30 flex items-center justify-center">
-                <HeartHandshake className="w-5 h-5 text-forest-night" />
+              <div className="w-10 h-10 rounded-xl bg-neon-pulse/30 flex items-center justify-center">
+                <HeartHandshake className="w-5 h-5 text-obsidian-shell" />
               </div>
               <div>
-                <h3 className="font-display font-bold text-lg text-forest-night">
+                <h3 className="font-display font-bold text-lg text-obsidian-shell">
                   Confirm Food Reservation
                 </h3>
-                <span className="text-xs text-muted-text">Single-winner atomic transaction</span>
+                <span className="text-xs text-slate-text">Single-winner atomic transaction</span>
               </div>
             </div>
 
-            <p className="text-xs text-forest-night leading-relaxed">
+            <p className="text-xs text-obsidian-shell leading-relaxed">
               You are claiming{' '}
               <span className="font-bold">
                 {confirmModalDonation.quantity} {confirmModalDonation.unit.toLowerCase()}
@@ -221,9 +221,9 @@ export function AvailableFoodPage() {
               <span className="font-bold">{confirmModalDonation.donorOrganization?.name}</span>.
             </p>
 
-            <div className="p-3 rounded-card bg-fresh-mint/15 text-xs text-forest-night space-y-1">
+            <div className="p-3 rounded-card bg-neon-pulse/10 text-xs text-obsidian-shell space-y-1">
               <span className="font-bold block">Next steps upon reservation:</span>
-              <p className="text-[11px] text-forest-night/80">
+              <p className="text-[11px] text-obsidian-shell/80">
                 1. A rescue mission is automatically published to local transport volunteers.
                 <br />
                 2. You receive live updates as soon as a volunteer accepts pickup.

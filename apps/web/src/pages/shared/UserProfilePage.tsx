@@ -25,27 +25,27 @@ export function UserProfilePage() {
   return (
     <div className="max-w-2xl space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
           User Account Profile
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Personal contact details, authenticated role privileges, and security settings.
         </p>
       </div>
 
       <GlassCard variant="light" padding="lg" className="border-white/70 shadow-glass-md space-y-6">
         <div className="flex items-center gap-4 pb-4 border-b border-black/5">
-          <div className="w-14 h-14 rounded-2xl bg-forest-night flex items-center justify-center text-fresh-mint font-display font-bold text-xl shadow-md">
+          <div className="w-14 h-14 rounded-2xl bg-obsidian-shell flex items-center justify-center text-neon-pulse font-display font-medium text-xl shadow-md">
             {user?.name?.[0]?.toUpperCase() || 'U'}
           </div>
           <div className="space-y-0.5">
-            <h2 className="font-display font-bold text-lg text-forest-night">{user?.name}</h2>
+            <h2 className="font-display font-medium text-lg text-obsidian-shell">{user?.name}</h2>
             <div className="flex items-center gap-2">
               <Badge variant="outline" size="sm" className="font-semibold text-[10px]">
                 {role}
               </Badge>
               {organization && (
-                <span className="text-xs text-muted-text">• {organization.name}</span>
+                <span className="text-xs text-slate-text">• {organization.name}</span>
               )}
             </div>
           </div>
@@ -57,7 +57,7 @@ export function UserProfilePage() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            leftIcon={<User className="w-4 h-4 text-muted-text" />}
+            leftIcon={<User className="w-4 h-4 text-slate-text" />}
           />
 
           <Input
@@ -65,7 +65,7 @@ export function UserProfilePage() {
             type="email"
             disabled
             value={user?.email || ''}
-            leftIcon={<Mail className="w-4 h-4 text-muted-text" />}
+            leftIcon={<Mail className="w-4 h-4 text-slate-text" />}
           />
 
           <Input
@@ -73,7 +73,7 @@ export function UserProfilePage() {
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            leftIcon={<Phone className="w-4 h-4 text-muted-text" />}
+            leftIcon={<Phone className="w-4 h-4 text-slate-text" />}
           />
 
           <div className="pt-2 flex justify-end">
@@ -82,7 +82,7 @@ export function UserProfilePage() {
               variant="primary"
               size="md"
               isLoading={isLoading}
-              leftIcon={<Save className="w-4 h-4 text-forest-night" />}
+              leftIcon={<Save className="w-4 h-4 text-obsidian-shell" />}
             >
               Save Profile
             </Button>
@@ -90,8 +90,8 @@ export function UserProfilePage() {
         </form>
       </GlassCard>
 
-      <div className="text-center text-[11px] text-muted-text flex items-center justify-center gap-1.5">
-        <ShieldCheck className="w-3.5 h-3.5 text-bridge-green" />
+      <div className="text-center text-[11px] text-slate-text flex items-center justify-center gap-1.5">
+        <ShieldCheck className="w-3.5 h-3.5 text-neon-pulse" />
         <span>Authentication managed with Supabase security tokens</span>
       </div>
     </div>

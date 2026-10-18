@@ -37,10 +37,10 @@ export function DonationManagementPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+          <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
             Global Donations Registry
           </h1>
-          <p className="text-xs sm:text-sm text-muted-text mt-1">
+          <p className="text-xs sm:text-sm text-slate-text mt-1">
             Audit and inspect all surplus food batches published across all jurisdictions.
           </p>
         </div>
@@ -50,18 +50,18 @@ export function DonationManagementPage() {
             placeholder="Search donations..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            leftIcon={<Search className="w-4 h-4 text-muted-text" />}
+            leftIcon={<Search className="w-4 h-4 text-slate-text" />}
           />
         </div>
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Loading global listings...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Loading global listings...</div>
       ) : filtered.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
-          <UtensilsCrossed className="w-10 h-10 mx-auto text-muted-text" />
-          <h3 className="font-bold text-forest-night text-base">No donations recorded</h3>
-          <p className="text-xs text-muted-text">No active or completed listings match your query.</p>
+          <UtensilsCrossed className="w-10 h-10 mx-auto text-slate-text" />
+          <h3 className="font-medium text-obsidian-shell text-base">No donations recorded</h3>
+          <p className="text-xs text-slate-text">No active or completed listings match your query.</p>
         </GlassCard>
       ) : (
         <div className="space-y-3">
@@ -70,18 +70,18 @@ export function DonationManagementPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-forest-night text-sm">{d.title}</span>
+                    <span className="font-medium text-obsidian-shell text-sm">{d.title}</span>
                     <Badge variant="outline" size="sm" className="text-[10px]">
                       {d.category.replace(/_/g, ' ')}
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-text">
+                  <p className="text-xs text-slate-text">
                     Donor: {d.donorOrganization?.name || 'Local Kitchen'} • {d.pickupCity}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="font-bold text-bridge-green text-sm">
+                  <span className="font-medium text-neon-pulse text-sm">
                     {d.quantity} {d.unit.toLowerCase()}
                   </span>
                   <Badge
@@ -100,7 +100,7 @@ export function DonationManagementPage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 text-xs text-muted-text pt-1">
+              <div className="flex items-center gap-4 text-xs text-slate-text pt-1">
                 <span>Deadline: {new Date(d.pickupDeadline).toLocaleDateString()}</span>
                 <span>•</span>
                 <span>Created: {new Date(d.createdAt).toLocaleDateString()}</span>

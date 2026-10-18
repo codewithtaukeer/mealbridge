@@ -62,7 +62,7 @@ export function SectionHeading({
           <p
             className={cn(
               'mt-3 text-base md:text-lg leading-relaxed',
-              isDark ? 'text-warm-ivory/70' : 'text-muted-text'
+              isDark ? 'text-slate-text' : 'text-slate-text'
             )}
           >
             {description}

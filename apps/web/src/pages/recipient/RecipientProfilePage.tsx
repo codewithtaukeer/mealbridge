@@ -48,10 +48,10 @@ export function RecipientProfilePage() {
   return (
     <div className="max-w-3xl space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
           Recipient NGO Profile
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Registered non-profit entity details, verification status, and distribution center coordinates.
         </p>
       </div>
@@ -59,14 +59,14 @@ export function RecipientProfilePage() {
       <GlassCard variant="light" padding="lg" className="border-white/70 shadow-glass-md space-y-6">
         <div className="flex items-center justify-between pb-4 border-b border-black/5">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-forest-night flex items-center justify-center text-fresh-mint font-display font-bold text-lg">
+            <div className="w-12 h-12 rounded-2xl bg-obsidian-shell flex items-center justify-center text-neon-pulse font-display font-bold text-lg">
               {organization?.name?.[0] || 'R'}
             </div>
             <div>
-              <h2 className="font-display font-bold text-forest-night text-lg">
+              <h2 className="font-display font-bold text-obsidian-shell text-lg">
                 {organization?.name || 'Registered Recipient NGO'}
               </h2>
-              <span className="text-xs text-muted-text">{organization?.type || 'NGO'}</span>
+              <span className="text-xs text-slate-text">{organization?.type || 'NGO'}</span>
             </div>
           </div>
 
@@ -85,7 +85,7 @@ export function RecipientProfilePage() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            leftIcon={<Building className="w-4 h-4 text-muted-text" />}
+            leftIcon={<Building className="w-4 h-4 text-slate-text" />}
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -94,7 +94,7 @@ export function RecipientProfilePage() {
               required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              leftIcon={<Phone className="w-4 h-4 text-muted-text" />}
+              leftIcon={<Phone className="w-4 h-4 text-slate-text" />}
             />
 
             <Input
@@ -102,7 +102,7 @@ export function RecipientProfilePage() {
               required
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              leftIcon={<MapPin className="w-4 h-4 text-muted-text" />}
+              leftIcon={<MapPin className="w-4 h-4 text-slate-text" />}
             />
           </div>
 
@@ -118,12 +118,12 @@ export function RecipientProfilePage() {
               required
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              leftIcon={<MapPin className="w-4 h-4 text-muted-text" />}
+              leftIcon={<MapPin className="w-4 h-4 text-slate-text" />}
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-medium text-forest-night">
+            <label className="block text-xs font-medium text-obsidian-shell">
               Organization Purpose & Beneficiary Focus
             </label>
             <textarea
@@ -131,7 +131,7 @@ export function RecipientProfilePage() {
               placeholder="e.g. Registered non-profit operating soup kitchens, temporary shelter feeding programs, and orphan care."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-card bg-white/70 border border-black/10 text-primary-text text-sm focus:outline-none focus:ring-2 focus:ring-bridge-green/30"
+              className="w-full px-3.5 py-2.5 rounded-card bg-white/70 border border-black/10 text-obsidian-shell text-sm focus:outline-none focus:ring-2 focus:ring-neon-pulse/30"
             />
           </div>
 
@@ -141,7 +141,7 @@ export function RecipientProfilePage() {
               variant="primary"
               size="md"
               isLoading={isLoading}
-              leftIcon={<Save className="w-4 h-4 text-forest-night" />}
+              leftIcon={<Save className="w-4 h-4 text-obsidian-shell" />}
             >
               Save Profile Changes
             </Button>
@@ -149,8 +149,8 @@ export function RecipientProfilePage() {
         </form>
       </GlassCard>
 
-      <div className="text-center text-[11px] text-muted-text flex items-center justify-center gap-1.5">
-        <ShieldCheck className="w-3.5 h-3.5 text-bridge-green" />
+      <div className="text-center text-[11px] text-slate-text flex items-center justify-center gap-1.5">
+        <ShieldCheck className="w-3.5 h-3.5 text-neon-pulse" />
         <span>Verification credentials prevent fraud and maintain public accountability</span>
       </div>
     </div>

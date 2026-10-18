@@ -76,10 +76,10 @@ export function DonationsListPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
             My Food Donations
           </h1>
-          <p className="text-xs sm:text-sm text-muted-text mt-1">
+          <p className="text-xs sm:text-sm text-slate-text mt-1">
             Manage your surplus food donations, inspect recipient claims, and track volunteer pickups.
           </p>
         </div>
@@ -88,7 +88,7 @@ export function DonationsListPage() {
           <Button
             variant="primary"
             size="md"
-            leftIcon={<PlusCircle className="w-4 h-4 text-forest-night" />}
+            leftIcon={<PlusCircle className="w-4 h-4 text-obsidian-shell" />}
             className="shadow-md hover:shadow-glow-mint whitespace-nowrap"
           >
             Create Food Listing
@@ -106,8 +106,8 @@ export function DonationsListPage() {
               onClick={() => setSelectedStatus(sf.value)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedStatus === sf.value
-                  ? 'bg-bridge-green text-white shadow-sm'
-                  : 'bg-white/60 text-muted-text hover:bg-white/90 border border-black/5'
+                  ? 'bg-neon-pulse text-white shadow-sm'
+                  : 'bg-white/60 text-slate-text hover:bg-white/90 border border-black/5'
               }`}
             >
               {sf.label}
@@ -121,27 +121,27 @@ export function DonationsListPage() {
             placeholder="Search listings..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            leftIcon={<Search className="w-4 h-4 text-muted-text" />}
+            leftIcon={<Search className="w-4 h-4 text-slate-text" />}
           />
         </div>
       </div>
 
       {/* Listings Grid */}
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Loading your donations...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Loading your donations...</div>
       ) : filteredDonations.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-4 border-dashed">
-          <div className="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center mx-auto text-muted-text">
+          <div className="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center mx-auto text-slate-text">
             <UtensilsCrossed className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-display font-bold text-forest-night text-base">
+            <h3 className="font-display font-bold text-obsidian-shell text-base">
               No matching listings found
             </h3>
-            <p className="text-xs text-muted-text max-w-sm mx-auto mt-1">
+            <p className="text-xs text-slate-text max-w-sm mx-auto mt-1">
               {searchQuery || selectedStatus !== 'ALL'
                 ? 'Try resetting your status or search filters.'
-                : 'Post today’s surplus food to feed local communities.'}
+                : "Post today's surplus food to feed local communities."}
             </p>
           </div>
           <Link to="/donor/donations/create">
@@ -188,24 +188,24 @@ export function DonationsListPage() {
                   </div>
 
                   <div>
-                    <h3 className="font-display font-bold text-forest-night text-base line-clamp-1">
+                    <h3 className="font-display font-bold text-obsidian-shell text-base line-clamp-1">
                       {donation.title}
                     </h3>
-                    <p className="text-xs font-semibold text-bridge-green mt-1">
+                    <p className="text-xs font-semibold text-neon-pulse mt-1">
                       {donation.quantity} {donation.unit.toLowerCase()}
                     </p>
                   </div>
 
-                  <div className="space-y-1 text-xs text-muted-text pt-1">
+                  <div className="space-y-1 text-xs text-slate-text pt-1">
                     <div className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-muted-text" />
+                      <Clock className="w-3.5 h-3.5 text-slate-text" />
                       <span>
                         Deadline: {new Date(donation.pickupDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ({new Date(donation.pickupDeadline).toLocaleDateString()})
                       </span>
                     </div>
 
                     <div className="flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-muted-text" />
+                      <Calendar className="w-3.5 h-3.5 text-slate-text" />
                       <span>Listed: {new Date(donation.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>
@@ -214,7 +214,7 @@ export function DonationsListPage() {
                 <div className="pt-4 mt-4 border-t border-black/5 flex items-center justify-between">
                   <Link
                     to={`/donor/donations/${donation.id}`}
-                    className="text-xs font-bold text-bridge-green hover:underline flex items-center gap-1"
+                    className="text-xs font-bold text-neon-pulse hover:underline flex items-center gap-1"
                   >
                     View Details & Matches <ArrowRight className="w-3.5 h-3.5" />
                   </Link>

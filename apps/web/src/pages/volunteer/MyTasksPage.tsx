@@ -86,21 +86,21 @@ export function MyTasksPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
           Active Missions
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Missions assigned to you. Follow the pickup and delivery sequence to keep all parties updated.
         </p>
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Loading active missions...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Loading active missions...</div>
       ) : rescues.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
-          <PackageCheck className="w-10 h-10 mx-auto text-bridge-green" />
-          <h3 className="font-bold text-forest-night text-base">No active missions in progress</h3>
-          <p className="text-xs text-muted-text max-w-sm mx-auto">
+          <PackageCheck className="w-10 h-10 mx-auto text-neon-pulse" />
+          <h3 className="font-medium text-obsidian-shell text-base">No active missions in progress</h3>
+          <p className="text-xs text-slate-text max-w-sm mx-auto">
             You have no pending pickups or deliveries. Head over to Available Missions to claim a new run.
           </p>
         </GlassCard>
@@ -118,16 +118,16 @@ export function MyTasksPage() {
                       {rescue.status === 'ASSIGNED' ? 'Ready for Pickup' : 'In Transit'}
                     </Badge>
                   </div>
-                  <h2 className="font-display font-bold text-lg text-forest-night">
+                  <h2 className="font-display font-medium text-lg text-obsidian-shell">
                     {rescue.donation?.title}
                   </h2>
                 </div>
 
                 <div className="text-right">
-                  <span className="text-xs uppercase font-bold text-muted-text block">
+                  <span className="text-[9px] font-medium uppercase tracking-[0.05em] text-slate-text block">
                     Quantity
                   </span>
-                  <span className="text-xl font-display font-bold text-bridge-green">
+                  <span className="text-xl font-display font-medium text-neon-pulse">
                     {rescue.donation?.quantity} {rescue.donation?.unit.toLowerCase()}
                   </span>
                 </div>
@@ -139,13 +139,13 @@ export function MyTasksPage() {
                 <div
                   className={`p-4 rounded-card border transition-all ${
                     rescue.status === 'ASSIGNED'
-                      ? 'bg-bridge-green/10 border-bridge-green shadow-sm'
-                      : 'bg-white/60 border-black/5'
+                      ? 'bg-neon-pulse/10 border-neon-pulse shadow-sm'
+                      : 'bg-obsidian-shell/5 border-fog-border'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-forest-night flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-bridge-green" />
+                    <span className="text-xs font-medium uppercase tracking-[0.05em] text-obsidian-shell flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-neon-pulse" />
                       1. Pickup Point
                     </span>
                     {rescue.status === 'PICKED_UP' && (
@@ -154,14 +154,14 @@ export function MyTasksPage() {
                       </Badge>
                     )}
                   </div>
-                  <p className="font-bold text-sm text-forest-night">
+                  <p className="font-medium text-sm text-obsidian-shell">
                     {rescue.donation?.donorOrganization?.name}
                   </p>
-                  <p className="text-xs text-muted-text mt-0.5">
+                  <p className="text-xs text-slate-text mt-0.5">
                     {rescue.donation?.pickupAddress}, {rescue.donation?.pickupCity}
                   </p>
                   {rescue.donation?.donorOrganization?.phone && (
-                    <div className="flex items-center gap-1 text-xs text-bridge-green font-semibold mt-2">
+                    <div className="flex items-center gap-1 text-xs text-neon-pulse font-semibold mt-2">
                       <Phone className="w-3 h-3" />
                       <span>{rescue.donation.donorOrganization.phone}</span>
                     </div>
@@ -172,24 +172,24 @@ export function MyTasksPage() {
                 <div
                   className={`p-4 rounded-card border transition-all ${
                     rescue.status === 'PICKED_UP'
-                      ? 'bg-bridge-green/10 border-bridge-green shadow-sm'
-                      : 'bg-white/60 border-black/5'
+                      ? 'bg-neon-pulse/10 border-neon-pulse shadow-sm'
+                      : 'bg-obsidian-shell/5 border-fog-border'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-forest-night flex items-center gap-1.5">
-                      <HeartHandshake className="w-3.5 h-3.5 text-bridge-green" />
+                    <span className="text-xs font-medium uppercase tracking-[0.05em] text-obsidian-shell flex items-center gap-1.5">
+                      <HeartHandshake className="w-3.5 h-3.5 text-neon-pulse" />
                       2. Destination
                     </span>
                   </div>
-                  <p className="font-bold text-sm text-forest-night">
+                  <p className="font-medium text-sm text-obsidian-shell">
                     {rescue.recipientOrganization?.name}
                   </p>
-                  <p className="text-xs text-muted-text mt-0.5">
+                  <p className="text-xs text-slate-text mt-0.5">
                     {rescue.recipientOrganization?.address}, {rescue.recipientOrganization?.city}
                   </p>
                   {rescue.recipientOrganization?.phone && (
-                    <div className="flex items-center gap-1 text-xs text-bridge-green font-semibold mt-2">
+                    <div className="flex items-center gap-1 text-xs text-neon-pulse font-semibold mt-2">
                       <Phone className="w-3 h-3" />
                       <span>{rescue.recipientOrganization.phone}</span>
                     </div>
@@ -206,7 +206,7 @@ export function MyTasksPage() {
                     className="w-full justify-center shadow-md hover:shadow-glow-mint"
                     isLoading={activeActionId === rescue.id}
                     onClick={() => handleConfirmPickup(rescue.id)}
-                    leftIcon={<PackageCheck className="w-5 h-5 text-forest-night" />}
+                    leftIcon={<PackageCheck className="w-5 h-5 text-obsidian-shell" />}
                   >
                     Confirm Food Pickup from Donor
                   </Button>
@@ -217,7 +217,7 @@ export function MyTasksPage() {
                     className="w-full justify-center shadow-md hover:shadow-glow-mint"
                     isLoading={activeActionId === rescue.id}
                     onClick={() => handleConfirmDelivery(rescue.id)}
-                    leftIcon={<CheckCircle2 className="w-5 h-5 text-forest-night" />}
+                    leftIcon={<CheckCircle2 className="w-5 h-5 text-obsidian-shell" />}
                   >
                     Confirm Delivery to Recipient Facility
                   </Button>

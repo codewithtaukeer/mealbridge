@@ -35,22 +35,22 @@ export function TaskHistoryPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
           Mission History
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Log of completed surplus food deliveries and community meals rescued.
         </p>
       </div>
 
-      <div className="p-4 rounded-xl bg-fresh-mint/20 border border-fresh-mint/40 flex items-center justify-between">
+      <div className="p-4 rounded-xl bg-neon-pulse/10 border border-neon-pulse/30 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-forest-night flex items-center justify-center text-fresh-mint">
+          <div className="w-10 h-10 rounded-xl bg-obsidian-shell flex items-center justify-center text-neon-pulse">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs font-semibold text-muted-text">Your Cumulative Impact</span>
-            <p className="font-display font-bold text-lg text-forest-night">
+            <span className="text-xs font-semibold text-slate-text">Your Cumulative Impact</span>
+            <p className="font-display font-medium text-lg text-obsidian-shell">
               {rescues.length} Completed Missions • {totalPortions} Meals Rescued
             </p>
           </div>
@@ -58,12 +58,12 @@ export function TaskHistoryPage() {
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Loading mission history...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Loading mission history...</div>
       ) : rescues.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
-          <History className="w-10 h-10 mx-auto text-muted-text" />
-          <h3 className="font-bold text-forest-night text-base">No completed deliveries yet</h3>
-          <p className="text-xs text-muted-text max-w-sm mx-auto">
+          <History className="w-10 h-10 mx-auto text-slate-text" />
+          <h3 className="font-medium text-obsidian-shell text-base">No completed deliveries yet</h3>
+          <p className="text-xs text-slate-text max-w-sm mx-auto">
             Your fulfilled missions and delivery confirmation certificates will appear here.
           </p>
         </GlassCard>
@@ -74,23 +74,23 @@ export function TaskHistoryPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-forest-night text-sm">
+                    <span className="font-medium text-obsidian-shell text-sm">
                       {rescue.donation?.title}
                     </span>
                     <Badge variant="success" size="sm" dot>
                       Delivered
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-text">
+                  <p className="text-xs text-slate-text">
                     From {rescue.donation?.donorOrganization?.name} to {rescue.recipientOrganization?.name}
                   </p>
                 </div>
 
                 <div className="text-right">
-                  <span className="font-bold text-bridge-green text-sm block">
+                  <span className="font-medium text-neon-pulse text-sm block">
                     {rescue.donation?.quantity} {rescue.donation?.unit.toLowerCase()}
                   </span>
-                  <span className="text-[10px] text-muted-text">
+                  <span className="text-[10px] text-slate-text">
                     {rescue.deliveredAt ? new Date(rescue.deliveredAt).toLocaleDateString() : 'Completed'}
                   </span>
                 </div>

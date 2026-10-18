@@ -37,10 +37,10 @@ export function UserManagementPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
-            User Accounts & Roles
+          <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
+            User Accounts &amp; Roles
           </h1>
-          <p className="text-xs sm:text-sm text-muted-text mt-1">
+          <p className="text-xs sm:text-sm text-slate-text mt-1">
             Global view of registered donors, recipient administrators, volunteer couriers, and staff.
           </p>
         </div>
@@ -50,24 +50,24 @@ export function UserManagementPage() {
             placeholder="Search users by name, email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            leftIcon={<Search className="w-4 h-4 text-muted-text" />}
+            leftIcon={<Search className="w-4 h-4 text-slate-text" />}
           />
         </div>
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Loading users...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Loading users...</div>
       ) : filtered.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
-          <Users className="w-10 h-10 mx-auto text-muted-text" />
-          <h3 className="font-bold text-forest-night text-base">No user accounts found</h3>
-          <p className="text-xs text-muted-text">Try adjusting your search query.</p>
+          <Users className="w-10 h-10 mx-auto text-slate-text" />
+          <h3 className="font-medium text-obsidian-shell text-base">No user accounts found</h3>
+          <p className="text-xs text-slate-text">Try adjusting your search query.</p>
         </GlassCard>
       ) : (
         <GlassCard variant="light" padding="none" className="border-white/70 overflow-hidden shadow-glass-md">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-primary-text">
-              <thead className="bg-black/5 uppercase text-[10px] font-bold text-muted-text tracking-wider">
+            <table className="w-full text-left text-xs text-obsidian-shell">
+              <thead className="bg-black/5 uppercase text-[10px] font-medium text-slate-text tracking-[0.05em]">
                 <tr>
                   <th className="px-4 py-3">User</th>
                   <th className="px-4 py-3">Role</th>
@@ -79,8 +79,8 @@ export function UserManagementPage() {
                 {filtered.map((u) => (
                   <tr key={u.id} className="hover:bg-white/40 transition-colors">
                     <td className="px-4 py-3">
-                      <div className="font-bold text-forest-night">{u.name}</div>
-                      <div className="text-[11px] text-muted-text">{u.email}</div>
+                      <div className="font-medium text-obsidian-shell">{u.name}</div>
+                      <div className="text-[11px] text-slate-text">{u.email}</div>
                     </td>
                     <td className="px-4 py-3">
                       <Badge variant="outline" size="sm" className="font-semibold text-[10px]">
@@ -92,7 +92,7 @@ export function UserManagementPage() {
                         {u.isActive ? 'Active' : 'Deactivated'}
                       </Badge>
                     </td>
-                    <td className="px-4 py-3 text-muted-text">
+                    <td className="px-4 py-3 text-slate-text">
                       {new Date(u.createdAt).toLocaleDateString()}
                     </td>
                   </tr>

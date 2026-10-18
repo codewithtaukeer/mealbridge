@@ -22,10 +22,10 @@ export function UserSettingsPage() {
   return (
     <div className="max-w-2xl space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
-          Notification & Platform Settings
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
+          Notification &amp; Platform Settings
         </h1>
-        <p className="text-xs sm:text-sm text-muted-text mt-1">
+        <p className="text-xs sm:text-sm text-slate-text mt-1">
           Control how and when you receive real-time surplus food dispatch alerts.
         </p>
       </div>
@@ -33,17 +33,17 @@ export function UserSettingsPage() {
       <GlassCard variant="light" padding="lg" className="border-white/70 shadow-glass-md space-y-6">
         <form onSubmit={handleSave} className="space-y-6">
           <div className="space-y-4">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-forest-night flex items-center gap-1.5">
-              <Bell className="w-3.5 h-3.5 text-bridge-green" />
+            <h2 className="text-xs font-medium uppercase tracking-[0.05em] text-obsidian-shell flex items-center gap-1.5">
+              <Bell className="w-3.5 h-3.5 text-neon-pulse" />
               Dispatch Notification Preferences
             </h2>
 
-            <div className="p-3.5 rounded-card bg-white/60 border border-black/5 flex items-center justify-between">
+            <div className="p-3.5 rounded-card bg-obsidian-shell/5 border border-fog-border flex items-center justify-between">
               <div>
-                <span className="font-bold text-xs text-forest-night block">
+                <span className="font-medium text-xs text-obsidian-shell block">
                   Email Notifications
                 </span>
-                <span className="text-[11px] text-muted-text">
+                <span className="text-[11px] text-slate-text">
                   Receive daily summaries and donation reservation receipts.
                 </span>
               </div>
@@ -51,16 +51,16 @@ export function UserSettingsPage() {
                 type="checkbox"
                 checked={emailAlerts}
                 onChange={(e) => setEmailAlerts(e.target.checked)}
-                className="rounded border-black/20 text-bridge-green focus:ring-bridge-green"
+                className="rounded border-black/20 text-neon-pulse focus:ring-neon-pulse"
               />
             </div>
 
-            <div className="p-3.5 rounded-card bg-white/60 border border-black/5 flex items-center justify-between">
+            <div className="p-3.5 rounded-card bg-obsidian-shell/5 border border-fog-border flex items-center justify-between">
               <div>
-                <span className="font-bold text-xs text-forest-night block">
+                <span className="font-medium text-xs text-obsidian-shell block">
                   Real-Time Browser Push Alerts
                 </span>
-                <span className="text-[11px] text-muted-text">
+                <span className="text-[11px] text-slate-text">
                   Instant popup when fresh surplus food or rescue pickups are ready.
                 </span>
               </div>
@@ -68,16 +68,16 @@ export function UserSettingsPage() {
                 type="checkbox"
                 checked={browserNotifications}
                 onChange={(e) => setBrowserNotifications(e.target.checked)}
-                className="rounded border-black/20 text-bridge-green focus:ring-bridge-green"
+                className="rounded border-black/20 text-neon-pulse focus:ring-neon-pulse"
               />
             </div>
 
-            <div className="p-3.5 rounded-card bg-white/60 border border-black/5 flex items-center justify-between">
+            <div className="p-3.5 rounded-card bg-obsidian-shell/5 border border-fog-border flex items-center justify-between">
               <div>
-                <span className="font-bold text-xs text-forest-night block">
+                <span className="font-medium text-xs text-obsidian-shell block">
                   SMS Emergency Expiry Alerts
                 </span>
-                <span className="text-[11px] text-muted-text">
+                <span className="text-[11px] text-slate-text">
                   Urgent SMS when food deadline is within 60 minutes.
                 </span>
               </div>
@@ -85,7 +85,7 @@ export function UserSettingsPage() {
                 type="checkbox"
                 checked={urgentSmsAlerts}
                 onChange={(e) => setUrgentSmsAlerts(e.target.checked)}
-                className="rounded border-black/20 text-bridge-green focus:ring-bridge-green"
+                className="rounded border-black/20 text-neon-pulse focus:ring-neon-pulse"
               />
             </div>
           </div>
@@ -96,7 +96,7 @@ export function UserSettingsPage() {
               variant="primary"
               size="md"
               isLoading={isLoading}
-              leftIcon={<Save className="w-4 h-4 text-forest-night" />}
+              leftIcon={<Save className="w-4 h-4 text-obsidian-shell" />}
             >
               Save Settings
             </Button>

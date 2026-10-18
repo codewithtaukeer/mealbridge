@@ -52,10 +52,10 @@ export function DonorDashboardPage() {
       {/* Welcome & Quick Action Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
             Welcome back, {organization?.name || user?.name}
           </h1>
-          <p className="text-xs sm:text-sm text-muted-text mt-1">
+          <p className="text-xs sm:text-sm text-slate-text mt-1">
             Track surplus food redistribution, manage rescue coordination, and monitor your environmental diversion.
           </p>
         </div>
@@ -64,7 +64,7 @@ export function DonorDashboardPage() {
           <Button
             variant="primary"
             size="md"
-            leftIcon={<PlusCircle className="w-4 h-4 text-forest-night" />}
+            leftIcon={<PlusCircle className="w-4 h-4 text-obsidian-shell" />}
             className="shadow-md hover:shadow-glow-mint whitespace-nowrap"
           >
             Donate Surplus Food
@@ -74,12 +74,12 @@ export function DonorDashboardPage() {
 
       {/* Verification Notice Banner if not yet verified */}
       {organization?.verificationStatus !== 'VERIFIED' && (
-        <div className="p-4 rounded-card bg-harvest-gold/20 border border-harvest-gold/40 flex items-start justify-between gap-4">
+        <div className="p-4 rounded-card bg-signal-yellow/10 border border-signal-yellow/30 flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-[#8a5d1b] shrink-0 mt-0.5" />
-            <div className="text-xs text-forest-night space-y-0.5">
+            <AlertCircle className="w-5 h-5 text-signal-yellow shrink-0 mt-0.5" />
+            <div className="text-xs text-obsidian-shell space-y-0.5">
               <p className="font-bold">Organization Verification Under Evaluation</p>
-              <p className="text-forest-night/80">
+              <p className="text-obsidian-shell/80">
                 Your listings are active in pilot mode. Complete documentation verification to receive verified donor certification.
               </p>
             </div>
@@ -96,61 +96,61 @@ export function DonorDashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <GlassCard variant="light" padding="md" className="border-white/70">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-muted-text">Active Listings</span>
-            <div className="w-8 h-8 rounded-xl bg-bridge-green/15 flex items-center justify-center">
-              <UtensilsCrossed className="w-4 h-4 text-bridge-green" />
+            <span className="text-xs font-semibold text-slate-text">Active Listings</span>
+            <div className="w-8 h-8 rounded-xl bg-neon-pulse/15 flex items-center justify-center">
+              <UtensilsCrossed className="w-4 h-4 text-neon-pulse" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-2xl font-display font-bold text-forest-night">
+            <span className="text-2xl font-display font-bold text-obsidian-shell">
               {activeDonationsCount}
             </span>
-            <span className="text-[11px] text-muted-text block mt-0.5">Ready for pickup or in transit</span>
+            <span className="text-[11px] text-slate-text block mt-0.5">Ready for pickup or in transit</span>
           </div>
         </GlassCard>
 
         <GlassCard variant="light" padding="md" className="border-white/70">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-muted-text">Portions Diverted</span>
-            <div className="w-8 h-8 rounded-xl bg-fresh-mint/30 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-forest-night" />
+            <span className="text-xs font-semibold text-slate-text">Portions Diverted</span>
+            <div className="w-8 h-8 rounded-xl bg-neon-pulse/30 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-obsidian-shell" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-2xl font-display font-bold text-forest-night">
+            <span className="text-2xl font-display font-bold text-obsidian-shell">
               {totalPortions}
             </span>
-            <span className="text-[11px] text-muted-text block mt-0.5">Meals shared to vulnerable groups</span>
+            <span className="text-[11px] text-slate-text block mt-0.5">Meals shared to vulnerable groups</span>
           </div>
         </GlassCard>
 
         <GlassCard variant="light" padding="md" className="border-white/70">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-muted-text">Completed Rescues</span>
+            <span className="text-xs font-semibold text-slate-text">Completed Rescues</span>
             <div className="w-8 h-8 rounded-xl bg-harvest-gold/25 flex items-center justify-center">
-              <CheckCircle2 className="w-4 h-4 text-[#8a5d1b]" />
+              <CheckCircle2 className="w-4 h-4 text-signal-yellow" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-2xl font-display font-bold text-forest-night">
+            <span className="text-2xl font-display font-bold text-obsidian-shell">
               {deliveredCount}
             </span>
-            <span className="text-[11px] text-muted-text block mt-0.5">Delivered to verified NGOs</span>
+            <span className="text-[11px] text-slate-text block mt-0.5">Delivered to verified NGOs</span>
           </div>
         </GlassCard>
 
         <GlassCard variant="light" padding="md" className="border-white/70">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-muted-text">CO₂ Emissions Avoided</span>
-            <div className="w-8 h-8 rounded-xl bg-fresh-mint/20 flex items-center justify-center">
-              <Leaf className="w-4 h-4 text-bridge-green" />
+            <span className="text-xs font-semibold text-slate-text">CO₂ Emissions Avoided</span>
+            <div className="w-8 h-8 rounded-xl bg-neon-pulse/20 flex items-center justify-center">
+              <Leaf className="w-4 h-4 text-neon-pulse" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-2xl font-display font-bold text-forest-night">
+            <span className="text-2xl font-display font-bold text-obsidian-shell">
               {co2AvoidedKg} kg
             </span>
-            <span className="text-[11px] text-muted-text block mt-0.5">GHG landfill reduction</span>
+            <span className="text-[11px] text-slate-text block mt-0.5">GHG landfill reduction</span>
           </div>
         </GlassCard>
       </div>
@@ -158,30 +158,30 @@ export function DonorDashboardPage() {
       {/* Recent Surplus Food Listings Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-display font-bold text-forest-night">
+          <h2 className="text-lg font-display font-bold text-obsidian-shell">
             Recent Donations
           </h2>
           <Link
             to="/donor/donations"
-            className="text-xs font-semibold text-bridge-green hover:underline flex items-center gap-1"
+            className="text-xs font-semibold text-neon-pulse hover:underline flex items-center gap-1"
           >
             View all listings <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
         {isLoading ? (
-          <div className="py-12 text-center text-muted-text text-sm">Loading listings...</div>
+          <div className="py-12 text-center text-slate-text text-sm">Loading listings...</div>
         ) : donations.length === 0 ? (
           <GlassCard variant="light" padding="lg" className="text-center py-12 space-y-4 border-dashed">
-            <div className="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center mx-auto text-muted-text">
+            <div className="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center mx-auto text-slate-text">
               <UtensilsCrossed className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-display font-bold text-forest-night text-base">
+              <h3 className="font-display font-bold text-obsidian-shell text-base">
                 No active food donations yet
               </h3>
-              <p className="text-xs text-muted-text max-w-sm mx-auto mt-1">
-                Post surplus food from today’s service, prep, or catering to connect with local charities.
+              <p className="text-xs text-slate-text max-w-sm mx-auto mt-1">
+                Post surplus food from today's service, prep, or catering to connect with local charities.
               </p>
             </div>
             <Link to="/donor/donations/create">
@@ -219,22 +219,22 @@ export function DonorDashboardPage() {
                     </Badge>
                   </div>
 
-                  <h3 className="font-display font-bold text-forest-night text-sm line-clamp-1">
+                  <h3 className="font-display font-bold text-obsidian-shell text-sm line-clamp-1">
                     {donation.title}
                   </h3>
 
-                  <div className="flex items-center gap-2 text-xs font-semibold text-forest-night">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-obsidian-shell">
                     <span>
                       {donation.quantity} {donation.unit.toLowerCase()}
                     </span>
                     <span>•</span>
-                    <span className="text-muted-text text-[11px] font-normal truncate">
+                    <span className="text-slate-text text-[11px] font-normal truncate">
                       {donation.pickupCity}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-1.5 text-[11px] text-muted-text">
-                    <Clock className="w-3.5 h-3.5 text-muted-text" />
+                  <div className="flex items-center gap-1.5 text-[11px] text-slate-text">
+                    <Clock className="w-3.5 h-3.5 text-slate-text" />
                     <span>
                       Deadline: {new Date(donation.pickupDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
@@ -244,11 +244,11 @@ export function DonorDashboardPage() {
                 <div className="pt-4 mt-3 border-t border-black/5 flex items-center justify-between text-xs">
                   <Link
                     to={`/donor/donations/${donation.id}`}
-                    className="font-bold text-bridge-green hover:underline flex items-center gap-1"
+                    className="font-bold text-neon-pulse hover:underline flex items-center gap-1"
                   >
                     Manage & Matches <ArrowRight className="w-3 h-3" />
                   </Link>
-                  <span className="text-[10px] text-muted-text">
+                  <span className="text-[10px] text-slate-text">
                     <Calendar className="w-3 h-3 inline mr-1" />
                     {new Date(donation.createdAt).toLocaleDateString()}
                   </span>

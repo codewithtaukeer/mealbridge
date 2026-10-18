@@ -73,8 +73,8 @@ export function HomePage() {
       <section className="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden">
         {/* Soft radial background gradient blooms */}
         <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[650px] -z-10">
-          <div className="absolute top-10 left-1/4 w-[500px] h-[500px] bg-fresh-mint/20 rounded-full blur-[120px] mix-blend-multiply" />
-          <div className="absolute top-20 right-1/4 w-[450px] h-[450px] bg-bridge-green/15 rounded-full blur-[140px] mix-blend-multiply" />
+          <div className="absolute top-10 left-1/4 w-[500px] h-[500px] bg-neon-pulse/10 rounded-full blur-[120px]" />
+          <div className="absolute top-20 right-1/4 w-[450px] h-[450px] bg-obsidian-shell/30 rounded-full blur-[140px]" />
         </div>
 
         <PageContainer size="lg">

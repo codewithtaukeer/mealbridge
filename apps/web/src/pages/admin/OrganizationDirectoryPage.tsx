@@ -37,10 +37,10 @@ export function OrganizationDirectoryPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-forest-night">
+          <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
             Organization Directory
           </h1>
-          <p className="text-xs sm:text-sm text-muted-text mt-1">
+          <p className="text-xs sm:text-sm text-slate-text mt-1">
             Registered food donors, charities, and distribution centers across the MealBridge network.
           </p>
         </div>
@@ -50,18 +50,18 @@ export function OrganizationDirectoryPage() {
             placeholder="Search by name, city, type..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            leftIcon={<Search className="w-4 h-4 text-muted-text" />}
+            leftIcon={<Search className="w-4 h-4 text-slate-text" />}
           />
         </div>
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-muted-text text-sm">Loading directory...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Loading directory...</div>
       ) : filtered.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
-          <Building className="w-10 h-10 mx-auto text-muted-text" />
-          <h3 className="font-bold text-forest-night text-base">No organizations found</h3>
-          <p className="text-xs text-muted-text">Try modifying your search criteria.</p>
+          <Building className="w-10 h-10 mx-auto text-slate-text" />
+          <h3 className="font-medium text-obsidian-shell text-base">No organizations found</h3>
+          <p className="text-xs text-slate-text">Try modifying your search criteria.</p>
         </GlassCard>
       ) : (
         <div className="space-y-3">
@@ -69,17 +69,17 @@ export function OrganizationDirectoryPage() {
             <GlassCard key={org.id} variant="light" padding="md" className="border-white/70 space-y-2">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-forest-night flex items-center justify-center text-fresh-mint font-bold text-sm">
+                  <div className="w-9 h-9 rounded-xl bg-obsidian-shell flex items-center justify-center text-neon-pulse font-bold text-sm">
                     {org.name[0]}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-forest-night text-sm">{org.name}</span>
+                      <span className="font-medium text-obsidian-shell text-sm">{org.name}</span>
                       <Badge variant="outline" size="sm" className="text-[10px]">
                         {org.type}
                       </Badge>
                     </div>
-                    <span className="text-xs text-muted-text">{org.address}, {org.city}</span>
+                    <span className="text-xs text-slate-text">{org.address}, {org.city}</span>
                   </div>
                 </div>
 
@@ -92,7 +92,7 @@ export function OrganizationDirectoryPage() {
                 </Badge>
               </div>
 
-              <div className="flex items-center gap-4 text-xs text-muted-text pt-1">
+              <div className="flex items-center gap-4 text-xs text-slate-text pt-1">
                 <span>Phone: {org.phone || 'N/A'}</span>
                 <span>•</span>
                 <span>Email: {org.email}</span>
