@@ -140,20 +140,21 @@ export function FoodDiscoveryPage() {
     <div className="py-10">
       <PageContainer size="lg" withBloom>
         <SectionHeading
+          theme="dark"
           badge="Live Listings"
           title="Discover Available Surplus Food"
           description="Browse safe, high-quality surplus food from verified commercial donors. Exact collection address and contact details are disclosed to authorized recipient NGOs upon acceptance."
         />
 
         {/* Filter & Search Bar */}
-        <div className="glass-light p-4 rounded-2xl border border-white/60 shadow-glass-sm space-y-4 mb-8">
+        <div className="bg-deep-abyss p-4 rounded-card border border-white/10 shadow-md space-y-4 mb-8">
           <div className="flex flex-col md:flex-row items-center gap-3">
             <div className="flex-1 w-full">
               <Input
                 placeholder="Search food by name, donor, or area..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                leftIcon={<Search className="w-4 h-4 text-muted-text" />}
+                leftIcon={<Search className="w-4 h-4 text-slate-text" />}
               />
             </div>
 
@@ -163,7 +164,7 @@ export function FoodDiscoveryPage() {
                 aria-label="Filter by food category"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full rounded-button bg-white/80 border border-black/15 text-primary-text text-sm py-2.5 px-3 focus:bg-white focus:border-bridge-green focus:outline-none focus:ring-2 focus:ring-fresh-mint/60"
+                className="w-full rounded-pill bg-obsidian-shell border border-white/15 text-pure-white text-xs py-2.5 px-4 focus:border-neon-pulse focus:outline-none"
               >
                 <option value="ALL">All Categories</option>
                 {FOOD_CATEGORIES.map((cat) => (
@@ -175,35 +176,35 @@ export function FoodDiscoveryPage() {
             </div>
 
             {/* View Mode Switcher */}
-            <div className="flex items-center gap-1 bg-black/5 p-1 rounded-xl self-end md:self-auto shrink-0">
+            <div className="flex items-center gap-1 bg-obsidian-shell p-1 rounded-pill border border-white/10 self-end md:self-auto shrink-0">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                className={`px-3 py-1.5 rounded-pill text-xs font-medium flex items-center gap-1.5 transition-colors ${
                   viewMode === 'grid'
-                    ? 'bg-white text-forest-night shadow-sm'
-                    : 'text-muted-text hover:text-forest-night'
+                    ? 'bg-neon-pulse text-obsidian-shell font-semibold shadow-sm'
+                    : 'text-slate-text hover:text-pure-white'
                 }`}
               >
-                <LayoutGrid className="w-4 h-4" />
+                <LayoutGrid className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">List View</span>
               </button>
               <button
                 onClick={() => setViewMode('map')}
-                className={`p-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                className={`px-3 py-1.5 rounded-pill text-xs font-medium flex items-center gap-1.5 transition-colors ${
                   viewMode === 'map'
-                    ? 'bg-white text-forest-night shadow-sm'
-                    : 'text-muted-text hover:text-forest-night'
+                    ? 'bg-neon-pulse text-obsidian-shell font-semibold shadow-sm'
+                    : 'text-slate-text hover:text-pure-white'
                 }`}
               >
-                <MapIcon className="w-4 h-4" />
+                <MapIcon className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Map View</span>
               </button>
             </div>
           </div>
 
           {/* Privacy Notice Pill */}
-          <div className="text-[11px] text-muted-text flex items-center gap-1.5 pt-1 border-t border-black/5">
-            <span className="w-1.5 h-1.5 rounded-full bg-fresh-mint shrink-0" />
+          <div className="text-[11px] text-slate-text flex items-center gap-1.5 pt-2 border-t border-white/10">
+            <span className="w-1.5 h-1.5 rounded-full bg-neon-pulse shadow-[0_0_6px_#3ddc91] shrink-0" />
             <span>Showing verified offers within local service radius. Exact donor phone numbers and private pickup addresses are restricted to authorized rescue participants.</span>
           </div>
         </div>
@@ -211,14 +212,14 @@ export function FoodDiscoveryPage() {
         {/* View Mode: Map Simulated Interface */}
         {viewMode === 'map' ? (
           <GlassCard variant="light" padding="lg" className="mb-8 text-center space-y-4">
-            <div className="w-full h-80 rounded-xl bg-forest-night/5 border border-black/10 flex flex-col items-center justify-center p-6 relative overflow-hidden">
-              <div className="w-12 h-12 rounded-full bg-bridge-green/10 flex items-center justify-center text-bridge-green mb-3">
+            <div className="w-full h-80 rounded-xl bg-white/70 border border-fog-border flex flex-col items-center justify-center p-6 relative overflow-hidden">
+              <div className="w-12 h-12 rounded-full bg-obsidian-shell flex items-center justify-center text-neon-pulse mb-3 shadow-sm">
                 <MapPin className="w-6 h-6 animate-bounce" />
               </div>
-              <h3 className="text-base font-bold text-forest-night">
+              <h3 className="text-base font-semibold text-obsidian-shell">
                 Interactive Local Map (Prayagraj Pilot Area)
               </h3>
-              <p className="text-xs text-muted-text max-w-md mt-1">
+              <p className="text-xs text-slate-text max-w-md mt-1">
                 Displaying 5 active pickup hubs across Civil Lines, Katra, and Naini.
                 Full OpenStreetMap integration with live routing is available in the volunteer workflow.
               </p>
@@ -226,9 +227,9 @@ export function FoodDiscoveryPage() {
                 {filteredDonations.map((d) => (
                   <span
                     key={d.id}
-                    className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-white shadow-sm border border-black/10 text-forest-night flex items-center gap-1"
+                    className="text-[11px] font-semibold px-2.5 py-1 rounded-pill bg-white shadow-sm border border-fog-border text-obsidian-shell flex items-center gap-1"
                   >
-                    <MapPin className="w-3 h-3 text-bridge-green" />
+                    <MapPin className="w-3 h-3 text-neon-pulse" />
                     {d.city} · {d.quantity} {d.unit}
                   </span>
                 ))}
@@ -240,17 +241,17 @@ export function FoodDiscoveryPage() {
         {/* Listings Grid */}
         {filteredDonations.length === 0 ? (
           <GlassCard variant="light" padding="xl" className="text-center py-16">
-            <div className="w-12 h-12 rounded-full bg-black/5 flex items-center justify-center mx-auto text-muted-text mb-3">
+            <div className="w-12 h-12 rounded-full bg-black/5 flex items-center justify-center mx-auto text-slate-text mb-3">
               <AlertTriangle className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-forest-night">No donations matched your criteria</h3>
-            <p className="text-xs text-muted-text mt-1 max-w-sm mx-auto">
+            <h3 className="text-lg font-medium text-obsidian-shell">No donations matched your criteria</h3>
+            <p className="text-xs text-slate-text mt-1 max-w-sm mx-auto">
               Try adjusting your category filter or clearing your search term to see other available listings.
             </p>
             <Button
               variant="outline"
               size="sm"
-              className="mt-4"
+              className="mt-4 text-obsidian-shell border-obsidian-shell/20 hover:border-obsidian-shell"
               onClick={() => {
                 setSearchTerm('');
                 setSelectedCategory('ALL');
@@ -267,7 +268,7 @@ export function FoodDiscoveryPage() {
                 variant="light"
                 padding="md"
                 hoverEffect
-                className="flex flex-col justify-between border-white/70"
+                className="flex flex-col justify-between border-fog-border"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -279,42 +280,42 @@ export function FoodDiscoveryPage() {
                     </Badge>
                   </div>
 
-                  <h3 className="text-lg font-bold text-forest-night leading-snug">
+                  <h3 className="text-lg font-medium text-obsidian-shell leading-snug">
                     {d.title}
                   </h3>
 
-                  <div className="space-y-1.5 text-xs text-muted-text">
-                    <p className="flex items-center gap-1.5 font-medium text-primary-text">
-                      <Building2 className="w-3.5 h-3.5 text-bridge-green shrink-0" />
+                  <div className="space-y-1.5 text-xs text-slate-text">
+                    <p className="flex items-center gap-1.5 font-medium text-obsidian-shell">
+                      <Building2 className="w-3.5 h-3.5 text-obsidian-shell/70 shrink-0" />
                       <span>{d.donorName}</span>
-                      <span className="text-[10px] text-muted-text">({d.donorType})</span>
+                      <span className="text-[10px] text-slate-text">({d.donorType})</span>
                     </p>
                     <p className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-muted-text shrink-0" />
+                      <MapPin className="w-3.5 h-3.5 text-slate-text shrink-0" />
                       <span>{d.locality}, {d.city}</span>
                     </p>
                     <p className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-harvest-gold shrink-0" />
-                      <span>Pickup Deadline: <strong className="text-forest-night">{d.deadline}</strong></span>
+                      <Clock className="w-3.5 h-3.5 text-signal-yellow shrink-0" />
+                      <span>Pickup Deadline: <strong className="text-obsidian-shell">{d.deadline}</strong></span>
                     </p>
                   </div>
 
                   {d.handlingNotes && (
-                    <div className="p-2 rounded-lg bg-black/[0.03] text-[11px] text-muted-text">
-                      <span className="font-semibold text-primary-text">Storage notes: </span>
+                    <div className="p-2 rounded-lg bg-white/70 border border-fog-border text-[11px] text-slate-text">
+                      <span className="font-semibold text-obsidian-shell">Storage notes: </span>
                       {d.handlingNotes}
                     </div>
                   )}
 
                   {d.allergens.length > 0 && (
                     <div className="pt-1 flex flex-wrap items-center gap-1">
-                      <span className="text-[10px] uppercase font-bold text-muted-text mr-1">
+                      <span className="text-[10px] uppercase font-medium tracking-[0.05em] text-slate-text mr-1">
                         Allergens:
                       </span>
                       {d.allergens.map((alg) => (
                         <span
                           key={alg}
-                          className="text-[10px] px-2 py-0.5 rounded-full bg-soft-coral/20 text-[#7a2e20] border border-soft-coral/30 font-medium"
+                          className="text-[10px] px-2 py-0.5 rounded-full bg-soft-coral/15 text-soft-coral border border-soft-coral/30 font-medium"
                         >
                           {alg}
                         </span>
@@ -323,10 +324,10 @@ export function FoodDiscoveryPage() {
                   )}
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-black/5 flex items-center justify-between">
+                <div className="pt-4 mt-4 border-t border-fog-border flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-muted-text block">Quantity</span>
-                    <span className="text-base font-extrabold text-forest-night">
+                    <span className="text-[10px] uppercase font-medium tracking-[0.05em] text-slate-text block">Quantity</span>
+                    <span className="text-base font-bold text-obsidian-shell">
                       {d.quantity} {d.unit}
                     </span>
                   </div>
