@@ -56,7 +56,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.warn('API /auth/me lookup notice:', err);
     }
 
-    // If backend profile is not yet synced, construct clean representation from real Supabase session metadata
     if (currentSession?.user) {
       const supaUser = currentSession.user;
       const meta = (supaUser.user_metadata || {}) as Record<string, any>;
@@ -72,12 +71,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       const userName = meta.name || supaUser.email?.split('@')[0] || 'User';
 
+      const isOrg = userRole === 'DONOR' || userRole === 'RECIPIENT';
+      const fallbackOrg: Organization | null = isOrg && (meta.organizationName || meta.organizationId)
+        ? {
+            id: meta.organizationId || `org-${supaUser.id.slice(0, 8)}`,
+            name: meta.organizationName || `${userName}'s Kitchen`,
+            type: meta.organizationType || (userRole === 'DONOR' ? 'RESTAURANT' : 'NGO'),
+            phone: meta.phone || '+91 98765 00000',
+            email: supaUser.email || '',
+            address: meta.organizationAddress || 'Commercial Area',
+            city: meta.city || 'Prayagraj',
+            state: meta.state || 'UP',
+            pinCode: meta.pinCode || '211001',
+            verificationStatus: meta.verificationStatus || 'PENDING',
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          }
+        : null;
+
       const fallbackUser: User = {
         id: supaUser.id,
         email: supaUser.email || '',
         name: userName,
         role: userRole,
         phone: meta.phone,
+        organizationId: fallbackOrg?.id,
         isActive: true,
         emailVerified: true,
         createdAt: new Date().toISOString(),
@@ -86,7 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setUser(fallbackUser);
       setRole(fallbackUser.role);
-      setOrganization(null);
+      setOrganization(fallbackOrg);
       return fallbackUser;
     }
 
@@ -220,6 +239,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { success: false, error: 'Registration failed: Supabase user ID was not generated.' };
       }
 
+      if (authData.session) {
+        setSession(authData.session);
+      }
+
       // Sync user and organization to PostgreSQL database
       const syncRes = await api.post<{ user: User; organization?: Organization }>('/auth/sync', {
         supabaseId: effectiveSupabaseId,
@@ -250,14 +273,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         updatedAt: new Date().toISOString(),
       };
 
-      const createdOrg: Organization | null = syncRes.data?.organization || null;
+      const createdOrg: Organization | null = syncRes.data?.organization || (data.organizationName ? {
+        id: `org-${effectiveSupabaseId.slice(0, 8)}`,
+        name: data.organizationName,
+        type: data.organizationType || (data.role === 'DONOR' ? 'RESTAURANT' : 'NGO'),
+        phone: data.phone || '+91 98765 00000',
+        email: data.email,
+        address: data.organizationAddress || 'Commercial Area',
+        city: data.city || 'Prayagraj',
+        state: 'UP',
+        pinCode: data.pinCode || '211001',
+        verificationStatus: 'PENDING',
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      } : null);
 
       setUser(createdUser);
       setRole(createdUser.role);
       setOrganization(createdOrg);
-      if (authData.session) {
-        setSession(authData.session);
-      }
 
       toast.success('Account created successfully! Welcome to MealBridge.');
       return { success: true, role: createdUser.role, user: createdUser };

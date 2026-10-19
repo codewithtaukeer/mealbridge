@@ -4,8 +4,32 @@ import type { ApiResponse } from '@mealbridge/shared';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1';
 
 async function getAuthHeader(): Promise<Record<string, string>> {
-  const { data } = await supabase.auth.getSession();
-  const token = data.session?.access_token;
+  let token: string | undefined;
+
+  try {
+    const { data } = await supabase.auth.getSession();
+    token = data.session?.access_token;
+  } catch {}
+
+  // Fallback to checking localStorage directly in case getSession is delayed
+  if (!token) {
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('sb-') || key.includes('auth-token')) && key.endsWith('-auth-token')) {
+          const raw = localStorage.getItem(key);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed.access_token) {
+              token = parsed.access_token;
+              break;
+            }
+          }
+        }
+      }
+    } catch {}
+  }
+
   const headers: Record<string, string> = {};
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
@@ -39,7 +63,7 @@ export async function apiRequest<T>(
       return {
         error: json.error || {
           code: 'API_ERROR',
-          message: `Request failed with status ${res.status}`,
+          message: json.message || `Request failed with status ${res.status}`,
         },
       };
     }
