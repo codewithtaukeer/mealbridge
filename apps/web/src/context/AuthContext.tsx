@@ -41,8 +41,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Guard against concurrent fetchProfile calls to avoid race conditions
+  const isFetchingRef = React.useRef(false);
+
   const fetchProfile = async (fallbackSession?: Session | null): Promise<User | null> => {
-    const currentSession = fallbackSession || session;
+    // Deduplicate concurrent calls: if already fetching, just wait
+    if (isFetchingRef.current) return null;
+    isFetchingRef.current = true;
+
+    // Always get a fresh session from Supabase SDK — never rely on stale closure
+    let currentSession = fallbackSession;
+    if (!currentSession) {
+      try {
+        const { data } = await supabase.auth.getSession();
+        currentSession = data.session;
+      } catch {
+        // fallthrough
+      }
+    }
 
     try {
       const res = await api.get<{ user: User; organization?: Organization }>('/auth/me');
@@ -117,7 +133,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         setSession(session);
-        fetchProfile(session).finally(() => setIsLoading(false));
+        fetchProfile(session).finally(() => {
+          isFetchingRef.current = false;
+          setIsLoading(false);
+        });
       } else {
         setIsLoading(false);
       }
@@ -135,6 +154,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setRole(null);
         setOrganization(null);
       }
+      isFetchingRef.current = false;
       setIsLoading(false);
     });
 
@@ -162,8 +182,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setSession(data.session);
 
+      // Reset guard so signIn's own fetchProfile always runs
+      isFetchingRef.current = false;
+
       // Synchronize session with database
       const loadedUser = await fetchProfile(data.session);
+      isFetchingRef.current = false; // allow refreshProfile to work after
+
       const meta = (data.session.user.user_metadata || {}) as Record<string, any>;
       const effectiveRole: UserRole =
         loadedUser?.role ||
@@ -195,6 +220,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const message = err instanceof Error ? err.message : 'Sign in failed';
       return { success: false, error: message };
     } finally {
+      isFetchingRef.current = false;
       setIsLoading(false);
     }
   };
@@ -319,7 +345,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const refreshProfile = async () => {
+    isFetchingRef.current = false; // always allow explicit refreshes
     await fetchProfile();
+    isFetchingRef.current = false;
   };
 
   return (

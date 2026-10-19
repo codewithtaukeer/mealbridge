@@ -51,11 +51,16 @@ export async function apiRequest<T>(
 
   const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
   try {
     const res = await fetch(url, {
       ...options,
       headers,
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
 
     const json = await res.json();
 
@@ -70,10 +75,16 @@ export async function apiRequest<T>(
 
     return json;
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Network error';
+    clearTimeout(timeoutId);
+    const isTimeout = err instanceof Error && err.name === 'AbortError';
+    const message = isTimeout
+      ? 'Request timed out - server may be starting up, please try again'
+      : err instanceof Error
+      ? err.message
+      : 'Network error';
     return {
       error: {
-        code: 'NETWORK_ERROR',
+        code: isTimeout ? 'TIMEOUT' : 'NETWORK_ERROR',
         message,
       },
     };
