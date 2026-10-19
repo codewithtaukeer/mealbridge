@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/services/api';
-import { PageContainer } from '@/components/ui/PageContainer';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -127,8 +126,8 @@ export function CreateDonationPage() {
   };
 
   return (
-    <PageContainer size="md" withBloom>
-      <div className="mb-6 flex items-center justify-between">
+    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
+      <div className="flex items-center justify-between">
         <Link
           to="/donor/dashboard"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-neon-pulse hover:underline"
@@ -140,17 +139,17 @@ export function CreateDonationPage() {
 
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-pure-white">
+          <h1 className="text-2xl sm:text-3xl font-display font-medium text-pure-white">
             Post Surplus Food Donation
           </h1>
           <p className="text-xs sm:text-sm text-slate-text mt-1">
-            Provide transparent information so nearby recipient NGOs and volunteer dispatchers can claim and transport safely.
+            Provide transparent details so nearby recipient NGOs and volunteer dispatchers can claim and transport safely.
           </p>
         </div>
 
-        <GlassCard variant="light" padding="lg" className="border-white/70 shadow-glass-md">
+        <GlassCard variant="dark" padding="lg" className="border-white/10 shadow-lg">
           {errorMessage && (
-            <div className="mb-6 p-3 rounded-xl bg-soft-coral/15 border border-soft-coral/30 text-xs text-soft-coral font-medium animate-fade-in flex items-center gap-2">
+            <div className="mb-6 p-3.5 rounded-xl bg-soft-coral/15 border border-soft-coral/30 text-xs text-soft-coral font-medium animate-fade-in flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{errorMessage}</span>
             </div>
@@ -159,7 +158,7 @@ export function CreateDonationPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* 1. Item Specifics */}
             <div className="space-y-4">
-              <h2 className="text-[9px] font-medium uppercase tracking-[0.05em] text-obsidian-shell/80 flex items-center gap-1.5">
+              <h2 className="text-[10px] font-semibold uppercase tracking-[0.05em] text-neon-pulse flex items-center gap-1.5">
                 <UtensilsCrossed className="w-3.5 h-3.5 text-neon-pulse" />
                 1. Food Details
               </h2>
@@ -173,26 +172,26 @@ export function CreateDonationPage() {
               />
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-medium text-obsidian-shell">Item Description (Optional)</label>
+                <label className="block text-xs font-medium text-slate-text">Item Description (Optional)</label>
                 <textarea
                   rows={2}
                   placeholder="e.g. Cooked today at 1:00 PM in commercial kitchen. Packaged in sealed food-grade containers."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-card bg-white/70 border border-black/10 text-obsidian-shell text-xs focus:outline-none focus:ring-2 focus:ring-neon-pulse/30"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-deep-abyss/90 border border-white/15 text-pure-white placeholder:text-slate-text text-sm focus:outline-none focus:ring-1 focus:ring-neon-pulse focus:border-neon-pulse transition-all"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-medium text-obsidian-shell">Food Category</label>
+                  <label className="block text-xs font-medium text-slate-text">Food Category</label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as FoodCategory)}
-                    className="w-full px-3.5 py-2.5 rounded-card bg-white/70 border border-black/10 text-obsidian-shell text-sm focus:outline-none focus:ring-2 focus:ring-neon-pulse/30"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-deep-abyss/90 border border-white/15 text-pure-white text-sm focus:outline-none focus:ring-1 focus:ring-neon-pulse focus:border-neon-pulse transition-all"
                   >
                     {FOOD_CATEGORIES.map((cat) => (
-                      <option key={cat.value} value={cat.value}>
+                      <option key={cat.value} value={cat.value} className="bg-deep-abyss text-pure-white">
                         {cat.label}
                       </option>
                     ))}
@@ -209,14 +208,14 @@ export function CreateDonationPage() {
                 />
 
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-medium text-obsidian-shell">Unit</label>
+                  <label className="block text-xs font-medium text-slate-text">Unit</label>
                   <select
                     value={unit}
                     onChange={(e) => setUnit(e.target.value as QuantityUnit)}
-                    className="w-full px-3.5 py-2.5 rounded-card bg-white/70 border border-black/10 text-obsidian-shell text-sm focus:outline-none focus:ring-2 focus:ring-neon-pulse/30"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-deep-abyss/90 border border-white/15 text-pure-white text-sm focus:outline-none focus:ring-1 focus:ring-neon-pulse focus:border-neon-pulse transition-all"
                   >
                     {QUANTITY_UNITS.map((u) => (
-                      <option key={u.value} value={u.value}>
+                      <option key={u.value} value={u.value} className="bg-deep-abyss text-pure-white">
                         {u.label}
                       </option>
                     ))}
@@ -226,14 +225,14 @@ export function CreateDonationPage() {
             </div>
 
             {/* 2. Pickup Window & Deadline */}
-            <div className="pt-4 border-t border-black/5 space-y-4">
-              <h2 className="text-[9px] font-medium uppercase tracking-[0.05em] text-obsidian-shell/80 flex items-center gap-1.5">
+            <div className="pt-4 border-t border-white/10 space-y-4">
+              <h2 className="text-[10px] font-semibold uppercase tracking-[0.05em] text-neon-pulse flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-neon-pulse" />
                 2. Pickup Schedule & Expiry
               </h2>
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-medium text-obsidian-shell">
+                <label className="block text-xs font-medium text-slate-text">
                   Must Be Picked Up Before (Deadline) *
                 </label>
                 <input
@@ -241,7 +240,7 @@ export function CreateDonationPage() {
                   required
                   value={pickupDeadline}
                   onChange={(e) => setPickupDeadline(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-card bg-white/70 border border-black/10 text-obsidian-shell text-sm focus:outline-none focus:ring-2 focus:ring-neon-pulse/30"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-deep-abyss/90 border border-white/15 text-pure-white text-sm [color-scheme:dark] focus:outline-none focus:ring-1 focus:ring-neon-pulse focus:border-neon-pulse transition-all"
                 />
                 <span className="text-[11px] text-slate-text">
                   Set realistic deadlines considering safe consumption limits.
@@ -250,9 +249,9 @@ export function CreateDonationPage() {
             </div>
 
             {/* 3. Pickup Location */}
-            <div className="pt-4 border-t border-black/5 space-y-4">
+            <div className="pt-4 border-t border-white/10 space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-[9px] font-medium uppercase tracking-[0.05em] text-obsidian-shell/80 flex items-center gap-1.5">
+                <h2 className="text-[10px] font-semibold uppercase tracking-[0.05em] text-neon-pulse flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-neon-pulse" />
                   3. Pickup Location
                 </h2>
@@ -260,19 +259,21 @@ export function CreateDonationPage() {
                   type="button"
                   onClick={handleDetectLocation}
                   disabled={isDetecting}
-                  className="px-2.5 py-1 rounded-pill bg-neon-pulse/15 border border-neon-pulse/40 text-[11px] font-semibold text-obsidian-shell hover:bg-neon-pulse/25 flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 rounded-pill bg-neon-pulse/15 border border-neon-pulse/40 text-xs font-semibold text-neon-pulse hover:bg-neon-pulse/25 flex items-center gap-1.5 transition-colors"
                 >
-                  <Navigation className={`w-3 h-3 text-neon-pulse ${isDetecting ? 'animate-spin' : ''}`} />
+                  <Navigation className={`w-3.5 h-3.5 text-neon-pulse ${isDetecting ? 'animate-spin' : ''}`} />
                   <span>{isDetecting ? 'Acquiring GPS...' : 'Detect Pickup Location'}</span>
                 </button>
               </div>
 
               {pickupLatitude && pickupLongitude && (
-                <div className="p-2 rounded-lg bg-neon-pulse/10 border border-neon-pulse/30 flex items-center justify-between">
-                  <span className="text-[11px] text-obsidian-shell font-medium">
+                <div className="p-2.5 rounded-xl bg-neon-pulse/10 border border-neon-pulse/30 flex items-center justify-between">
+                  <span className="text-xs text-pure-white font-medium">
                     Pickup Geolocation: {pickupLatitude.toFixed(4)}° N, {pickupLongitude.toFixed(4)}° E
                   </span>
-                  <span className="text-[10px] text-neon-pulse font-bold uppercase">Ready for Volunteer Proximity Matching</span>
+                  <span className="text-[10px] text-neon-pulse font-bold uppercase tracking-wider bg-neon-pulse/20 px-2 py-0.5 rounded">
+                    GPS Locked
+                  </span>
                 </div>
               )}
 
@@ -288,7 +289,7 @@ export function CreateDonationPage() {
                 <Input
                   label="City"
                   required
-                  placeholder="e.g. Bangalore"
+                  placeholder="e.g. Prayagraj"
                   value={pickupCity}
                   onChange={(e) => setPickupCity(e.target.value)}
                 />
@@ -303,14 +304,14 @@ export function CreateDonationPage() {
             </div>
 
             {/* 4. Safety & Allergen Information */}
-            <div className="pt-4 border-t border-black/5 space-y-4">
-              <h2 className="text-[9px] font-medium uppercase tracking-[0.05em] text-obsidian-shell/80 flex items-center gap-1.5">
+            <div className="pt-4 border-t border-white/10 space-y-4">
+              <h2 className="text-[10px] font-semibold uppercase tracking-[0.05em] text-neon-pulse flex items-center gap-1.5">
                 <Tag className="w-3.5 h-3.5 text-neon-pulse" />
                 4. Safety & Allergens
               </h2>
 
               <div className="space-y-2">
-                <label className="block text-xs font-medium text-obsidian-shell">
+                <label className="block text-xs font-medium text-slate-text">
                   Select Contained Allergens (if any)
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -321,10 +322,10 @@ export function CreateDonationPage() {
                         key={allergen}
                         type="button"
                         onClick={() => toggleAllergen(allergen)}
-                        className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                        className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                           isSelected
-                            ? 'bg-neon-pulse text-white border-neon-pulse font-semibold'
-                            : 'bg-white/60 text-slate-text border-black/10 hover:border-black/20'
+                            ? 'bg-neon-pulse text-obsidian-shell border-neon-pulse font-semibold shadow-sm'
+                            : 'bg-white/5 text-slate-text border-white/10 hover:border-white/25 hover:text-pure-white'
                         }`}
                       >
                         {allergen}
@@ -350,17 +351,17 @@ export function CreateDonationPage() {
             </div>
 
             {/* Food Safety Guarantee Checkbox */}
-            <div className="pt-4 border-t border-black/5 p-4 rounded-xl bg-neon-pulse/10 border border-neon-pulse/30 flex items-start gap-3">
+            <div className="pt-4 border-t border-white/10 p-4 rounded-xl bg-neon-pulse/10 border border-neon-pulse/30 flex items-start gap-3">
               <input
                 id="safety"
                 type="checkbox"
                 required
                 checked={safetyCertified}
                 onChange={(e) => setSafetyCertified(e.target.checked)}
-                className="mt-0.5 rounded border-black/20 text-neon-pulse focus:ring-neon-pulse"
+                className="mt-0.5 rounded border-white/30 text-neon-pulse focus:ring-neon-pulse accent-neon-pulse"
               />
-              <label htmlFor="safety" className="text-xs text-obsidian-shell leading-relaxed select-none">
-                <span className="font-bold">Food Safety & Hygiene Declaration:</span> I hereby certify that this surplus food was prepared under sanitary conditions, stored within safe temperature ranges, and is wholesome and fit for human redistribution.
+              <label htmlFor="safety" className="text-xs text-pure-white leading-relaxed select-none">
+                <span className="font-semibold text-neon-pulse">Food Safety &amp; Hygiene Declaration:</span> I hereby certify that this surplus food was prepared under sanitary conditions, stored within safe temperature ranges, and is wholesome and fit for human redistribution.
               </label>
             </div>
 
@@ -379,9 +380,9 @@ export function CreateDonationPage() {
 
         <div className="text-center text-[11px] text-slate-text flex items-center justify-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-neon-pulse" />
-          <span>Instant notification will be dispatched to nearby verified recipient NGOs</span>
+          <span>Instant notification will be dispatched to nearby verified recipient NGOs &amp; volunteers</span>
         </div>
       </div>
-    </PageContainer>
+    </div>
   );
 }

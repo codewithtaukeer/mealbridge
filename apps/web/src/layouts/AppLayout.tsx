@@ -123,24 +123,22 @@ export function AppLayout() {
       {/* Desktop Deep-Green Obsidian Sidebar */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 w-64 bg-deep-abyss text-white flex flex-col justify-between p-4 transition-transform duration-300 md:translate-x-0 md:static md:h-screen md:shrink-0 border-r border-white/8 shadow-lg',
+          'fixed inset-y-0 left-0 z-50 w-64 bg-deep-abyss text-white flex flex-col justify-between p-5 transition-transform duration-300 md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0 border-r border-white/10 shadow-2xl overflow-y-auto custom-scrollbar',
           mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         <div className="space-y-6">
           {/* Logo Brand */}
-          <div className="flex items-center justify-between px-2 pt-1">
-            <Link to="/" className="flex items-center gap-2 group">
-              <img
-                src="/mealbridge-symbol.png"
-                alt="MealBridge"
-                className="h-10 w-auto object-contain transition-transform group-hover:scale-105"
-              />
+          <div className="flex items-center justify-between px-1 pt-1">
+            <Link to="/" className="flex items-center gap-2.5 group select-none">
+              <div className="w-9 h-9 rounded-xl bg-neon-pulse/15 border border-neon-pulse/30 flex items-center justify-center p-1.5 shrink-0 group-hover:scale-105 transition-transform">
+                <HeartHandshake className="w-5 h-5 text-neon-pulse" />
+              </div>
               <div className="flex flex-col">
-                <span className="text-lg font-display font-bold tracking-tight text-white">
+                <span className="text-base font-display font-medium tracking-tight text-pure-white leading-tight">
                   Meal<span className="text-neon-pulse">Bridge</span>
                 </span>
-                <span className="text-[9px] font-medium uppercase tracking-[0.05em] text-neon-pulse/60">
+                <span className="text-[9px] font-medium uppercase tracking-[0.05em] text-neon-pulse/70">
                   {role ? ROLE_LABELS[role] : 'Platform'}
                 </span>
               </div>
@@ -219,7 +217,7 @@ export function AppLayout() {
       </aside>
 
       {/* Main Content Canvas */}
-      <main className="flex-1 overflow-y-auto min-h-screen bg-obsidian-shell">
+      <main className="flex-1 min-w-0 min-h-screen bg-obsidian-shell flex flex-col">
         {/* Top Header (Desktop) */}
         <header className="hidden md:flex items-center justify-between px-8 py-4 bg-deep-abyss border-b border-white/8 sticky top-0 z-30">
           <div className="flex items-center gap-2 text-xs font-medium text-slate-text">
