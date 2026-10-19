@@ -88,20 +88,50 @@ export function AppLayout() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [pendingVerifCount, setPendingVerifCount] = useState(0);
 
-  useEffect(() => {
+  const updateCounts = () => {
     try {
       if (role === 'ADMIN') {
         const localPending = JSON.parse(localStorage.getItem('mealbridge_pending_verifications') || '[]');
-        const count = localPending.filter((o: any) => o.verificationStatus !== 'VERIFIED').length;
-        const total = Math.max(count, 2);
-        setPendingVerifCount(total);
-        setUnreadCount(total);
+        const pCount = localPending.filter(
+          (o: any) => o.verificationStatus === 'PENDING' || o.verificationStatus === 'UNDER_REVIEW'
+        ).length;
+        setPendingVerifCount(pCount);
+
+        const adminNotifs = JSON.parse(localStorage.getItem('mealbridge_admin_notifications') || '[]');
+        if (location.pathname === '/notifications') {
+          const marked = adminNotifs.map((n: any) => ({ ...n, isRead: true }));
+          localStorage.setItem('mealbridge_admin_notifications', JSON.stringify(marked));
+          setUnreadCount(0);
+        } else {
+          const unread = adminNotifs.filter((n: any) => !n.isRead).length;
+          setUnreadCount(unread);
+        }
       } else {
-        const notifs = JSON.parse(localStorage.getItem('mealbridge_user_notifications') || '[]');
-        const unread = notifs.filter((n: any) => !n.isRead).length;
-        setUnreadCount(unread);
+        setPendingVerifCount(0);
+        const userNotifs = JSON.parse(localStorage.getItem('mealbridge_user_notifications') || '[]');
+        if (location.pathname === '/notifications') {
+          const marked = userNotifs.map((n: any) => ({ ...n, isRead: true }));
+          localStorage.setItem('mealbridge_user_notifications', JSON.stringify(marked));
+          setUnreadCount(0);
+        } else {
+          const unread = userNotifs.filter((n: any) => !n.isRead).length;
+          setUnreadCount(unread);
+        }
       }
     } catch {}
+  };
+
+  useEffect(() => {
+    updateCounts();
+    const handleUpdate = () => updateCounts();
+    window.addEventListener('mealbridge_notifications_updated', handleUpdate);
+    window.addEventListener('mealbridge_queue_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    return () => {
+      window.removeEventListener('mealbridge_notifications_updated', handleUpdate);
+      window.removeEventListener('mealbridge_queue_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
   }, [role, location.pathname]);
 
   const handleSignOut = async () => {

@@ -109,6 +109,8 @@ export function VerificationQueuePage() {
       } catch {}
 
       toast.success('Organization approved and verified!');
+      window.dispatchEvent(new Event('mealbridge_queue_updated'));
+      window.dispatchEvent(new Event('mealbridge_notifications_updated'));
       // Update UI state immediately
       setOrganizations((prev) => prev.filter((o) => o.id !== orgId));
     } catch {
@@ -145,6 +147,8 @@ export function VerificationQueuePage() {
       } catch {}
 
       toast.success('Organization verification rejected');
+      window.dispatchEvent(new Event('mealbridge_queue_updated'));
+      window.dispatchEvent(new Event('mealbridge_notifications_updated'));
       setRejectModalOrg(null);
       setRejectReason('');
       setOrganizations((prev) => prev.filter((o) => o.id !== orgId));

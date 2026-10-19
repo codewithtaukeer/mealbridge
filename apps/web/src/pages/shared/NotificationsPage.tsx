@@ -113,6 +113,7 @@ export function NotificationsPage() {
       }
     } catch {}
 
+    window.dispatchEvent(new Event('mealbridge_notifications_updated'));
     toast.success('All notifications marked as read');
   };
 
