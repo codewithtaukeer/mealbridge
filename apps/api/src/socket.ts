@@ -127,7 +127,8 @@ export function publishDomainEvent(
   entityId: string,
   entityType: 'donation' | 'rescue' | 'organization' | 'report' | 'notification',
   targetRooms?: string[],
-  actorId?: string
+  actorId?: string,
+  data?: Record<string, any>
 ): void {
   if (!io) return;
 
@@ -137,6 +138,7 @@ export function publishDomainEvent(
     entityType,
     timestamp: new Date().toISOString(),
     actorId,
+    data,
   };
 
   if (targetRooms && targetRooms.length > 0) {
@@ -147,9 +149,12 @@ export function publishDomainEvent(
     // Default routing based on domain event type
     switch (type) {
       case 'donation.created':
+        io.to('food:available').to('role:RECIPIENT').to('role:VOLUNTEER').emit('domain:event', eventPayload);
+        break;
+
       case 'donation.updated':
       case 'donation.expired':
-        io.to('food:available').to('role:RECIPIENT').emit('domain:event', eventPayload);
+        io.to('food:available').to('role:RECIPIENT').to('role:VOLUNTEER').emit('domain:event', eventPayload);
         break;
 
       case 'donation.reserved':

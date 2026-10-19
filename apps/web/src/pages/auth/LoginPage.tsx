@@ -45,14 +45,15 @@ export function LoginPage() {
       return;
     }
 
-    // Determine target route
+    // Determine target route using returned role from sign in
+    const targetRole = result.role || role || 'DONOR';
     const from = (location.state as { from?: { pathname: string } })?.from?.pathname;
     if (from && !from.includes('/login') && !from.includes('/signup')) {
       navigate(from, { replace: true });
-    } else if (role && ROLE_DASHBOARD_PATHS[role]) {
-      navigate(ROLE_DASHBOARD_PATHS[role], { replace: true });
+    } else if (targetRole && ROLE_DASHBOARD_PATHS[targetRole]) {
+      navigate(ROLE_DASHBOARD_PATHS[targetRole], { replace: true });
     } else {
-      navigate('/', { replace: true });
+      navigate('/donor/dashboard', { replace: true });
     }
   };
 

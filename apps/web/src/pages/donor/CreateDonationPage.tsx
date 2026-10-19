@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { FOOD_CATEGORIES, QUANTITY_UNITS, COMMON_ALLERGENS } from '@mealbridge/shared';
 import type { FoodCategory, QuantityUnit } from '@mealbridge/shared';
+import { useGeolocation } from '@/hooks/useGeolocation';
 import {
   UtensilsCrossed,
   Clock,
@@ -17,12 +18,14 @@ import {
   ArrowLeft,
   AlertCircle,
   Tag,
+  Navigation,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export function CreateDonationPage() {
   const { organization } = useAuth();
   const navigate = useNavigate();
+  const { detectLocation, isDetecting } = useGeolocation();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -38,8 +41,20 @@ export function CreateDonationPage() {
   // Location
   const [pickupAddress, setPickupAddress] = useState(organization?.address || '');
   const [pickupCity, setPickupCity] = useState(organization?.city || '');
+  const [pickupLatitude, setPickupLatitude] = useState<number | undefined>(organization?.latitude);
+  const [pickupLongitude, setPickupLongitude] = useState<number | undefined>(organization?.longitude);
   const [pickupInstructions, setPickupInstructions] = useState('');
   const [storageRequirements, setStorageRequirements] = useState('Maintain between 0°C and 4°C or consume within 2 hours');
+
+  const handleDetectLocation = async () => {
+    const loc = await detectLocation();
+    if (loc) {
+      if (loc.address) setPickupAddress(loc.address);
+      if (loc.city) setPickupCity(loc.city);
+      setPickupLatitude(loc.latitude);
+      setPickupLongitude(loc.longitude);
+    }
+  };
 
   // Allergens & Handling
   const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
@@ -90,6 +105,8 @@ export function CreateDonationPage() {
         pickupDeadline: new Date(pickupDeadline).toISOString(),
         pickupAddress,
         pickupCity,
+        pickupLatitude: pickupLatitude || undefined,
+        pickupLongitude: pickupLongitude || undefined,
         pickupInstructions: pickupInstructions || undefined,
         storageRequirements: storageRequirements || undefined,
         allergens: selectedAllergens,
@@ -234,10 +251,30 @@ export function CreateDonationPage() {
 
             {/* 3. Pickup Location */}
             <div className="pt-4 border-t border-black/5 space-y-4">
-              <h2 className="text-[9px] font-medium uppercase tracking-[0.05em] text-obsidian-shell/80 flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-neon-pulse" />
-                3. Pickup Location
-              </h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-[9px] font-medium uppercase tracking-[0.05em] text-obsidian-shell/80 flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-neon-pulse" />
+                  3. Pickup Location
+                </h2>
+                <button
+                  type="button"
+                  onClick={handleDetectLocation}
+                  disabled={isDetecting}
+                  className="px-2.5 py-1 rounded-pill bg-neon-pulse/15 border border-neon-pulse/40 text-[11px] font-semibold text-obsidian-shell hover:bg-neon-pulse/25 flex items-center gap-1.5 transition-colors"
+                >
+                  <Navigation className={`w-3 h-3 text-neon-pulse ${isDetecting ? 'animate-spin' : ''}`} />
+                  <span>{isDetecting ? 'Acquiring GPS...' : 'Detect Pickup Location'}</span>
+                </button>
+              </div>
+
+              {pickupLatitude && pickupLongitude && (
+                <div className="p-2 rounded-lg bg-neon-pulse/10 border border-neon-pulse/30 flex items-center justify-between">
+                  <span className="text-[11px] text-obsidian-shell font-medium">
+                    Pickup Geolocation: {pickupLatitude.toFixed(4)}° N, {pickupLongitude.toFixed(4)}° E
+                  </span>
+                  <span className="text-[10px] text-neon-pulse font-bold uppercase">Ready for Volunteer Proximity Matching</span>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input

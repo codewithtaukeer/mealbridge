@@ -54,16 +54,56 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     // Domain Event Listeners & Live Toast Alerts
     newSocket.on('domain:event', (event: DomainEvent) => {
       switch (event.type) {
-        case 'donation.created':
-          toast('🍲 New surplus food listing posted nearby', {
-            icon: '🟢',
-            style: {
-              background: '#0e1a19',
-              color: '#ffffff',
-              border: '1px solid #3ddc91',
-            },
-          });
+        case 'donation.created': {
+          let distanceText = '';
+          let isWithinRadius = true;
+
+          // Check volunteer live location preferences
+          const volLocRaw = localStorage.getItem('mealbridge_volunteer_location');
+          if (volLocRaw) {
+            try {
+              const volLoc = JSON.parse(volLocRaw);
+              const maxRadius = volLoc.serviceRadius || 15;
+
+              if (volLoc.latitude && volLoc.longitude && event.data?.pickupLatitude && event.data?.pickupLongitude) {
+                // Haversine formula
+                const R = 6371;
+                const dLat = (event.data.pickupLatitude - volLoc.latitude) * (Math.PI / 180);
+                const dLon = (event.data.pickupLongitude - volLoc.longitude) * (Math.PI / 180);
+                const a =
+                  Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(volLoc.latitude * (Math.PI / 180)) *
+                    Math.cos(event.data.pickupLatitude * (Math.PI / 180)) *
+                    Math.sin(dLon / 2) *
+                    Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                const distKm = Math.round(R * c * 10) / 10;
+                distanceText = ` (${distKm} km from your live location)`;
+                isWithinRadius = distKm <= maxRadius;
+              } else if (volLoc.city && event.data?.city) {
+                isWithinRadius = volLoc.city.toLowerCase() === event.data.city.toLowerCase();
+              }
+            } catch {}
+          }
+
+          if (isWithinRadius) {
+            const title = event.data?.title || 'Surplus food listing';
+            toast(
+              `📍 Proximity Alert: ${title} posted nearby${distanceText}! Ready for courier rescue.`,
+              {
+                icon: '🟢',
+                duration: 7000,
+                style: {
+                  background: '#0e1a19',
+                  color: '#ffffff',
+                  border: '1px solid #3ddc91',
+                  boxShadow: '0 8px 24px rgba(61, 220, 145, 0.2)',
+                },
+              }
+            );
+          }
           break;
+        }
         case 'donation.reserved':
           toast.success('Food donation reserved by recipient organization!');
           break;

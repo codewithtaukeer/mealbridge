@@ -5,6 +5,7 @@ import { PageContainer } from '@/components/ui/PageContainer';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { useGeolocation } from '@/hooks/useGeolocation';
 import { ROLE_DASHBOARD_PATHS, type UserRole, type OrganizationType } from '@mealbridge/shared';
 import {
   Lock,
@@ -20,11 +21,14 @@ import {
   UtensilsCrossed,
   HeartHandshake,
   Bike,
+  Navigation,
+  Compass,
 } from 'lucide-react';
 
 export function SignUpPage() {
   const { signUp } = useAuth();
   const navigate = useNavigate();
+  const { detectLocation, isDetecting } = useGeolocation();
 
   const [selectedRole, setSelectedRole] = useState<UserRole>('DONOR');
   const [name, setName] = useState('');
@@ -34,11 +38,14 @@ export function SignUpPage() {
   const [phone, setPhone] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  // Organization-specific state
+  // Organization & Location state
   const [orgName, setOrgName] = useState('');
   const [orgType, setOrgType] = useState<OrganizationType>('RESTAURANT');
   const [city, setCity] = useState('');
+  const [pinCode, setPinCode] = useState('');
   const [address, setAddress] = useState('');
+  const [latitude, setLatitude] = useState<number | undefined>();
+  const [longitude, setLongitude] = useState<number | undefined>();
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -50,6 +57,17 @@ export function SignUpPage() {
       setOrgType('RESTAURANT');
     } else if (role === 'RECIPIENT') {
       setOrgType('NGO');
+    }
+  };
+
+  const handleDetectLocation = async () => {
+    const loc = await detectLocation();
+    if (loc) {
+      if (loc.city) setCity(loc.city);
+      if (loc.pinCode) setPinCode(loc.pinCode);
+      if (loc.address && !address) setAddress(loc.address);
+      setLatitude(loc.latitude);
+      setLongitude(loc.longitude);
     }
   };
 
@@ -94,6 +112,9 @@ export function SignUpPage() {
       organizationType: selectedRole !== 'VOLUNTEER' ? orgType : undefined,
       organizationAddress: address || undefined,
       city: city || undefined,
+      pinCode: pinCode || undefined,
+      latitude,
+      longitude,
     };
 
     const result = await signUp(payload);
@@ -105,7 +126,8 @@ export function SignUpPage() {
     }
 
     // Redirect to relevant dashboard
-    const targetPath = ROLE_DASHBOARD_PATHS[selectedRole] || '/';
+    const targetRole = result.role || selectedRole;
+    const targetPath = ROLE_DASHBOARD_PATHS[targetRole] || '/donor/dashboard';
     navigate(targetPath, { replace: true });
   };
 
@@ -254,13 +276,55 @@ export function SignUpPage() {
                 leftIcon={<Phone className="w-4 h-4 text-slate-text" />}
               />
 
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-medium text-obsidian-shell">City / Region</label>
+                  <button
+                    type="button"
+                    onClick={handleDetectLocation}
+                    disabled={isDetecting}
+                    className="inline-flex items-center gap-1 text-[11px] font-medium text-neon-pulse hover:text-emerald-300 transition-colors"
+                  >
+                    <Navigation className={`w-3 h-3 ${isDetecting ? 'animate-spin' : ''}`} />
+                    <span>{isDetecting ? 'Detecting GPS...' : 'Detect Location'}</span>
+                  </button>
+                </div>
+                <Input
+                  placeholder="e.g. Prayagraj, Mumbai, Delhi"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  leftIcon={<MapPin className="w-4 h-4 text-slate-text" />}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
-                label="City / Region"
-                placeholder="e.g. Bangalore, Mumbai, Delhi"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                leftIcon={<MapPin className="w-4 h-4 text-slate-text" />}
+                label="Postal PIN Code"
+                placeholder="e.g. 211001"
+                value={pinCode}
+                onChange={(e) => setPinCode(e.target.value)}
+                leftIcon={<Compass className="w-4 h-4 text-slate-text" />}
               />
+
+              {latitude && longitude ? (
+                <div className="p-2.5 rounded-card bg-neon-pulse/10 border border-neon-pulse/30 flex items-center justify-between self-end">
+                  <div className="flex items-center gap-2">
+                    <Navigation className="w-3.5 h-3.5 text-neon-pulse" />
+                    <span className="text-[11px] text-obsidian-shell font-medium">
+                      GPS: {latitude.toFixed(4)}, {longitude.toFixed(4)}
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-slate-text uppercase">Live Geo</span>
+                </div>
+              ) : (
+                <div className="p-2.5 rounded-card bg-obsidian-shell/5 border border-fog-border flex items-center gap-2 self-end">
+                  <Compass className="w-3.5 h-3.5 text-slate-text" />
+                  <span className="text-[11px] text-slate-text">
+                    Click &apos;Detect Location&apos; to auto-fill GPS &amp; PIN
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Organization Fields for Donors and Recipients */}

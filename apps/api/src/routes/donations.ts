@@ -281,6 +281,8 @@ donationRouter.post(
           pickupDeadline: new Date(validated.pickupDeadline),
           pickupAddress: validated.pickupAddress,
           pickupCity: validated.pickupCity,
+          pickupLatitude: validated.pickupLatitude || null,
+          pickupLongitude: validated.pickupLongitude || null,
           allergensJson: validated.allergens ? JSON.stringify(validated.allergens) : '[]',
           handlingNotes: validated.handlingNotes || null,
           status: 'AVAILABLE',
@@ -290,12 +292,12 @@ donationRouter.post(
           updatedAt: new Date().toISOString(),
           donorOrganization: {
             id: req.user!.organizationId || 'demo-donor-org-1',
-            name: 'Grand Royal Hotel & Restaurant',
-            type: 'RESTAURANT',
+            name: req.user!.organization?.name || 'Grand Royal Hotel & Restaurant',
+            type: req.user!.organization?.type || 'RESTAURANT',
             city: validated.pickupCity,
             verificationStatus: 'VERIFIED',
-            phone: '+91 98765 11223',
-            email: 'donor@grandroyal.com',
+            phone: req.user!.organization?.phone || '+91 98765 11223',
+            email: req.user!.email || 'donor@grandroyal.com',
             address: validated.pickupAddress,
           },
           rescue: null,
@@ -314,8 +316,14 @@ donationRouter.post(
         ipAddress: req.ip,
       });
 
-      // Realtime notification to matching channels
-      publishDomainEvent('donation.created', donation.id, 'donation', undefined, req.user!.id);
+      // Realtime notification to matching channels including location coordinates
+      publishDomainEvent('donation.created', donation.id, 'donation', undefined, req.user!.id, {
+        title: donation.title,
+        city: donation.pickupCity,
+        pickupAddress: donation.pickupAddress,
+        pickupLatitude: donation.pickupLatitude,
+        pickupLongitude: donation.pickupLongitude,
+      });
 
       res.status(201).json({ data: donation });
     } catch (err) {

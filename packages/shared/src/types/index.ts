@@ -271,4 +271,5 @@ export interface DomainEvent {
   entityType: string;
   timestamp: string;
   actorId?: string;
+  data?: Record<string, any>;
 }
