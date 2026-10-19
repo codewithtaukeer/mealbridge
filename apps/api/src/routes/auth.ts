@@ -293,19 +293,20 @@ authRouter.post('/sync', async (req: Request, res: Response) => {
 /**
  * GET /api/v1/auth/me
  * Return authenticated user and their affiliated organization.
- * Also auto-provisions the user in PostgreSQL if they don't have a DB record yet
- * (important for admin and users who signed up but whose /auth/sync failed).
+ * Tries Prisma DB first, then falls back to Supabase REST when the DB pooler is unavailable.
  */
 authRouter.get('/me', authenticate, async (req: Request, res: Response, next) => {
   try {
     const user = req.user!;
 
-    // Auto-provision user in DB if they only exist in Supabase Auth
-    // Detection: when the JWT fallback was used, req.user.id === req.user.supabaseId (both are Supabase UUID)
-    // When loaded from DB, id is a Postgres-generated UUID distinct from supabaseId
+    // When the JWT fallback was used in auth middleware, user.id === user.supabaseId
+    // (since the middleware couldn't look up the DB record). We need to fetch real user data.
     if (user.supabaseId && user.id === user.supabaseId) {
+
+      // --- Attempt 1: Prisma DB lookup/provision ---
+      let existingDbUser: any = null;
       try {
-        const existing = await prisma.user.findFirst({
+        existingDbUser = await prisma.user.findFirst({
           where: {
             OR: [
               { supabaseId: user.supabaseId },
@@ -317,9 +318,9 @@ authRouter.get('/me', authenticate, async (req: Request, res: Response, next) =>
           },
         });
 
-        if (!existing) {
+        if (!existingDbUser) {
           // Auto-create the DB user record
-          const created = await prisma.user.create({
+          existingDbUser = await prisma.user.create({
             data: {
               supabaseId: user.supabaseId,
               email: user.email,
@@ -333,65 +334,106 @@ authRouter.get('/me', authenticate, async (req: Request, res: Response, next) =>
               organizationMemberships: { include: { organization: true } },
             },
           });
+        }
+      } catch (dbErr: any) {
+        console.warn('[/auth/me] Prisma lookup/provision warning:', dbErr.message);
+      }
 
-          // Respond with the freshly created user
-          return res.status(200).json({
-            data: {
-              user: {
-                id: created.id,
-                email: created.email,
-                name: created.name,
-                phone: created.phone,
-                role: created.role,
-                organizationId: null,
-                isActive: created.isActive,
-                emailVerified: created.emailVerified,
-                createdAt: created.createdAt.toISOString(),
-                updatedAt: created.updatedAt.toISOString(),
-              },
-              organization: null,
+      if (existingDbUser) {
+        const primaryMembership = existingDbUser.organizationMemberships?.[0];
+        const org = primaryMembership?.organization;
+        return res.status(200).json({
+          data: {
+            user: {
+              id: existingDbUser.id,
+              email: existingDbUser.email,
+              name: existingDbUser.name,
+              phone: existingDbUser.phone,
+              role: existingDbUser.role,
+              organizationId: primaryMembership?.organizationId ?? null,
+              isActive: existingDbUser.isActive,
+              emailVerified: existingDbUser.emailVerified,
+              createdAt: existingDbUser.createdAt instanceof Date
+                ? existingDbUser.createdAt.toISOString()
+                : existingDbUser.createdAt,
+              updatedAt: existingDbUser.updatedAt instanceof Date
+                ? existingDbUser.updatedAt.toISOString()
+                : existingDbUser.updatedAt,
             },
-          });
-        } else {
-          // User exists — return it
-          const primaryMembership = existing.organizationMemberships?.[0];
+            organization: org
+              ? {
+                  id: org.id,
+                  name: org.name,
+                  type: org.type,
+                  verificationStatus: org.verificationStatus,
+                  city: org.city,
+                  address: org.address,
+                  phone: org.phone,
+                  email: org.email,
+                  description: org.description,
+                }
+              : undefined,
+          },
+        });
+      }
+
+      // --- Attempt 2: Supabase REST fallback ---
+      try {
+        const { data: supaUsers } = await supabaseAdmin
+          .from('users')
+          .select('*')
+          .or(`supabase_id.eq.${user.supabaseId},email.eq.${user.email}`)
+          .limit(1);
+
+        const supaUser = supaUsers?.[0];
+
+        if (supaUser) {
+          // Look up org via membership
+          const { data: members } = await supabaseAdmin
+            .from('organization_members')
+            .select('*, organizations(*)')
+            .eq('user_id', supaUser.id)
+            .limit(1);
+
+          const org = members?.[0]?.organizations || null;
+
           return res.status(200).json({
             data: {
               user: {
-                id: existing.id,
-                email: existing.email,
-                name: existing.name,
-                phone: existing.phone,
-                role: existing.role,
-                organizationId: primaryMembership?.organizationId ?? null,
-                isActive: existing.isActive,
-                emailVerified: existing.emailVerified,
-                createdAt: existing.createdAt.toISOString(),
-                updatedAt: existing.updatedAt.toISOString(),
+                id: supaUser.id,
+                email: supaUser.email,
+                name: supaUser.name,
+                phone: supaUser.phone,
+                role: supaUser.role,
+                organizationId: org?.id ?? null,
+                isActive: supaUser.is_active,
+                emailVerified: supaUser.email_verified,
+                createdAt: supaUser.created_at,
+                updatedAt: supaUser.updated_at,
               },
-              organization: primaryMembership?.organization
+              organization: org
                 ? {
-                    id: primaryMembership.organization.id,
-                    name: primaryMembership.organization.name,
-                    type: primaryMembership.organization.type,
-                    verificationStatus: primaryMembership.organization.verificationStatus,
-                    city: primaryMembership.organization.city,
-                    address: primaryMembership.organization.address,
-                    phone: primaryMembership.organization.phone,
-                    email: primaryMembership.organization.email,
-                    description: primaryMembership.organization.description,
+                    id: org.id,
+                    name: org.name,
+                    type: org.type,
+                    verificationStatus: org.verification_status,
+                    city: org.city,
+                    address: org.address,
+                    phone: org.phone,
+                    email: org.email,
+                    description: org.description,
                   }
                 : undefined,
             },
           });
         }
-      } catch (dbErr: any) {
-        // DB unavailable — fall through to JWT-only response
-        console.warn('[/auth/me] DB auto-provision warning:', dbErr.message);
+      } catch (supaErr: any) {
+        console.warn('[/auth/me] Supabase REST fallback failed:', supaErr.message);
       }
     }
 
-    // If DB user was loaded by the middleware, return it as normal
+    // Default path: DB user was already loaded by auth middleware (id !== supabaseId)
+    // OR Supabase fallbacks all failed — return what we have from middleware
     res.status(200).json({
       data: {
         user: {
@@ -403,8 +445,8 @@ authRouter.get('/me', authenticate, async (req: Request, res: Response, next) =>
           organizationId: user.organizationId,
           isActive: user.isActive,
           emailVerified: user.emailVerified,
-          createdAt: user.createdAt.toISOString(),
-          updatedAt: user.updatedAt.toISOString(),
+          createdAt: user.createdAt instanceof Date ? user.createdAt.toISOString() : (user.createdAt as string),
+          updatedAt: user.updatedAt instanceof Date ? user.updatedAt.toISOString() : (user.updatedAt as string),
         },
         organization: user.organization
           ? {

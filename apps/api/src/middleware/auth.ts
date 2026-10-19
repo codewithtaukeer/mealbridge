@@ -50,6 +50,7 @@ export async function authenticate(
       throw new AppError(401, 'INVALID_TOKEN', 'Session has expired or token is invalid. Please sign in again.');
     }
 
+    // --- Try Prisma first ---
     let dbUser: any = null;
     try {
       dbUser = await prisma.user.findFirst({
@@ -68,11 +69,58 @@ export async function authenticate(
         },
       });
     } catch (dbErr: any) {
-      console.error('[Auth Middleware] Database query failed:', dbErr.message);
+      console.warn('[Auth Middleware] Prisma query failed, trying Supabase REST:', dbErr.message);
     }
 
-    // If database connection fails on deployment or user is not yet in public.users,
-    // gracefully synthesize authenticated user from verified Supabase session
+    // --- If Prisma failed or no record, try Supabase REST ---
+    if (!dbUser) {
+      try {
+        const { data: supaUsers } = await supabaseAdmin
+          .from('users')
+          .select('*, organization_members(role, organizations(*))')
+          .or(`supabase_id.eq.${authUser.id},email.eq.${authUser.email}`)
+          .limit(1);
+
+        if (supaUsers && supaUsers.length > 0) {
+          const su = supaUsers[0];
+          const membership = su.organization_members?.[0];
+          const org = membership?.organizations || null;
+
+          req.user = {
+            id: su.id,
+            supabaseId: su.supabase_id || su.id,
+            email: su.email || '',
+            name: su.name || su.email?.split('@')[0] || 'User',
+            role: su.role || 'DONOR',
+            phone: su.phone || null,
+            isActive: su.is_active ?? true,
+            emailVerified: su.email_verified ?? true,
+            avatarUrl: su.avatar_url || null,
+            organizationId: org?.id || membership?.organization_id || null,
+            organization: org
+              ? {
+                  id: org.id,
+                  name: org.name,
+                  type: org.type,
+                  verificationStatus: org.verification_status,
+                  city: org.city,
+                  address: org.address,
+                  phone: org.phone,
+                  email: org.email,
+                }
+              : null,
+            createdAt: su.created_at ? new Date(su.created_at) : new Date(),
+            updatedAt: su.updated_at ? new Date(su.updated_at) : new Date(),
+          } as any;
+
+          return next();
+        }
+      } catch (supaErr: any) {
+        console.warn('[Auth Middleware] Supabase REST fallback failed:', supaErr.message);
+      }
+    }
+
+    // --- Final fallback: synthesize from JWT metadata ---
     if (!dbUser) {
       const meta = (authUser.user_metadata || {}) as Record<string, any>;
       const userRole =
@@ -189,6 +237,50 @@ export async function optionalAuth(
         },
       });
     } catch {}
+
+    if (!dbUser) {
+      try {
+        const { data: supaUsers } = await supabaseAdmin
+          .from('users')
+          .select('*, organization_members(role, organizations(*))')
+          .or(`supabase_id.eq.${authUser.id},email.eq.${authUser.email}`)
+          .limit(1);
+
+        if (supaUsers && supaUsers.length > 0) {
+          const su = supaUsers[0];
+          const membership = su.organization_members?.[0];
+          const org = membership?.organizations || null;
+
+          req.user = {
+            id: su.id,
+            supabaseId: su.supabase_id || su.id,
+            email: su.email || '',
+            name: su.name || su.email?.split('@')[0] || 'User',
+            role: su.role || 'DONOR',
+            phone: su.phone || null,
+            isActive: su.is_active ?? true,
+            emailVerified: su.email_verified ?? true,
+            avatarUrl: su.avatar_url || null,
+            organizationId: org?.id || null,
+            organization: org
+              ? {
+                  id: org.id,
+                  name: org.name,
+                  type: org.type,
+                  verificationStatus: org.verification_status,
+                  city: org.city,
+                  address: org.address,
+                  phone: org.phone,
+                  email: org.email,
+                }
+              : null,
+            createdAt: su.created_at ? new Date(su.created_at) : new Date(),
+            updatedAt: su.updated_at ? new Date(su.updated_at) : new Date(),
+          } as any;
+          return next();
+        }
+      } catch {}
+    }
 
     if (dbUser && dbUser.isActive) {
       const primaryMembership = dbUser.organizationMemberships?.[0];
