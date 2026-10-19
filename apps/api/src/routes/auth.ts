@@ -157,37 +157,136 @@ authRouter.post('/sync', async (req: Request, res: Response, next) => {
 
 /**
  * GET /api/v1/auth/me
- * Return authenticated user and their affiliated organization
+ * Return authenticated user and their affiliated organization.
+ * Also auto-provisions the user in PostgreSQL if they don't have a DB record yet
+ * (important for admin and users who signed up but whose /auth/sync failed).
  */
-authRouter.get('/me', authenticate, async (req: Request, res: Response) => {
-  const user = req.user!;
-  res.status(200).json({
-    data: {
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        phone: user.phone,
-        role: user.role,
-        organizationId: user.organizationId,
-        isActive: user.isActive,
-        emailVerified: user.emailVerified,
-        createdAt: user.createdAt.toISOString(),
-        updatedAt: user.updatedAt.toISOString(),
+authRouter.get('/me', authenticate, async (req: Request, res: Response, next) => {
+  try {
+    const user = req.user!;
+
+    // Auto-provision user in DB if they only exist in Supabase Auth
+    // Detection: when the JWT fallback was used, req.user.id === req.user.supabaseId (both are Supabase UUID)
+    // When loaded from DB, id is a Postgres-generated UUID distinct from supabaseId
+    if (user.supabaseId && user.id === user.supabaseId) {
+      try {
+        const existing = await prisma.user.findFirst({
+          where: {
+            OR: [
+              { supabaseId: user.supabaseId },
+              { email: user.email },
+            ],
+          },
+          include: {
+            organizationMemberships: { include: { organization: true } },
+          },
+        });
+
+        if (!existing) {
+          // Auto-create the DB user record
+          const created = await prisma.user.create({
+            data: {
+              supabaseId: user.supabaseId,
+              email: user.email,
+              name: user.name,
+              role: user.role as any,
+              phone: user.phone,
+              emailVerified: true,
+              isActive: true,
+            },
+            include: {
+              organizationMemberships: { include: { organization: true } },
+            },
+          });
+
+          // Respond with the freshly created user
+          return res.status(200).json({
+            data: {
+              user: {
+                id: created.id,
+                email: created.email,
+                name: created.name,
+                phone: created.phone,
+                role: created.role,
+                organizationId: null,
+                isActive: created.isActive,
+                emailVerified: created.emailVerified,
+                createdAt: created.createdAt.toISOString(),
+                updatedAt: created.updatedAt.toISOString(),
+              },
+              organization: null,
+            },
+          });
+        } else {
+          // User exists — return it
+          const primaryMembership = existing.organizationMemberships?.[0];
+          return res.status(200).json({
+            data: {
+              user: {
+                id: existing.id,
+                email: existing.email,
+                name: existing.name,
+                phone: existing.phone,
+                role: existing.role,
+                organizationId: primaryMembership?.organizationId ?? null,
+                isActive: existing.isActive,
+                emailVerified: existing.emailVerified,
+                createdAt: existing.createdAt.toISOString(),
+                updatedAt: existing.updatedAt.toISOString(),
+              },
+              organization: primaryMembership?.organization
+                ? {
+                    id: primaryMembership.organization.id,
+                    name: primaryMembership.organization.name,
+                    type: primaryMembership.organization.type,
+                    verificationStatus: primaryMembership.organization.verificationStatus,
+                    city: primaryMembership.organization.city,
+                    address: primaryMembership.organization.address,
+                    phone: primaryMembership.organization.phone,
+                    email: primaryMembership.organization.email,
+                    description: primaryMembership.organization.description,
+                  }
+                : undefined,
+            },
+          });
+        }
+      } catch (dbErr: any) {
+        // DB unavailable — fall through to JWT-only response
+        console.warn('[/auth/me] DB auto-provision warning:', dbErr.message);
+      }
+    }
+
+    // If DB user was loaded by the middleware, return it as normal
+    res.status(200).json({
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          phone: user.phone,
+          role: user.role,
+          organizationId: user.organizationId,
+          isActive: user.isActive,
+          emailVerified: user.emailVerified,
+          createdAt: user.createdAt.toISOString(),
+          updatedAt: user.updatedAt.toISOString(),
+        },
+        organization: user.organization
+          ? {
+              id: user.organization.id,
+              name: user.organization.name,
+              type: user.organization.type,
+              verificationStatus: user.organization.verificationStatus,
+              city: user.organization.city,
+              address: user.organization.address,
+              phone: user.organization.phone,
+              email: user.organization.email,
+              description: user.organization.description,
+            }
+          : undefined,
       },
-      organization: user.organization
-        ? {
-            id: user.organization.id,
-            name: user.organization.name,
-            type: user.organization.type,
-            verificationStatus: user.organization.verificationStatus,
-            city: user.organization.city,
-            address: user.organization.address,
-            phone: user.organization.phone,
-            email: user.organization.email,
-            description: user.organization.description,
-          }
-        : undefined,
-    },
-  });
+    });
+  } catch (err) {
+    next(err);
+  }
 });

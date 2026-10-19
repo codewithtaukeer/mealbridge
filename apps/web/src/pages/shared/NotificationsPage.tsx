@@ -39,7 +39,18 @@ export function NotificationsPage() {
   };
 
   useEffect(() => {
-    loadNotifications();
+    loadNotifications().then(() => {
+      // Auto-mark all as read after a short delay so the user can see them highlighted first
+      const timer = setTimeout(() => {
+        api.post('/notifications/mark-all-read')
+          .then(() => {
+            setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+            window.dispatchEvent(new Event('mealbridge_notifications_updated'));
+          })
+          .catch(() => {/* non-critical */});
+      }, 1500);
+      return () => clearTimeout(timer);
+    });
   }, []);
 
   const handleMarkAllRead = async () => {
