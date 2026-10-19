@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: mealbridge-api
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build:api
+    startCommand: node apps/api/dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        value: https://mealbridge-three.vercel.app
+      - key: JWT_SECRET
+        value: mealbridge_jwt_super_secret_production_key_2026
+      - key: SUPABASE_URL
+        value: https://udcijvuccyjptptttvai.supabase.co
+      - key: SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkY2lqdnVjY3lqcHRwdHR0dmFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDg1NjMsImV4cCI6MjEwNzg4NDU2M30.-61pio1jTvaHO58CQUB3usbSwA3KTHfNYWvZS56VXz4
+      - key: DATABASE_URL
+        sync: false
