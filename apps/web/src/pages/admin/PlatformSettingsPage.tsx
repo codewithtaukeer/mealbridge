@@ -24,7 +24,7 @@ export function PlatformSettingsPage() {
   return (
     <div className="max-w-2xl space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-pure-white">
           Platform Governance &amp; Controls
         </h1>
         <p className="text-xs sm:text-sm text-slate-text mt-1">

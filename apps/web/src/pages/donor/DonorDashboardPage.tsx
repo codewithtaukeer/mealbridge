@@ -52,7 +52,7 @@ export function DonorDashboardPage() {
       {/* Welcome & Quick Action Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-pure-white">
             Welcome back, {organization?.name || user?.name}
           </h1>
           <p className="text-xs sm:text-sm text-slate-text mt-1">

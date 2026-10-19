@@ -103,7 +103,7 @@ export function RecipientFoodDetailsPage() {
               <Badge variant="outline" size="sm" className="mb-2">
                 {donation.category.replace(/_/g, ' ')}
               </Badge>
-              <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
+              <h1 className="text-2xl sm:text-3xl font-display font-bold text-pure-white">
                 {donation.title}
               </h1>
               <p className="text-xs text-slate-text mt-1 flex items-center gap-1.5">

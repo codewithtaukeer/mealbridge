@@ -48,7 +48,7 @@ export function RecipientProfilePage() {
   return (
     <div className="max-w-3xl space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-pure-white">
           Recipient NGO Profile
         </h1>
         <p className="text-xs sm:text-sm text-slate-text mt-1">

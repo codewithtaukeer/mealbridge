@@ -35,7 +35,7 @@ export function TaskHistoryPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
+        <h1 className="text-2xl sm:text-3xl font-display font-medium text-pure-white">
           Mission History
         </h1>
         <p className="text-xs sm:text-sm text-slate-text mt-1">

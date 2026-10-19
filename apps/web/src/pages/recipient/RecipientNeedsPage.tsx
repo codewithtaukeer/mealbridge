@@ -85,7 +85,7 @@ export function RecipientNeedsPage() {
     <PageContainer size="md" withBloom>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-pure-white">
             Food Intake Criteria & Preferences
           </h1>
           <p className="text-xs sm:text-sm text-slate-text mt-1">

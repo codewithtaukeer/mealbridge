@@ -42,7 +42,7 @@ export function NotificationsPage() {
     <div className="max-w-3xl space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
+          <h1 className="text-2xl sm:text-3xl font-display font-medium text-pure-white">
             Notifications &amp; Dispatch Alerts
           </h1>
           <p className="text-xs sm:text-sm text-slate-text mt-1">

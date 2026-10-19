@@ -31,62 +31,7 @@ export interface MockRescue {
   events: any[];
 }
 
-export const mockRescues: MockRescue[] = [
-  {
-    id: 'demo-rescue-1',
-    donationId: 'demo-1',
-    recipientOrganizationId: 'demo-recipient-org-1',
-    volunteerId: 'demo-volunteer-user-1',
-    status: 'ASSIGNED',
-    assignedAt: new Date(Date.now() - 600000).toISOString(),
-    createdAt: new Date(Date.now() - 900000).toISOString(),
-    updatedAt: new Date(Date.now() - 600000).toISOString(),
-    donation: {
-      id: 'demo-1',
-      title: '40 Fresh Veg Pulao & Dal Tadka',
-      category: 'VEGETARIAN_MEALS',
-      quantity: 40,
-      unit: 'PORTIONS',
-      pickupDeadline: new Date(Date.now() + 4 * 3600000).toISOString(),
-      pickupAddress: 'Grand Royal Hotel, Civil Lines',
-      pickupCity: 'Prayagraj',
-      donorOrganization: {
-        id: 'demo-donor-org-1',
-        name: 'Grand Royal Hotel & Restaurant',
-        phone: '+91 98765 11223',
-        email: 'donor@grandroyal.com',
-        address: 'Grand Royal Hotel, Civil Lines, Prayagraj',
-      },
-    },
-    recipientOrganization: {
-      id: 'demo-recipient-org-1',
-      name: 'Hope Community Shelter & Kitchen',
-      phone: '+91 98765 99887',
-      email: 'ngo@hopeshelter.org',
-      address: 'Katra Old Road, Prayagraj',
-      city: 'Prayagraj',
-    },
-    volunteer: {
-      id: 'demo-volunteer-user-1',
-      name: 'Amit Kumar (Express Volunteer)',
-      phone: '+91 98765 44332',
-    },
-    events: [
-      {
-        id: 'evt-1',
-        eventType: 'rescue.created',
-        actorRole: 'RECIPIENT',
-        createdAt: new Date(Date.now() - 900000).toISOString(),
-      },
-      {
-        id: 'evt-2',
-        eventType: 'rescue.assigned',
-        actorRole: 'VOLUNTEER',
-        createdAt: new Date(Date.now() - 600000).toISOString(),
-      },
-    ],
-  },
-];
+export const mockRescues: MockRescue[] = [];
 
 /**
  * GET /api/v1/rescues

@@ -48,7 +48,7 @@ export function VerifyAccountPage() {
           <div className="w-12 h-12 rounded-2xl bg-neon-pulse/15 border border-neon-pulse/30 flex items-center justify-center mx-auto shadow-md text-neon-pulse">
             <FileCheck className="w-6 h-6" />
           </div>
-          <h1 className="text-3xl font-display font-medium text-obsidian-shell">
+          <h1 className="text-3xl font-display font-medium text-pure-white">
             Organization Verification
           </h1>
           <p className="text-sm text-slate-text max-w-md mx-auto">

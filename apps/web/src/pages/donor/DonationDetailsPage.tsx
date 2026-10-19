@@ -151,7 +151,7 @@ export function DonationDetailsPage() {
                   {donation.status}
                 </Badge>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
+              <h1 className="text-2xl sm:text-3xl font-display font-bold text-pure-white">
                 {donation.title}
               </h1>
               <p className="text-xs text-slate-text mt-1">

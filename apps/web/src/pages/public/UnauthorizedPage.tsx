@@ -13,7 +13,7 @@ export function UnauthorizedPage() {
             <ShieldAlert className="w-8 h-8" />
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
+          <h1 className="text-2xl sm:text-3xl font-display font-medium text-pure-white">
             Access Restricted
           </h1>
 

@@ -80,7 +80,7 @@ export function FoodDetailsPage() {
             </div>
 
             <div className="py-4 space-y-4">
-              <h1 className="text-2xl sm:text-3xl font-display font-medium text-obsidian-shell">
+              <h1 className="text-2xl sm:text-3xl font-display font-medium text-pure-white">
                 {item.title}
               </h1>
               <p className="text-sm text-slate-text leading-relaxed">

@@ -108,7 +108,7 @@ export function RecipientRescueDetailsPage() {
             <span className="text-[9px] uppercase font-medium text-slate-text tracking-[0.05em]">
               Rescue Mission #{rescue.id.slice(0, 8)}
             </span>
-            <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell mt-1">
+            <h1 className="text-2xl sm:text-3xl font-display font-bold text-pure-white mt-1">
               {rescue.donation?.title}
             </h1>
             <p className="text-xs text-slate-text mt-1">

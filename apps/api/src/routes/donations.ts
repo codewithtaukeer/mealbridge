@@ -29,72 +29,7 @@ export function cleanupExpiredDonations(): void {
 setInterval(cleanupExpiredDonations, 30000);
 
 // In-memory demo store for when PostgreSQL is not configured locally
-export const mockDonations: any[] = [
-  {
-    id: 'demo-1',
-    title: '40 Fresh Veg Pulao & Dal Tadka',
-    description: 'Hot nutritious meal boxes packaged in hygienic food-grade containers.',
-    category: 'VEGETARIAN_MEALS',
-    quantity: 40,
-    unit: 'PORTIONS',
-    imageUrl: null,
-    preparedAt: new Date(Date.now() - 3600000).toISOString(),
-    pickupDeadline: new Date(Date.now() + 4 * 3600000).toISOString(),
-    pickupAddress: 'Grand Royal Hotel, Civil Lines',
-    pickupCity: 'Prayagraj',
-    pickupInstructions: 'Rear kitchen gate, ask for Chef Suresh',
-    storageRequirements: 'Keep above 60°C or chill under 4°C',
-    allergensJson: '[]',
-    handlingNotes: 'Keep upright',
-    status: 'AVAILABLE',
-    donorOrganizationId: 'demo-donor-org-1',
-    createdById: 'demo-donor-user-1',
-    createdAt: new Date(Date.now() - 1800000).toISOString(),
-    updatedAt: new Date(Date.now() - 1800000).toISOString(),
-    donorOrganization: {
-      id: 'demo-donor-org-1',
-      name: 'Grand Royal Hotel & Restaurant',
-      type: 'RESTAURANT',
-      city: 'Prayagraj',
-      verificationStatus: 'VERIFIED',
-      phone: '+91 98765 11223',
-      email: 'donor@grandroyal.com',
-      address: 'Grand Royal Hotel, Civil Lines, Prayagraj',
-    },
-    rescue: {
-      id: 'demo-rescue-1',
-      status: 'ASSIGNED',
-      recipientOrganizationId: 'demo-recipient-org-1',
-      volunteerId: 'demo-volunteer-user-1',
-      recipientOrganization: {
-        id: 'demo-recipient-org-1',
-        name: 'Hope Community Shelter & Kitchen',
-        phone: '+91 98765 99887',
-        email: 'ngo@hopeshelter.org',
-        address: 'Katra Old Road, Prayagraj',
-      },
-      volunteer: {
-        id: 'demo-volunteer-user-1',
-        name: 'Amit Kumar (Express Volunteer)',
-        phone: '+91 98765 44332',
-      },
-      events: [
-        {
-          id: 'evt-1',
-          eventType: 'RESCUE_CLAIMED',
-          actorRole: 'RECIPIENT',
-          createdAt: new Date(Date.now() - 900000).toISOString(),
-        },
-        {
-          id: 'evt-2',
-          eventType: 'VOLUNTEER_ASSIGNED',
-          actorRole: 'VOLUNTEER',
-          createdAt: new Date(Date.now() - 600000).toISOString(),
-        }
-      ]
-    }
-  }
-];
+export const mockDonations: any[] = [];
 
 const createDonationSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),

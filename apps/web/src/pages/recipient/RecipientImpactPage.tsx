@@ -38,7 +38,7 @@ export function RecipientImpactPage() {
   return (
     <div className="space-y-8 animate-fade-in">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-obsidian-shell">
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-pure-white">
           Community Distribution Impact
         </h1>
         <p className="text-xs sm:text-sm text-slate-text mt-1">

@@ -19,23 +19,24 @@ export async function authenticate(
       throw new AppError(401, 'UNAUTHORIZED', 'Token is missing from Authorization header');
     }
 
-    // Support demo-token for local pilot testing when remote Supabase is in placeholder/mock mode
-    if (token.startsWith('demo-token') || token === 'demo-token') {
+    // Support demo-token and custom-token for pilot/serverless testing
+    if (token.startsWith('demo-token') || token.startsWith('custom-token-') || token === 'demo-token') {
       const demoRole = req.headers['x-demo-role'] as any || 'DONOR';
+      const userId = token.startsWith('custom-token-') ? token.replace('custom-token-', '') : `demo-${demoRole.toLowerCase()}-user-1`;
       req.user = {
-        id: `demo-${demoRole.toLowerCase()}-user-1`,
-        supabaseId: `demo-${demoRole.toLowerCase()}-supabase-id`,
+        id: userId,
+        supabaseId: `supabase-${userId}`,
         email: `${demoRole.toLowerCase()}@mealbridge.org`,
-        name: `Pilot ${demoRole}`,
+        name: `User (${demoRole})`,
         role: demoRole,
         phone: '+91 98765 00000',
         isActive: true,
         emailVerified: true,
         avatarUrl: null,
-        organizationId: `demo-${demoRole.toLowerCase()}-org-1`,
+        organizationId: `org-${userId}`,
         organization: {
-          id: `demo-${demoRole.toLowerCase()}-org-1`,
-          name: demoRole === 'DONOR' ? 'Grand Royal Hotel & Restaurant' : 'Hope Community Shelter & Kitchen',
+          id: `org-${userId}`,
+          name: demoRole === 'DONOR' ? 'Surplus Food Donor' : 'Hope Community Kitchen',
           type: demoRole === 'DONOR' ? 'RESTAURANT' : 'NGO',
           phone: '+91 98765 11223',
           email: `${demoRole.toLowerCase()}@mealbridge.org`,
@@ -43,7 +44,7 @@ export async function authenticate(
           city: 'Prayagraj',
           state: 'UP',
           pinCode: '211001',
-          verificationStatus: 'VERIFIED',
+          verificationStatus: 'PENDING',
           isActive: true,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -108,12 +109,13 @@ export async function optionalAuth(
     const token = authHeader.split(' ')[1];
     if (!token) return next();
 
-    // Support demo-token for local pilot testing
-    if (token.startsWith('demo-token') || token === 'demo-token') {
+    // Support demo-token and custom-token for local pilot testing
+    if (token.startsWith('demo-token') || token.startsWith('custom-token-') || token === 'demo-token') {
       const demoRole = (req.headers['x-demo-role'] as any) || 'DONOR';
+      const userId = token.startsWith('custom-token-') ? token.replace('custom-token-', '') : `demo-${demoRole.toLowerCase()}-user-1`;
       req.user = {
-        id: `demo-${demoRole.toLowerCase()}-user-1`,
-        supabaseId: `demo-${demoRole.toLowerCase()}-supabase-id`,
+        id: userId,
+        supabaseId: `supabase-${userId}`,
         email: `${demoRole.toLowerCase()}@mealbridge.org`,
         name: `Pilot ${demoRole}`,
         role: demoRole,
