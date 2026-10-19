@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { api } from '@/services/api';
 import { ROLE_LABELS, type UserRole } from '@mealbridge/shared';
 import {
   LayoutDashboard,
@@ -84,53 +85,45 @@ export function AppLayout() {
 
   const navItems = getNavItems(role);
 
-  // Unread notifications and pending verifications count
+  // Unread notifications and pending verifications count from API
   const [unreadCount, setUnreadCount] = useState(0);
   const [pendingVerifCount, setPendingVerifCount] = useState(0);
 
-  const updateCounts = () => {
+  const fetchBadgeCounts = async () => {
     try {
       if (role === 'ADMIN') {
-        const localPending = JSON.parse(localStorage.getItem('mealbridge_pending_verifications') || '[]');
-        const pCount = localPending.filter(
-          (o: any) => o.verificationStatus === 'PENDING' || o.verificationStatus === 'UNDER_REVIEW'
-        ).length;
-        setPendingVerifCount(pCount);
+        const [verifRes, notifRes] = await Promise.all([
+          api.get<any[]>('/admin/verifications'),
+          api.get<any[]>('/notifications'),
+        ]);
 
-        const adminNotifs = JSON.parse(localStorage.getItem('mealbridge_admin_notifications') || '[]');
-        if (location.pathname === '/notifications') {
-          const marked = adminNotifs.map((n: any) => ({ ...n, isRead: true }));
-          localStorage.setItem('mealbridge_admin_notifications', JSON.stringify(marked));
-          setUnreadCount(0);
-        } else {
-          const unread = adminNotifs.filter((n: any) => !n.isRead).length;
-          setUnreadCount(unread);
+        if (verifRes.data) {
+          setPendingVerifCount(verifRes.data.length);
+        }
+
+        if (notifRes.data) {
+          setUnreadCount(notifRes.data.filter((n) => !n.isRead).length);
         }
       } else {
         setPendingVerifCount(0);
-        const userNotifs = JSON.parse(localStorage.getItem('mealbridge_user_notifications') || '[]');
-        if (location.pathname === '/notifications') {
-          const marked = userNotifs.map((n: any) => ({ ...n, isRead: true }));
-          localStorage.setItem('mealbridge_user_notifications', JSON.stringify(marked));
-          setUnreadCount(0);
-        } else {
-          const unread = userNotifs.filter((n: any) => !n.isRead).length;
-          setUnreadCount(unread);
+        const notifRes = await api.get<any[]>('/notifications');
+        if (notifRes.data) {
+          setUnreadCount(notifRes.data.filter((n) => !n.isRead).length);
         }
       }
-    } catch {}
+    } catch {
+      // Non-blocking
+    }
   };
 
   useEffect(() => {
-    updateCounts();
-    const handleUpdate = () => updateCounts();
+    fetchBadgeCounts();
+    const handleUpdate = () => fetchBadgeCounts();
     window.addEventListener('mealbridge_notifications_updated', handleUpdate);
     window.addEventListener('mealbridge_queue_updated', handleUpdate);
-    window.addEventListener('storage', handleUpdate);
     return () => {
       window.removeEventListener('mealbridge_notifications_updated', handleUpdate);
       window.removeEventListener('mealbridge_queue_updated', handleUpdate);
-      window.removeEventListener('storage', handleUpdate);
     };
   }, [role, location.pathname]);
 

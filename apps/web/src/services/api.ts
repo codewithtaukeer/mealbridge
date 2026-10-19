@@ -5,31 +5,11 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/
 
 async function getAuthHeader(): Promise<Record<string, string>> {
   const { data } = await supabase.auth.getSession();
-  const token = data.session?.access_token || localStorage.getItem('mealbridge_demo_token');
-  const demoRole = localStorage.getItem('mealbridge_demo_role');
+  const token = data.session?.access_token;
   const headers: Record<string, string> = {};
-  if (token) headers['Authorization'] = `Bearer ${token}`;
-  if (demoRole) headers['x-demo-role'] = demoRole;
-
-  const currentUserJson = localStorage.getItem('mealbridge_current_user') || localStorage.getItem('mealbridge_custom_user');
-  if (currentUserJson) {
-    try {
-      const u = JSON.parse(currentUserJson);
-      if (u.email) headers['x-user-email'] = u.email;
-      if (u.name) headers['x-user-name'] = u.name;
-      if (u.role) headers['x-demo-role'] = u.role;
-      if (u.organizationId) headers['x-user-org-id'] = u.organizationId;
-    } catch {}
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
-
-  const currentOrgJson = localStorage.getItem('mealbridge_current_org') || localStorage.getItem('mealbridge_custom_org');
-  if (currentOrgJson) {
-    try {
-      const o = JSON.parse(currentOrgJson);
-      if (o.name) headers['x-user-org-name'] = o.name;
-    } catch {}
-  }
-
   return headers;
 }
 

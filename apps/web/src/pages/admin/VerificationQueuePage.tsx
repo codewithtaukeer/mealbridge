@@ -26,34 +26,15 @@ export function VerificationQueuePage() {
   const fetchQueue = async () => {
     try {
       setIsLoading(true);
-      let apiOrgs: Organization[] = [];
-      try {
-        const res = await api.get<Organization[]>('/admin/verifications');
-        if (res.data) apiOrgs = res.data;
-      } catch {
-        // Fallback to local cache
+      const res = await api.get<Organization[]>('/admin/verifications');
+      if (res.data) {
+        setOrganizations(res.data);
+      } else {
+        setOrganizations([]);
       }
-
-      // Merge with pending verifications saved locally
-      let localPending: any[] = [];
-      try {
-        localPending = JSON.parse(localStorage.getItem('mealbridge_pending_verifications') || '[]');
-      } catch {}
-
-      // Also check current active org if not verified
-      try {
-        const currentOrg = JSON.parse(localStorage.getItem('mealbridge_current_org') || 'null');
-        if (currentOrg && (currentOrg.verificationStatus === 'PENDING' || currentOrg.verificationStatus === 'UNDER_REVIEW')) {
-          localPending.push(currentOrg);
-        }
-      } catch {}
-
-      const combined = [...localPending.filter((o: any) => o.verificationStatus !== 'VERIFIED'), ...apiOrgs];
-      // Deduplicate by ID
-      const unique = Array.from(new Map(combined.map((o: any) => [o.id, o])).values()) as Organization[];
-      setOrganizations(unique);
     } catch {
-      toast.error('Failed to load verification queue');
+      toast.error('Failed to load verification queue from database');
+      setOrganizations([]);
     } finally {
       setIsLoading(false);
     }
@@ -66,53 +47,16 @@ export function VerificationQueuePage() {
   const handleApprove = async (orgId: string) => {
     setActiveOrgId(orgId);
     try {
-      // 1. Send approval to API
-      try {
-        await api.post(`/admin/verifications/${orgId}/approve`);
-      } catch (err) {
-        console.warn('API approve warning (using local fallback sync):', err);
+      const res = await api.post(`/admin/verifications/${orgId}/approve`);
+      if (res.error) {
+        toast.error(res.error.message);
+        return;
       }
 
-      // 2. Update local storage stores
-      try {
-        const localPending = JSON.parse(localStorage.getItem('mealbridge_pending_verifications') || '[]');
-        const updatedPending = localPending.map((o: any) =>
-          o.id === orgId ? { ...o, verificationStatus: 'VERIFIED', verifiedAt: new Date().toISOString() } : o
-        );
-        localStorage.setItem('mealbridge_pending_verifications', JSON.stringify(updatedPending));
-
-        const currentOrg = JSON.parse(localStorage.getItem('mealbridge_current_org') || 'null');
-        if (currentOrg && currentOrg.id === orgId) {
-          currentOrg.verificationStatus = 'VERIFIED';
-          currentOrg.verifiedAt = new Date().toISOString();
-          localStorage.setItem('mealbridge_current_org', JSON.stringify(currentOrg));
-        }
-
-        const customOrg = JSON.parse(localStorage.getItem('mealbridge_custom_org') || 'null');
-        if (customOrg && customOrg.id === orgId) {
-          customOrg.verificationStatus = 'VERIFIED';
-          customOrg.verifiedAt = new Date().toISOString();
-          localStorage.setItem('mealbridge_custom_org', JSON.stringify(customOrg));
-        }
-
-        // Add verified notification for the organization
-        const userNotifs = JSON.parse(localStorage.getItem('mealbridge_user_notifications') || '[]');
-        userNotifs.unshift({
-          id: 'notif-' + Date.now(),
-          type: 'ORG_VERIFIED',
-          title: 'Organization Verified & Approved!',
-          message: 'Your organization has been officially verified by MealBridge Admin. You have full clearance to publish and rescue food.',
-          time: 'Just now',
-          isRead: false,
-        });
-        localStorage.setItem('mealbridge_user_notifications', JSON.stringify(userNotifs));
-      } catch {}
-
-      toast.success('Organization approved and verified!');
+      toast.success('Organization approved and verified in database!');
+      setOrganizations((prev) => prev.filter((o) => o.id !== orgId));
       window.dispatchEvent(new Event('mealbridge_queue_updated'));
       window.dispatchEvent(new Event('mealbridge_notifications_updated'));
-      // Update UI state immediately
-      setOrganizations((prev) => prev.filter((o) => o.id !== orgId));
     } catch {
       toast.error('Failed to approve organization');
     } finally {
@@ -127,31 +71,18 @@ export function VerificationQueuePage() {
     const reasonText = rejectReason || 'Incomplete registration documents or unverified business registry ID';
 
     try {
-      try {
-        await api.post(`/admin/verifications/${orgId}/reject`, { reason: reasonText });
-      } catch {}
-
-      try {
-        const localPending = JSON.parse(localStorage.getItem('mealbridge_pending_verifications') || '[]');
-        const updatedPending = localPending.map((o: any) =>
-          o.id === orgId ? { ...o, verificationStatus: 'REJECTED', rejectionReason: reasonText } : o
-        );
-        localStorage.setItem('mealbridge_pending_verifications', JSON.stringify(updatedPending));
-
-        const currentOrg = JSON.parse(localStorage.getItem('mealbridge_current_org') || 'null');
-        if (currentOrg && currentOrg.id === orgId) {
-          currentOrg.verificationStatus = 'REJECTED';
-          currentOrg.rejectionReason = reasonText;
-          localStorage.setItem('mealbridge_current_org', JSON.stringify(currentOrg));
-        }
-      } catch {}
+      const res = await api.post(`/admin/verifications/${orgId}/reject`, { reason: reasonText });
+      if (res.error) {
+        toast.error(res.error.message);
+        return;
+      }
 
       toast.success('Organization verification rejected');
-      window.dispatchEvent(new Event('mealbridge_queue_updated'));
-      window.dispatchEvent(new Event('mealbridge_notifications_updated'));
       setRejectModalOrg(null);
       setRejectReason('');
       setOrganizations((prev) => prev.filter((o) => o.id !== orgId));
+      window.dispatchEvent(new Event('mealbridge_queue_updated'));
+      window.dispatchEvent(new Event('mealbridge_notifications_updated'));
     } catch {
       toast.error('Failed to reject organization');
     } finally {
@@ -185,7 +116,7 @@ export function VerificationQueuePage() {
       {isLoading ? (
         <div className="py-20 text-center text-slate-text text-sm flex items-center justify-center gap-2">
           <RefreshCw className="w-4 h-4 animate-spin text-neon-pulse" />
-          <span>Loading verification applications...</span>
+          <span>Loading verification applications from database...</span>
         </div>
       ) : organizations.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">

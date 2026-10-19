@@ -49,61 +49,8 @@ export function VerifyAccountPage() {
         toast.error(res.error.message);
       } else {
         toast.success('Verification request submitted for administrative review!');
-
-        // Update local context immediately
-        const updatedOrg = {
-          ...(organization || {}),
-          id: organization?.id || user?.organizationId || 'org-' + Date.now(),
-          name: organization?.name || user?.name + "'s Organization",
-          type: organization?.type || (user?.role === 'DONOR' ? 'RESTAURANT' : 'NGO'),
-          verificationStatus: 'UNDER_REVIEW' as const,
-          phone: organization?.phone || user?.phone || '+91 98765 00000',
-          email: organization?.email || user?.email || '',
-          address: organization?.address || 'Commercial District',
-          city: organization?.city || 'Prayagraj',
-          state: organization?.state || 'UP',
-          pinCode: organization?.pinCode || '211001',
-          isActive: true,
-          createdAt: organization?.createdAt || new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-
-        // Persist to local storage
-        localStorage.setItem('mealbridge_current_org', JSON.stringify(updatedOrg));
-        localStorage.setItem('mealbridge_custom_org', JSON.stringify(updatedOrg));
-
-        // Save into pending verifications queue so admin sees it immediately
-        try {
-          const pendingList = JSON.parse(localStorage.getItem('mealbridge_pending_verifications') || '[]');
-          const queueEntry = {
-            ...updatedOrg,
-            members: [{ user: { id: user?.id, name: user?.name, email: user?.email, phone: user?.phone } }],
-          };
-          const existingIdx = pendingList.findIndex((p: any) => p.id === updatedOrg.id);
-          if (existingIdx >= 0) {
-            pendingList[existingIdx] = queueEntry;
-          } else {
-            pendingList.unshift(queueEntry);
-          }
-          localStorage.setItem('mealbridge_pending_verifications', JSON.stringify(pendingList));
-        } catch {}
-
-        // Add admin notification
-        try {
-          const adminNotifs = JSON.parse(localStorage.getItem('mealbridge_admin_notifications') || '[]');
-          adminNotifs.unshift({
-            id: 'notif-' + Date.now(),
-            type: 'ORG_VERIFICATION_REQUESTED',
-            title: `Verification Request: ${updatedOrg.name}`,
-            message: `${updatedOrg.name} (${updatedOrg.type}) submitted ${documentType} credentials (${licenseNumber || 'Verified File'}) for review.`,
-            link: '/admin/verification',
-            time: 'Just now',
-            isRead: false,
-          });
-          localStorage.setItem('mealbridge_admin_notifications', JSON.stringify(adminNotifs));
-        } catch {}
-
         await refreshProfile();
+        window.dispatchEvent(new Event('mealbridge_queue_updated'));
       }
     } catch {
       toast.error('Failed to submit verification request');

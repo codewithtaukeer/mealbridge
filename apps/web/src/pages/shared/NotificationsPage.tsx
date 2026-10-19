@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
 import { api } from '@/services/api';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Button } from '@/components/ui/Button';
@@ -11,76 +10,29 @@ interface NotificationItem {
   id: string;
   title: string;
   message: string;
-  time?: string;
-  createdAt?: string;
+  createdAt: string;
   isRead: boolean;
   type: string;
-  link?: string;
+  resourceType?: string;
+  resourceId?: string;
 }
 
 export function NotificationsPage() {
-  const { role } = useAuth();
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadNotifications = async () => {
     setIsLoading(true);
     try {
-      let apiItems: NotificationItem[] = [];
-      try {
-        const res = await api.get<NotificationItem[]>('/notifications');
-        if (res.data) apiItems = res.data;
-      } catch {}
-
-      let localItems: NotificationItem[] = [];
-      try {
-        if (role === 'ADMIN') {
-          localItems = JSON.parse(localStorage.getItem('mealbridge_admin_notifications') || '[]');
-          if (localItems.length === 0) {
-            localItems = [
-              {
-                id: 'notif-admin-seed-1',
-                title: 'New Verification Request: Grand Heritage Hotel',
-                message: 'Grand Heritage Hotel & Banquet submitted FSSAI documentation for verification review.',
-                link: '/admin/verification',
-                time: '1h ago',
-                isRead: false,
-                type: 'VERIFICATION_REQUEST',
-              },
-              {
-                id: 'notif-admin-seed-2',
-                title: 'New Verification Request: Annapurna Kitchen',
-                message: 'Annapurna Community Kitchen submitted NGO Darpan certification for review.',
-                link: '/admin/verification',
-                time: '3h ago',
-                isRead: false,
-                type: 'VERIFICATION_REQUEST',
-              },
-            ];
-          }
-        } else {
-          localItems = JSON.parse(localStorage.getItem('mealbridge_user_notifications') || '[]');
-          if (localItems.length === 0) {
-            localItems = [
-              {
-                id: 'notif-user-seed-1',
-                title: 'Account Registered & Verification Required',
-                message: 'Please submit your organization documentation for review before publishing surplus food.',
-                link: '/verify-account',
-                time: 'Just now',
-                isRead: false,
-                type: 'SYSTEM',
-              },
-            ];
-          }
-        }
-      } catch {}
-
-      const combined = [...localItems, ...apiItems];
-      const unique = Array.from(new Map(combined.map((n) => [n.id, n])).values());
-      setNotifications(unique);
+      const res = await api.get<NotificationItem[]>('/notifications');
+      if (res.data) {
+        setNotifications(res.data);
+      } else {
+        setNotifications([]);
+      }
     } catch {
-      toast.error('Failed to load notifications');
+      toast.error('Failed to load notifications from database');
+      setNotifications([]);
     } finally {
       setIsLoading(false);
     }
@@ -88,33 +40,17 @@ export function NotificationsPage() {
 
   useEffect(() => {
     loadNotifications();
-  }, [role]);
+  }, []);
 
   const handleMarkAllRead = async () => {
     try {
       await api.post('/notifications/mark-all-read');
-    } catch {}
-
-    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-
-    try {
-      if (role === 'ADMIN') {
-        const adminNotifs = JSON.parse(localStorage.getItem('mealbridge_admin_notifications') || '[]');
-        localStorage.setItem(
-          'mealbridge_admin_notifications',
-          JSON.stringify(adminNotifs.map((n: any) => ({ ...n, isRead: true })))
-        );
-      } else {
-        const userNotifs = JSON.parse(localStorage.getItem('mealbridge_user_notifications') || '[]');
-        localStorage.setItem(
-          'mealbridge_user_notifications',
-          JSON.stringify(userNotifs.map((n: any) => ({ ...n, isRead: true })))
-        );
-      }
-    } catch {}
-
-    window.dispatchEvent(new Event('mealbridge_notifications_updated'));
-    toast.success('All notifications marked as read');
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+      window.dispatchEvent(new Event('mealbridge_notifications_updated'));
+      toast.success('All notifications marked as read');
+    } catch {
+      toast.error('Failed to mark notifications as read');
+    }
   };
 
   return (
@@ -125,7 +61,7 @@ export function NotificationsPage() {
             Notifications &amp; Verification Alerts
           </h1>
           <p className="text-xs sm:text-sm text-slate-text mt-1">
-            Real-time status changes, verification requests, and domain events delivered via Socket.IO.
+            Real-time status changes, verification requests, and domain events delivered via database &amp; Socket.IO.
           </p>
         </div>
 
@@ -167,18 +103,18 @@ export function NotificationsPage() {
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-sm text-obsidian-shell">{n.title}</span>
                   <span className="text-[10px] text-slate-text flex items-center gap-1">
-                    <Clock className="w-3 h-3" /> {n.time || (n.createdAt ? new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recent')}
+                    <Clock className="w-3 h-3" /> {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
                 <p className="text-xs text-slate-text">{n.message}</p>
 
-                {n.link && (
+                {n.type === 'ORG_VERIFICATION_REQUESTED' && (
                   <div className="pt-1.5">
                     <Link
-                      to={n.link}
+                      to="/admin/verification"
                       className="inline-flex items-center gap-1 text-xs font-semibold text-neon-pulse hover:underline"
                     >
-                      <span>Take Action</span>
+                      <span>Review in Verification Queue</span>
                       <ArrowRight className="w-3 h-3" />
                     </Link>
                   </div>

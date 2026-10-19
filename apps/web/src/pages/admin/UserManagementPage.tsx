@@ -15,74 +15,15 @@ export function UserManagementPage() {
     async function loadUsers() {
       try {
         setIsLoading(true);
-        let list: User[] = [];
-        try {
-          const res = await api.get<User[]>('/admin/users');
-          if (res.data && res.data.length > 0) list = res.data;
-        } catch {}
-
-        // Merge locally registered users from registry
-        try {
-          const registry = JSON.parse(localStorage.getItem('mealbridge_users_registry') || '{}');
-          const registryUsers = Object.values(registry).map((item: any) => item.user).filter(Boolean);
-          const currentUser = JSON.parse(localStorage.getItem('mealbridge_current_user') || 'null');
-          if (currentUser) registryUsers.push(currentUser);
-          list = [...registryUsers, ...list];
-        } catch {}
-
-        if (list.length === 0) {
-          list = [
-            {
-              id: 'usr-admin-1',
-              name: 'Chief Operations Officer (Admin)',
-              email: 'admin@mealbridge.org',
-              role: 'ADMIN',
-              isActive: true,
-              emailVerified: true,
-              phone: '+91 98765 00001',
-              createdAt: new Date(Date.now() - 3600000 * 24 * 60).toISOString(),
-              updatedAt: new Date().toISOString(),
-            },
-            {
-              id: 'usr-donor-1',
-              name: 'Vikram Malhotra',
-              email: 'vikram@grandheritage.com',
-              role: 'DONOR',
-              isActive: true,
-              emailVerified: true,
-              phone: '+91 98390 12345',
-              createdAt: new Date(Date.now() - 3600000 * 24 * 14).toISOString(),
-              updatedAt: new Date().toISOString(),
-            },
-            {
-              id: 'usr-recipient-1',
-              name: 'Sunita Sharma',
-              email: 'sunita@annapurnatrust.org',
-              role: 'RECIPIENT',
-              isActive: true,
-              emailVerified: true,
-              phone: '+91 94150 98765',
-              createdAt: new Date(Date.now() - 3600000 * 24 * 30).toISOString(),
-              updatedAt: new Date().toISOString(),
-            },
-            {
-              id: 'usr-volunteer-1',
-              name: 'Rahul Verma',
-              email: 'rahul.volunteer@mealbridge.org',
-              role: 'VOLUNTEER',
-              isActive: true,
-              emailVerified: true,
-              phone: '+91 98765 43210',
-              createdAt: new Date(Date.now() - 3600000 * 24 * 25).toISOString(),
-              updatedAt: new Date().toISOString(),
-            },
-          ];
+        const res = await api.get<User[]>('/admin/users');
+        if (res.data) {
+          setUsers(res.data);
+        } else {
+          setUsers([]);
         }
-
-        const unique = Array.from(new Map(list.map((u) => [u.id || u.email, u])).values());
-        setUsers(unique);
       } catch (err) {
-        console.error(err);
+        console.error('Failed to load users from database:', err);
+        setUsers([]);
       } finally {
         setIsLoading(false);
       }
@@ -120,12 +61,12 @@ export function UserManagementPage() {
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-slate-text text-sm">Loading users...</div>
+        <div className="py-20 text-center text-slate-text text-sm">Loading users from database...</div>
       ) : filtered.length === 0 ? (
         <GlassCard variant="light" padding="lg" className="text-center py-16 space-y-3 border-dashed">
           <Users className="w-10 h-10 mx-auto text-slate-text" />
           <h3 className="font-medium text-obsidian-shell text-base">No user accounts found</h3>
-          <p className="text-xs text-slate-text">Try adjusting your search query.</p>
+          <p className="text-xs text-slate-text">No user accounts registered yet or matching your search criteria.</p>
         </GlassCard>
       ) : (
         <GlassCard variant="light" padding="none" className="border-white/70 overflow-hidden shadow-glass-md">
