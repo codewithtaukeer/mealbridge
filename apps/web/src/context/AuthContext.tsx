@@ -282,10 +282,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       let createdOrg: Organization | null = null;
       let userSession: Session | null = null;
 
+      const redirectUrl = typeof window !== 'undefined' ? `${window.location.origin}/login` : 'https://mealbridge-three.vercel.app/login';
+
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
+          emailRedirectTo: redirectUrl,
           data: {
             name: data.name,
             role: data.role,
