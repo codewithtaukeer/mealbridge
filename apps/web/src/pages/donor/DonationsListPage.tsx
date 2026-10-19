@@ -13,6 +13,7 @@ import {
   Clock,
   ArrowRight,
   Calendar,
+  XCircle,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -22,6 +23,31 @@ export function DonationsListPage() {
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [cancellingDonation, setCancellingDonation] = useState<Donation | null>(null);
+  const [cancelReason, setCancelReason] = useState('');
+  const [isCancelling, setIsCancelling] = useState(false);
+
+  const handleCancelDonation = async () => {
+    if (!cancellingDonation) return;
+    try {
+      setIsCancelling(true);
+      const res = await api.post(`/donations/${cancellingDonation.id}/cancel`, {
+        reason: cancelReason.trim() || 'Cancelled by donor before NGO claim',
+      });
+      if (res.error) {
+        toast.error(res.error.message);
+      } else {
+        toast.success(`Listing "${cancellingDonation.title}" cancelled successfully`);
+        setCancellingDonation(null);
+        setCancelReason('');
+        await fetchDonations();
+      }
+    } catch {
+      toast.error('Failed to cancel donation');
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   const fetchDonations = async () => {
     try {
@@ -211,17 +237,85 @@ export function DonationsListPage() {
                   </div>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-black/5 flex items-center justify-between">
+                <div className="pt-4 mt-4 border-t border-black/5 flex items-center justify-between gap-2">
                   <Link
                     to={`/donor/donations/${donation.id}`}
                     className="text-xs font-bold text-neon-pulse hover:underline flex items-center gap-1"
                   >
                     View Details & Matches <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
+
+                  {donation.status === 'AVAILABLE' && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-[11px] h-7 px-2.5 text-soft-coral border-soft-coral/30 hover:bg-soft-coral/10 hover:border-soft-coral"
+                      onClick={() => setCancellingDonation(donation)}
+                    >
+                      Cancel Listing
+                    </Button>
+                  )}
                 </div>
               </GlassCard>
             );
           })}
+        </div>
+      )}
+
+      {/* Cancellation Confirmation Modal */}
+      {cancellingDonation && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <GlassCard variant="light" padding="lg" className="max-w-md w-full border-white/80 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-soft-coral/20 flex items-center justify-center text-soft-coral">
+                <XCircle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-lg text-obsidian-shell">
+                  Cancel Food Listing
+                </h3>
+                <span className="text-xs text-slate-text">Permitted only before an NGO claims</span>
+              </div>
+            </div>
+
+            <p className="text-xs text-obsidian-shell leading-relaxed">
+              Are you sure you want to cancel the listing for <span className="font-bold">{cancellingDonation.title}</span> ({cancellingDonation.quantity} {cancellingDonation.unit.toLowerCase()})? This will immediately remove it from all NGO discovery feeds.
+            </p>
+
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-semibold text-slate-text uppercase tracking-[0.05em]">
+                Cancellation Reason (Optional)
+              </label>
+              <Input
+                placeholder="e.g. Accidental entry, inventory change, food quality issue"
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+              />
+            </div>
+
+            <div className="pt-2 flex items-center justify-end gap-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setCancellingDonation(null);
+                  setCancelReason('');
+                }}
+                disabled={isCancelling}
+              >
+                Keep Listing
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-soft-coral border-soft-coral hover:bg-soft-coral/10"
+                isLoading={isCancelling}
+                onClick={handleCancelDonation}
+              >
+                Confirm Cancellation
+              </Button>
+            </div>
+          </GlassCard>
         </div>
       )}
     </div>

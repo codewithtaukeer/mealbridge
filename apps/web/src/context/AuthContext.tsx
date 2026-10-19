@@ -56,11 +56,58 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Check initial Supabase session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
       if (session) {
+        setSession(session);
         fetchProfile().finally(() => setIsLoading(false));
       } else {
-        setIsLoading(false);
+        // Restore demo session from localStorage if it exists
+        const demoToken = localStorage.getItem('mealbridge_demo_token');
+        const demoRole = localStorage.getItem('mealbridge_demo_role') as UserRole | null;
+        const demoEmail = localStorage.getItem('mealbridge_demo_email');
+        if (demoToken && demoRole) {
+          const email = demoEmail || `${demoRole.toLowerCase()}@demo.mealbridge.org`;
+          const userIdMap: Record<UserRole, string> = {
+            DONOR: 'demo-donor-user-1', RECIPIENT: 'demo-recipient-user-1',
+            VOLUNTEER: 'demo-volunteer-user-1', ADMIN: 'demo-admin-user-1'
+          };
+          const orgIdMap: Record<UserRole, string> = {
+            DONOR: 'demo-donor-org-1', RECIPIENT: 'demo-recipient-org-1',
+            VOLUNTEER: 'demo-volunteer-org-1', ADMIN: 'demo-admin-org-1'
+          };
+          const nameMap: Record<UserRole, string> = {
+            DONOR: 'Chef Rajesh (Grand Royal Hotel)',
+            RECIPIENT: 'Sister Teresa (Hope Shelter NGO)',
+            VOLUNTEER: 'Amit Kumar (Express Volunteer)',
+            ADMIN: 'Chief Operations Officer (Admin)'
+          };
+          const restoredUser: User = {
+            id: userIdMap[demoRole], email, name: nameMap[demoRole], role: demoRole,
+            organizationId: orgIdMap[demoRole], isActive: true, emailVerified: true,
+            createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+          };
+          const restoredOrg: Organization = {
+            id: orgIdMap[demoRole],
+            name: demoRole === 'DONOR' ? 'Grand Royal Hotel & Restaurant' : demoRole === 'RECIPIENT' ? 'Hope Community Shelter & Kitchen' : 'MealBridge Rapid Volunteers',
+            type: demoRole === 'DONOR' ? 'RESTAURANT' : 'NGO',
+            phone: demoRole === 'DONOR' ? '+91 98765 11223' : '+91 98765 99887',
+            email, address: demoRole === 'DONOR' ? 'Civil Lines, MG Marg' : 'Katra Old Road',
+            city: 'Prayagraj', state: 'UP', pinCode: '211001',
+            verificationStatus: 'VERIFIED', isActive: true,
+            createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+          };
+          const demoSession: Session = {
+            access_token: demoToken, token_type: 'bearer', expires_in: 3600,
+            refresh_token: 'demo-refresh',
+            user: { id: 'demo-supabase-id', app_metadata: {}, user_metadata: {}, aud: 'authenticated', created_at: '' }
+          };
+          setUser(restoredUser);
+          setRole(demoRole);
+          setOrganization(restoredOrg);
+          setSession(demoSession);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
       }
     });
 
@@ -72,9 +119,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (newSession) {
         await fetchProfile();
       } else {
-        setUser(null);
-        setRole(null);
-        setOrganization(null);
+        // Only clear if not in demo mode
+        const demoToken = localStorage.getItem('mealbridge_demo_token');
+        if (!demoToken) {
+          setUser(null);
+          setRole(null);
+          setOrganization(null);
+        }
       }
       setIsLoading(false);
     });
@@ -94,8 +145,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         // If Supabase credentials are placeholder or offline, enable demo pilot access
+        // Also allow demo accounts (donor@, ngo@, volunteer@, admin@) to bypass real auth
         const isPlaceholder = !import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY.includes('placeholder');
-        if (isPlaceholder || error.message.includes('fetch failed') || error.message.includes('Invalid API key')) {
+        const isDemoAccount = email.startsWith('donor@') || email.startsWith('ngo@') || email.startsWith('volunteer@') || email.startsWith('admin@') || email.startsWith('recipient@');
+        if (isPlaceholder || isDemoAccount || error.message.includes('fetch failed') || error.message.includes('Invalid API key') || error.message.includes('Invalid login credentials')) {
           const roleFromEmail: UserRole = email.includes('admin') ? 'ADMIN' : email.includes('recipient') || email.includes('ngo') ? 'RECIPIENT' : email.includes('volunteer') ? 'VOLUNTEER' : 'DONOR';
           const userIdMap: Record<UserRole, string> = {
             DONOR: 'demo-donor-user-1',
@@ -140,6 +193,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setOrganization(mockOrg);
           localStorage.setItem('mealbridge_demo_token', 'demo-token');
           localStorage.setItem('mealbridge_demo_role', roleFromEmail);
+          localStorage.setItem('mealbridge_demo_email', email);
           setSession({ access_token: 'demo-token', token_type: 'bearer', expires_in: 3600, refresh_token: 'demo-ref', user: { id: 'demo-supabase-id', app_metadata: {}, user_metadata: {}, aud: 'authenticated', created_at: '' } });
           toast.success(`Signed in as ${roleFromEmail}: ${mockUser.name}`);
           return { success: true };

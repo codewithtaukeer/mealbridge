@@ -50,8 +50,15 @@ export function AvailableFoodPage() {
       const res = await api.post(`/donations/${donation.id}/reserve`);
       if (res.error) {
         toast.error(res.error.message);
+        if (res.error.code === 'ALREADY_RESERVED') {
+          // Immediately remove already reserved item from local listing
+          setDonations((prev) => prev.filter((d) => d.id !== donation.id));
+          setConfirmModalDonation(null);
+        }
       } else {
         toast.success(`Reserved ${donation.quantity} ${donation.unit.toLowerCase()} of ${donation.title}!`);
+        // Immediately remove claimed donation from local available state
+        setDonations((prev) => prev.filter((d) => d.id !== donation.id));
         setConfirmModalDonation(null);
         await fetchAvailableFood();
       }

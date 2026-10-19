@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { HeartHandshake, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { ShieldCheck, ArrowUpRight } from 'lucide-react';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -13,10 +13,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-white/10">
           {/* Brand Info */}
           <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="flex items-center gap-3 select-none">
-              <div className="w-9 h-9 rounded-xl bg-deep-abyss border border-neon-pulse/30 flex items-center justify-center p-1.5 shadow-md">
-                <HeartHandshake className="w-5 h-5 text-neon-pulse" />
-              </div>
+            <Link to="/" className="flex items-center gap-3 select-none group">
+              <img
+                src="/mealbridge-symbol.png"
+                alt="MealBridge Logo"
+                className="h-9 w-auto object-contain transition-transform group-hover:scale-105"
+              />
               <span className="text-2xl font-display font-medium tracking-tight text-pure-white">
                 Meal<span className="text-neon-pulse">Bridge</span>
               </span>

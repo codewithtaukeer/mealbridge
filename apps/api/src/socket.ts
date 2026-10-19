@@ -162,10 +162,13 @@ export function publishDomainEvent(
 
       case 'rescue.assigned':
       case 'rescue.pickup_confirmed':
-      case 'rescue.delivery_confirmed':
       case 'rescue.failed':
       case 'rescue.cancelled':
         io.to(`rescue:${entityId}`).to('admin:operations').emit('domain:event', eventPayload);
+        break;
+
+      case 'rescue.delivery_confirmed':
+        io.to(`rescue:${entityId}`).to('role:DONOR').to('role:RECIPIENT').to('admin:operations').emit('domain:event', eventPayload);
         break;
 
       case 'organization.verification_requested':

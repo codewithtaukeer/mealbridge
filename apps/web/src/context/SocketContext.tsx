@@ -78,7 +78,10 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
           });
           break;
         case 'rescue.delivery_confirmed':
-          toast.success('Food delivery confirmed and verified!');
+          toast.success('Food received! Delivery confirmed & verified by recipient NGO desk. 🍱✅', {
+            duration: 6000,
+            icon: '🎉',
+          });
           break;
         default:
           break;

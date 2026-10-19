@@ -59,19 +59,17 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group select-none">
-            <div className="relative w-10 h-10 rounded-xl bg-deep-abyss border border-neon-pulse/30 flex items-center justify-center shadow-md overflow-hidden p-1 transition-transform duration-200 group-hover:scale-105">
-              <img
-                src="/mealbridge-logo.png"
-                alt="MealBridge Logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
+            <img
+              src="/mealbridge-symbol.png"
+              alt="MealBridge Logo"
+              className="h-11 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+            />
             <div className="flex flex-col">
               <span className="text-xl font-display font-medium tracking-tight text-pure-white group-hover:text-neon-pulse transition-colors">
                 Meal<span className="text-neon-pulse">Bridge</span>
               </span>
               <span className="text-[9px] uppercase font-medium tracking-[0.05em] text-slate-text -mt-0.5 hidden sm:block">
-                Good Food · No Waste
+                Good Food · No Waste · Together
               </span>
             </div>
           </Link>

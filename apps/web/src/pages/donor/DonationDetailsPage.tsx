@@ -116,7 +116,7 @@ export function DonationDetailsPage() {
           <ArrowLeft className="w-3.5 h-3.5" /> Back to My Donations
         </Link>
 
-        {donation.status !== 'DELIVERED' && donation.status !== 'CANCELLED' && (
+        {donation.status === 'AVAILABLE' && (
           <Button
             variant="outline"
             size="sm"
@@ -379,7 +379,7 @@ export function DonationDetailsPage() {
               </h3>
             </div>
             <p className="text-xs text-slate-text leading-relaxed">
-              Are you sure you want to cancel this donation? If an NGO has reserved this food, they will be notified immediately.
+              Are you sure you want to cancel this donation? This action is only permitted before an NGO claims the listing and will immediately remove it from all discovery feeds.
             </p>
 
             <div className="space-y-1.5">

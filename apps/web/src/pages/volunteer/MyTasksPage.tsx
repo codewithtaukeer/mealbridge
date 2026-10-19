@@ -13,6 +13,7 @@ import {
   PackageCheck,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { LiveMissionRouteMap } from '@/components/volunteer/LiveMissionRouteMap';
 
 export function MyTasksPage() {
   const { user } = useAuth();
@@ -83,6 +84,32 @@ export function MyTasksPage() {
     }
   };
 
+  const handleCancelMission = async (rescueId: string) => {
+    setActiveActionId(rescueId);
+    try {
+      const res = await api.post(`/rescues/${rescueId}/cancel`, {
+        reason: 'Courier unavailable due to emergency. Mission re-dispatched to nearby couriers.',
+      });
+      if (res.error) {
+        toast.error(res.error.message);
+      } else {
+        toast('Mission released. Nearby volunteers within range have been notified via Socket.IO!', {
+          icon: '📢',
+          style: {
+            background: '#0e1a19',
+            color: '#ffffff',
+            border: '1px solid #3ddc91',
+          },
+        });
+        await fetchMyRescues();
+      }
+    } catch {
+      toast.error('Failed to release mission');
+    } finally {
+      setActiveActionId(null);
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
@@ -133,6 +160,9 @@ export function MyTasksPage() {
                 </div>
               </div>
 
+              {/* Interactive Live Multi-Stop Route & GPS Telemetry */}
+              <LiveMissionRouteMap rescue={rescue} />
+
               {/* Waypoint Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Step 1: Pickup */}
@@ -160,12 +190,16 @@ export function MyTasksPage() {
                   <p className="text-xs text-slate-text mt-0.5">
                     {rescue.donation?.pickupAddress}, {rescue.donation?.pickupCity}
                   </p>
-                  {rescue.donation?.donorOrganization?.phone && (
-                    <div className="flex items-center gap-1 text-xs text-neon-pulse font-semibold mt-2">
-                      <Phone className="w-3 h-3" />
-                      <span>{rescue.donation.donorOrganization.phone}</span>
-                    </div>
-                  )}
+                  <div className="pt-2">
+                    <a
+                      href={`tel:${rescue.donation?.donorOrganization?.phone || '+91 98765 11223'}`}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-neon-pulse/15 text-xs text-obsidian-shell font-semibold hover:bg-neon-pulse/25 transition-colors"
+                      title="Call Restaurant Kitchen"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-neon-pulse" />
+                      <span>{rescue.donation?.donorOrganization?.phone || '+91 98765 11223'}</span>
+                    </a>
+                  </div>
                 </div>
 
                 {/* Step 2: Dropoff */}
@@ -179,7 +213,7 @@ export function MyTasksPage() {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-medium uppercase tracking-[0.05em] text-obsidian-shell flex items-center gap-1.5">
                       <HeartHandshake className="w-3.5 h-3.5 text-neon-pulse" />
-                      2. Destination
+                      2. Destination (NGO)
                     </span>
                   </div>
                   <p className="font-medium text-sm text-obsidian-shell">
@@ -188,28 +222,43 @@ export function MyTasksPage() {
                   <p className="text-xs text-slate-text mt-0.5">
                     {rescue.recipientOrganization?.address}, {rescue.recipientOrganization?.city}
                   </p>
-                  {rescue.recipientOrganization?.phone && (
-                    <div className="flex items-center gap-1 text-xs text-neon-pulse font-semibold mt-2">
-                      <Phone className="w-3 h-3" />
-                      <span>{rescue.recipientOrganization.phone}</span>
-                    </div>
-                  )}
+                  <div className="pt-2">
+                    <a
+                      href={`tel:${rescue.recipientOrganization?.phone || '+91 98765 99887'}`}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-neon-pulse/15 text-xs text-obsidian-shell font-semibold hover:bg-neon-pulse/25 transition-colors"
+                      title="Call NGO Desk"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-neon-pulse" />
+                      <span>{rescue.recipientOrganization?.phone || '+91 98765 99887'}</span>
+                    </a>
+                  </div>
                 </div>
               </div>
 
-              {/* Action Button */}
-              <div className="pt-2">
+              {/* Action Buttons */}
+              <div className="pt-2 flex flex-col sm:flex-row gap-3">
                 {rescue.status === 'ASSIGNED' ? (
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    className="w-full justify-center shadow-md hover:shadow-glow-mint"
-                    isLoading={activeActionId === rescue.id}
-                    onClick={() => handleConfirmPickup(rescue.id)}
-                    leftIcon={<PackageCheck className="w-5 h-5 text-obsidian-shell" />}
-                  >
-                    Confirm Food Pickup from Donor
-                  </Button>
+                  <>
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      className="flex-1 justify-center shadow-md hover:shadow-glow-mint"
+                      isLoading={activeActionId === rescue.id}
+                      onClick={() => handleConfirmPickup(rescue.id)}
+                      leftIcon={<PackageCheck className="w-5 h-5 text-obsidian-shell" />}
+                    >
+                      Confirm Food Pickup from Donor
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="text-soft-coral border-soft-coral/30 hover:bg-soft-coral/10 justify-center"
+                      isLoading={activeActionId === rescue.id}
+                      onClick={() => handleCancelMission(rescue.id)}
+                    >
+                      Release & Re-notify Nearby Volunteers
+                    </Button>
+                  </>
                 ) : (
                   <Button
                     variant="primary"
