@@ -19,7 +19,7 @@ const SocketContext = createContext<SocketContextType>({
 });
 
 export function SocketProvider({ children }: { children: React.ReactNode }) {
-  const { session } = useAuth();
+  const { session, refreshProfile } = useAuth();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const activeSubscriptions = useRef<Set<string>>(new Set());
@@ -122,6 +122,16 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
             duration: 6000,
             icon: '🎉',
           });
+          break;
+        case 'organization.verified':
+          // The server sends this event to the organization's room after admin approval.
+          // Refresh AuthContext so dashboards and publishing/claiming guards update immediately.
+          void refreshProfile();
+          toast.success('Your organization has been verified. Access is being updated.');
+          break;
+        case 'organization.rejected':
+          void refreshProfile();
+          toast.error('Your organization verification was rejected. Check the verification page for details.');
           break;
         default:
           break;

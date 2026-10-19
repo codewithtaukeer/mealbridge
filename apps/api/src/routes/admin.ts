@@ -166,11 +166,12 @@ adminRouter.get('/verifications', async (_req: Request, res: Response) => {
 adminRouter.post('/verifications/:id/approve', async (req: Request, res: Response) => {
   const orgId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
   try {
+    const verifiedAt = new Date();
     const approvedOrg = await prisma.organization.update({
       where: { id: orgId },
       data: {
         verificationStatus: 'VERIFIED',
-        verifiedAt: new Date(),
+        verifiedAt,
         verifiedById: req.user!.id,
       },
       include: {
@@ -181,6 +182,25 @@ adminRouter.post('/verifications/:id/approve', async (req: Request, res: Respons
         },
       },
     });
+
+    // Keep the REST access path aligned with Prisma. Some deployment paths use
+    // Supabase REST as a fallback for profile reads, so mirroring is best-effort.
+    try {
+      const { error: mirrorError } = await supabaseAdmin
+        .from('organizations')
+        .update({
+          verification_status: 'VERIFIED',
+          verified_at: verifiedAt.toISOString(),
+          verified_by_id: req.user!.id,
+          updated_at: verifiedAt.toISOString(),
+        })
+        .eq('id', orgId);
+      if (mirrorError) {
+        console.warn('[Admin /approve] Supabase status mirror failed:', mirrorError.message);
+      }
+    } catch (mirrorErr) {
+      console.warn('[Admin /approve] Supabase status mirror failed:', mirrorErr);
+    }
 
     recordAuditEvent({
       actorId: req.user!.id,
@@ -257,6 +277,7 @@ adminRouter.post('/verifications/:id/reject', async (req: Request, res: Response
   const rejectReason = reason || 'Incomplete documentation or unverified business registry ID';
 
   try {
+    const rejectedAt = new Date();
     const rejectedOrg = await prisma.organization.update({
       where: { id: orgId },
       data: {
@@ -271,6 +292,23 @@ adminRouter.post('/verifications/:id/reject', async (req: Request, res: Response
         },
       },
     });
+
+    // Mirror the status for profile reads that take the Supabase REST fallback path.
+    try {
+      const { error: mirrorError } = await supabaseAdmin
+        .from('organizations')
+        .update({
+          verification_status: 'REJECTED',
+          rejection_reason: rejectReason,
+          updated_at: rejectedAt.toISOString(),
+        })
+        .eq('id', orgId);
+      if (mirrorError) {
+        console.warn('[Admin /reject] Supabase status mirror failed:', mirrorError.message);
+      }
+    } catch (mirrorErr) {
+      console.warn('[Admin /reject] Supabase status mirror failed:', mirrorErr);
+    }
 
     recordAuditEvent({
       actorId: req.user!.id,

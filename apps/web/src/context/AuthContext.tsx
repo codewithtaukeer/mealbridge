@@ -5,6 +5,35 @@ import type { User, UserRole, Organization, OrganizationType } from '@mealbridge
 import type { Session } from '@supabase/supabase-js';
 import toast from 'react-hot-toast';
 
+/** Normalize status values returned by Prisma, Supabase REST, or older metadata. */
+function normalizeVerificationStatus(value: unknown): Organization['verificationStatus'] {
+  const raw = String(value ?? 'PENDING').trim().toUpperCase().replace(/[\s-]+/g, '_');
+  const normalized = raw === 'APPROVED' ? 'VERIFIED' : raw;
+  const allowed: Organization['verificationStatus'][] = [
+    'PENDING',
+    'UNDER_REVIEW',
+    'VERIFIED',
+    'REJECTED',
+    'SUSPENDED',
+  ];
+  return allowed.includes(normalized as Organization['verificationStatus'])
+    ? (normalized as Organization['verificationStatus'])
+    : 'PENDING';
+}
+
+function normalizeOrganization(value?: Organization | null): Organization | null {
+  if (!value) return null;
+
+  // Keep compatibility with either camelCase API responses or Supabase snake_case rows.
+  const raw = value as Organization & { verification_status?: unknown };
+  return {
+    ...value,
+    verificationStatus: normalizeVerificationStatus(
+      raw.verificationStatus ?? raw.verification_status,
+    ),
+  };
+}
+
 export interface SignUpData {
   name: string;
   email: string;
@@ -65,7 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (res.data?.user) {
         setUser(res.data.user);
         setRole(res.data.user.role);
-        setOrganization(res.data.organization || null);
+        setOrganization(normalizeOrganization(res.data.organization || null));
         return res.data.user;
       }
     } catch (err) {
@@ -99,7 +128,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             city: meta.city || 'Prayagraj',
             state: meta.state || 'UP',
             pinCode: meta.pinCode || '211001',
-            verificationStatus: meta.verificationStatus || 'PENDING',
+            verificationStatus: normalizeVerificationStatus(meta.verificationStatus),
             isActive: true,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -160,6 +189,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => {
       subscription.unsubscribe();
+    };
+  }, []);
+
+  // A verification may be approved while this tab remains open. Refresh the profile
+  // when the user returns to the app, even if a socket event was missed.
+  useEffect(() => {
+    let isRefreshingForVisibility = false;
+
+    const refreshWhenActive = async () => {
+      if (
+        typeof document === 'undefined' ||
+        document.visibilityState === 'hidden' ||
+        isRefreshingForVisibility ||
+        isFetchingRef.current
+      ) {
+        return;
+      }
+
+      isRefreshingForVisibility = true;
+      let startedFetch = false;
+      try {
+        const { data } = await supabase.auth.getSession();
+        if (!data.session || isFetchingRef.current) return;
+
+        startedFetch = true;
+        await fetchProfile(data.session);
+      } catch (err) {
+        console.warn('Profile refresh on app focus failed:', err);
+      } finally {
+        if (startedFetch) isFetchingRef.current = false;
+        isRefreshingForVisibility = false;
+      }
+    };
+
+    window.addEventListener('focus', refreshWhenActive);
+    document.addEventListener('visibilitychange', refreshWhenActive);
+    return () => {
+      window.removeEventListener('focus', refreshWhenActive);
+      document.removeEventListener('visibilitychange', refreshWhenActive);
     };
   }, []);
 
