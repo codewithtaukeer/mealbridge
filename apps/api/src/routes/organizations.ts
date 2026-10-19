@@ -8,6 +8,7 @@ import { recordAuditEvent } from '../services/audit';
 
 import { publishDomainEvent } from '../socket';
 import { mockPendingOrganizations } from './auth';
+import { addNotification } from './notifications';
 
 export const organizationRouter = Router();
 
@@ -120,9 +121,13 @@ organizationRouter.post(
   requireOrganization,
   async (req: Request, res: Response, next) => {
     try {
+      const user = req.user!;
+      const orgId = user.organizationId!;
+      let updatedOrg: any = null;
+
       try {
         const org = await prisma.organization.findUnique({
-          where: { id: req.user!.organizationId! },
+          where: { id: orgId },
         });
 
         if (org) {
@@ -130,7 +135,7 @@ organizationRouter.post(
             throw new AppError(400, 'ALREADY_VERIFIED', 'Organization is already verified');
           }
 
-          const updated = await prisma.organization.update({
+          updatedOrg = await prisma.organization.update({
             where: { id: org.id },
             data: {
               verificationStatus: 'UNDER_REVIEW',
@@ -138,38 +143,82 @@ organizationRouter.post(
           });
 
           recordAuditEvent({
-            actorId: req.user!.id,
-            actorRole: req.user!.role,
+            actorId: user.id,
+            actorRole: user.role,
             action: 'VERIFICATION_REQUESTED',
             resourceType: 'organization',
-            resourceId: updated.id,
+            resourceId: updatedOrg.id,
             ipAddress: req.ip,
-          });
-
-          publishDomainEvent('organization.verification_requested', updated.id, 'organization', ['role:ADMIN'], req.user!.id);
-
-          return res.status(200).json({
-            data: updated,
-            message: 'Verification request submitted successfully for administrative review',
           });
         }
       } catch (dbErr) {
         if (dbErr instanceof AppError) throw dbErr;
       }
 
-      // In-memory fallback
-      const mockOrg = mockPendingOrganizations.find((o) => o.id === req.user!.organizationId) || req.user?.organization;
-      if (mockOrg) {
-        mockOrg.verificationStatus = 'UNDER_REVIEW';
-        publishDomainEvent('organization.verification_requested', mockOrg.id, 'organization', ['role:ADMIN'], req.user!.id);
-        return res.status(200).json({
-          data: mockOrg,
-          message: 'Verification request submitted successfully for administrative review',
-        });
+      // If not in DB or DB down, update mock org
+      if (!updatedOrg) {
+        const existingMock = mockPendingOrganizations.find((o) => o.id === orgId) || user.organization;
+        if (existingMock) {
+          existingMock.verificationStatus = 'UNDER_REVIEW';
+          existingMock.updatedAt = new Date().toISOString();
+          updatedOrg = existingMock;
+        } else {
+          updatedOrg = {
+            id: orgId,
+            name: user.name + "'s Organization",
+            type: user.role === 'DONOR' ? 'RESTAURANT' : 'NGO',
+            phone: user.phone || '+91 98765 00000',
+            email: user.email,
+            address: 'Commercial District',
+            city: 'Prayagraj',
+            state: 'UP',
+            pinCode: '211001',
+            verificationStatus: 'UNDER_REVIEW',
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+        }
       }
 
+      // ALWAYS ensure mockPendingOrganizations has this organization for the admin verification queue
+      const existingIdx = mockPendingOrganizations.findIndex((o) => o.id === updatedOrg.id);
+      const queueEntry = {
+        ...updatedOrg,
+        verificationStatus: 'UNDER_REVIEW',
+        members: [
+          {
+            user: {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              phone: user.phone,
+            },
+          },
+        ],
+      };
+
+      if (existingIdx >= 0) {
+        mockPendingOrganizations[existingIdx] = queueEntry;
+      } else {
+        mockPendingOrganizations.unshift(queueEntry);
+      }
+
+      // Notify administrator immediately
+      addNotification({
+        roleTarget: 'ADMIN',
+        type: 'ORG_VERIFICATION_REQUESTED',
+        title: `Verification Request: ${updatedOrg.name}`,
+        message: `${updatedOrg.name} (${updatedOrg.type}) submitted credentials for verification review.`,
+        link: '/admin/verification',
+        resourceType: 'organization',
+        resourceId: updatedOrg.id,
+      });
+
+      publishDomainEvent('organization.verification_requested', updatedOrg.id, 'organization', ['role:ADMIN'], user.id);
+
       return res.status(200).json({
-        data: { id: req.user!.organizationId, verificationStatus: 'UNDER_REVIEW' },
+        data: updatedOrg,
         message: 'Verification request submitted successfully for administrative review',
       });
     } catch (err) {

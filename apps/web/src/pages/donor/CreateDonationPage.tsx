@@ -69,9 +69,18 @@ export function CreateDonationPage() {
     );
   };
 
+  const isVerified = organization?.verificationStatus === 'VERIFIED';
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
+
+    if (!isVerified) {
+      setErrorMessage(
+        `Your organization is currently ${organization?.verificationStatus || 'PENDING'}. You are not allowed to publish food listings until verified by an administrator.`
+      );
+      return;
+    }
 
     if (!title || !pickupDeadline || !pickupAddress || !pickupCity) {
       setErrorMessage('Please fill in all required fields.');
@@ -146,6 +155,27 @@ export function CreateDonationPage() {
             Provide transparent details so nearby recipient NGOs and volunteer dispatchers can claim and transport safely.
           </p>
         </div>
+
+        {!isVerified && (
+          <div className="p-4 rounded-xl bg-soft-coral/15 border border-soft-coral/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-soft-coral shrink-0 mt-0.5" />
+              <div className="text-xs text-pure-white space-y-1">
+                <p className="font-semibold text-soft-coral text-sm">
+                  Donation Publishing Restricted: Organization Not Verified
+                </p>
+                <p className="text-slate-text">
+                  Your organization status is <strong className="text-pure-white">{organization?.verificationStatus || 'PENDING'}</strong>. You are <strong className="text-pure-white">not allowed</strong> to post surplus food donations until verified by a MealBridge administrator.
+                </p>
+              </div>
+            </div>
+            <Link to="/verify-account" className="shrink-0">
+              <Button variant="outline" size="sm" className="text-xs text-pure-white border-white/20 hover:bg-white/10 whitespace-nowrap">
+                Submit Documents &rarr;
+              </Button>
+            </Link>
+          </div>
+        )}
 
         <GlassCard variant="dark" padding="lg" className="border-white/10 shadow-lg">
           {errorMessage && (
@@ -367,13 +397,14 @@ export function CreateDonationPage() {
 
             <Button
               type="submit"
-              variant="primary"
+              variant={isVerified ? "primary" : "secondary"}
               size="lg"
-              className="w-full justify-center shadow-md hover:shadow-glow-mint mt-4"
+              className={`w-full justify-center shadow-md mt-4 ${!isVerified ? 'opacity-60 cursor-not-allowed bg-white/10 text-white/50 border border-white/10' : 'hover:shadow-glow-mint'}`}
               isLoading={isLoading}
-              rightIcon={<ArrowRight className="w-4 h-4 text-obsidian-shell" />}
+              disabled={!isVerified}
+              rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              Publish Food Listing
+              {isVerified ? 'Publish Food Listing' : 'Organization Verification Required to Publish'}
             </Button>
           </form>
         </GlassCard>

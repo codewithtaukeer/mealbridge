@@ -232,6 +232,16 @@ donationRouter.post(
     try {
       const validated = createDonationSchema.parse(req.body);
 
+      // Verify organization verification status
+      if (req.user?.role !== 'ADMIN' && req.user?.organization?.verificationStatus !== 'VERIFIED') {
+        const vStatus = req.user?.organization?.verificationStatus || 'PENDING';
+        throw new AppError(
+          403,
+          'ORGANIZATION_NOT_VERIFIED',
+          `Your organization is currently ${vStatus}. You are not allowed to publish surplus food listings until verified by an administrator. Please submit verification at /verify-account.`
+        );
+      }
+
       // Verify future deadline
       if (new Date(validated.pickupDeadline) <= new Date()) {
         throw new AppError(422, 'INVALID_DEADLINE', 'Pickup deadline must be in the future');
@@ -378,6 +388,16 @@ donationRouter.post(
   requireOrganization,
   async (req: Request, res: Response, next) => {
     try {
+      // Verify recipient organization verification status
+      if (req.user?.role !== 'ADMIN' && req.user?.organization?.verificationStatus !== 'VERIFIED') {
+        const vStatus = req.user?.organization?.verificationStatus || 'PENDING';
+        throw new AppError(
+          403,
+          'ORGANIZATION_NOT_VERIFIED',
+          `Your recipient organization is currently ${vStatus}. You are not allowed to claim surplus food until verified by an administrator. Please submit verification at /verify-account.`
+        );
+      }
+
       const donationId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
       const recipientOrgId = req.user!.organizationId!;
 

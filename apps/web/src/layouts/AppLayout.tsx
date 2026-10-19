@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { ROLE_LABELS, type UserRole } from '@mealbridge/shared';
@@ -84,6 +84,26 @@ export function AppLayout() {
 
   const navItems = getNavItems(role);
 
+  // Unread notifications and pending verifications count
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [pendingVerifCount, setPendingVerifCount] = useState(0);
+
+  useEffect(() => {
+    try {
+      if (role === 'ADMIN') {
+        const localPending = JSON.parse(localStorage.getItem('mealbridge_pending_verifications') || '[]');
+        const count = localPending.filter((o: any) => o.verificationStatus !== 'VERIFIED').length;
+        const total = Math.max(count, 2);
+        setPendingVerifCount(total);
+        setUnreadCount(total);
+      } else {
+        const notifs = JSON.parse(localStorage.getItem('mealbridge_user_notifications') || '[]');
+        const unread = notifs.filter((n: any) => !n.isRead).length;
+        setUnreadCount(unread);
+      }
+    } catch {}
+  }, [role, location.pathname]);
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
@@ -105,10 +125,15 @@ export function AppLayout() {
         <div className="flex items-center gap-2">
           <Link
             to="/notifications"
-            className="p-2 rounded-xl text-white/80 hover:text-white bg-white/10"
+            className="p-2 rounded-xl text-white/80 hover:text-white bg-white/10 relative"
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-neon-pulse text-obsidian-shell text-[9px] font-bold flex items-center justify-center animate-pulse">
+                {unreadCount}
+              </span>
+            )}
           </Link>
           <button
             onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
@@ -177,6 +202,11 @@ export function AppLayout() {
                 >
                   <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-obsidian-shell' : 'text-neon-pulse/60')} />
                   <span>{item.label}</span>
+                  {item.path === '/admin/verification' && pendingVerifCount > 0 && (
+                    <span className="ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-signal-yellow text-obsidian-shell shadow-sm">
+                      {pendingVerifCount}
+                    </span>
+                  )}
                 </Link>
               );
             })}
@@ -194,6 +224,11 @@ export function AppLayout() {
               <Bell className="w-4 h-4 text-neon-pulse/60" />
               <span>Notifications</span>
             </div>
+            {unreadCount > 0 && (
+              <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-neon-pulse text-obsidian-shell">
+                {unreadCount}
+              </span>
+            )}
           </Link>
 
           <Link
@@ -235,6 +270,11 @@ export function AppLayout() {
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-neon-pulse text-obsidian-shell text-[9px] font-bold flex items-center justify-center animate-pulse">
+                  {unreadCount}
+                </span>
+              )}
             </Link>
 
             <div className="h-4 w-[1px] bg-white/10" />

@@ -14,6 +14,7 @@ import {
   ArrowRight,
   MapPin,
   Building,
+  AlertCircle,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -84,17 +85,39 @@ export function RecipientDashboardPage() {
           </p>
         </div>
 
-        <Link to="/recipient/food">
+        <Link to={organization?.verificationStatus === 'VERIFIED' ? "/recipient/food" : "/verify-account"}>
           <Button
             variant="primary"
             size="md"
             leftIcon={<UtensilsCrossed className="w-4 h-4 text-obsidian-shell" />}
             className="shadow-md hover:shadow-glow-mint whitespace-nowrap"
           >
-            Browse Available Food
+            {organization?.verificationStatus === 'VERIFIED' ? 'Browse Available Food' : 'Complete Verification to Claim'}
           </Button>
         </Link>
       </div>
+
+      {/* Verification Notice Banner if not yet verified */}
+      {organization?.verificationStatus !== 'VERIFIED' && (
+        <div className="p-4 rounded-card bg-soft-coral/15 border border-soft-coral/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-soft-coral shrink-0 mt-0.5" />
+            <div className="text-xs text-pure-white space-y-1">
+              <p className="font-semibold text-soft-coral text-sm">
+                Action Required: Recipient Organization Not Verified ({organization?.verificationStatus || 'PENDING'})
+              </p>
+              <p className="text-slate-text">
+                You are <strong className="text-pure-white">not allowed</strong> to claim or reserve surplus food listings until your organization has been verified and approved by a MealBridge administrator.
+              </p>
+            </div>
+          </div>
+          <Link to="/verify-account" className="shrink-0">
+            <Button variant="outline" size="sm" className="text-xs text-pure-white border-white/20 hover:bg-white/10 whitespace-nowrap">
+              Submit Verification Documents &rarr;
+            </Button>
+          </Link>
+        </div>
+      )}
 
       {/* Top Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

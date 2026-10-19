@@ -5,6 +5,7 @@ import { donationRouter, mockDonations } from './donations';
 import { rescueRouter, mockRescues } from './rescues';
 import { needRouter } from './needs';
 import { adminRouter } from './admin';
+import { notificationRouter } from './notifications';
 
 export const apiRouter = Router();
 
@@ -33,5 +34,5 @@ apiRouter.use('/donations', donationRouter);
 apiRouter.use('/rescues', rescueRouter);
 apiRouter.use('/needs', needRouter);
 apiRouter.use('/admin', adminRouter);
-// apiRouter.use('/notifications', notificationRouter);
+apiRouter.use('/notifications', notificationRouter);
 // apiRouter.use('/analytics', analyticsRouter);

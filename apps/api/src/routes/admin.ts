@@ -7,6 +7,7 @@ import { AppError } from '../middleware/error-handler';
 import { recordAuditEvent } from '../services/audit';
 import { publishDomainEvent } from '../socket';
 import { mockPendingOrganizations } from './auth';
+import { addNotification } from './notifications';
 
 export const adminRouter = Router();
 
@@ -67,28 +68,37 @@ adminRouter.get('/stats', async (_req: Request, res: Response, next) => {
  */
 adminRouter.get('/verifications', async (_req: Request, res: Response, next) => {
   try {
-    const pendingOrgs = await prisma.organization.findMany({
-      where: {
-        verificationStatus: { in: ['PENDING', 'UNDER_REVIEW'] },
-      },
-      orderBy: { createdAt: 'desc' },
-      include: {
-        members: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                name: true,
-                email: true,
-                phone: true,
+    let pendingOrgs: any[] = [];
+    try {
+      pendingOrgs = await prisma.organization.findMany({
+        where: {
+          verificationStatus: { in: ['PENDING', 'UNDER_REVIEW'] },
+        },
+        orderBy: { createdAt: 'desc' },
+        include: {
+          members: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                  phone: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      });
+    } catch (_dbErr) {
+      // Fallback to in-memory
+    }
 
-    res.status(200).json({ data: [...mockPendingOrganizations.filter(o => o.verificationStatus !== 'VERIFIED'), ...pendingOrgs] });
+    const mockPending = mockPendingOrganizations.filter((o) => o.verificationStatus !== 'VERIFIED');
+    const combined = [...mockPending, ...pendingOrgs];
+    const unique = Array.from(new Map(combined.map((o) => [o.id, o])).values());
+
+    res.status(200).json({ data: unique });
   } catch (_err) {
     const pending = mockPendingOrganizations.filter((o) => o.verificationStatus !== 'VERIFIED');
     res.status(200).json({ data: pending });
@@ -102,9 +112,10 @@ adminRouter.get('/verifications', async (_req: Request, res: Response, next) => 
 adminRouter.post('/verifications/:id/approve', async (req: Request, res: Response, next) => {
   try {
     const orgId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    let approvedOrg: any = null;
 
     try {
-      const org = await prisma.organization.update({
+      approvedOrg = await prisma.organization.update({
         where: { id: orgId },
         data: {
           verificationStatus: 'VERIFIED',
@@ -118,23 +129,37 @@ adminRouter.post('/verifications/:id/approve', async (req: Request, res: Respons
         actorRole: req.user!.role,
         action: 'ORGANIZATION_VERIFIED',
         resourceType: 'organization',
-        resourceId: org.id,
+        resourceId: approvedOrg.id,
         ipAddress: req.ip,
       });
-
-      publishDomainEvent('organization.verified', org.id, 'organization', [`org:${org.id}`], req.user!.id);
-
-      return res.status(200).json({ data: org, message: 'Organization verified and approved successfully' });
     } catch (_dbErr) {
-      const mockOrg = mockPendingOrganizations.find((o) => o.id === orgId);
-      if (mockOrg) {
-        mockOrg.verificationStatus = 'VERIFIED';
-        mockOrg.verifiedAt = new Date().toISOString();
-        publishDomainEvent('organization.verified', mockOrg.id, 'organization', [`org:${mockOrg.id}`], req.user!.id);
-        return res.status(200).json({ data: mockOrg, message: 'Organization verified and approved successfully' });
-      }
-      return res.status(200).json({ data: { id: orgId, verificationStatus: 'VERIFIED' }, message: 'Organization verified successfully' });
+      // DB offline fallback
     }
+
+    // Always update mockPendingOrganizations entry as well
+    const mockOrg = mockPendingOrganizations.find((o) => o.id === orgId);
+    if (mockOrg) {
+      mockOrg.verificationStatus = 'VERIFIED';
+      mockOrg.verifiedAt = new Date().toISOString();
+      if (!approvedOrg) approvedOrg = mockOrg;
+    }
+
+    if (!approvedOrg) {
+      approvedOrg = { id: orgId, verificationStatus: 'VERIFIED' };
+    }
+
+    publishDomainEvent('organization.verified', orgId, 'organization', [`org:${orgId}`], req.user!.id);
+
+    // Notify organization
+    addNotification({
+      type: 'ORG_VERIFIED',
+      title: 'Organization Verified & Approved',
+      message: `Your organization "${approvedOrg.name || 'Account'}" has been approved by admin. You now have full operational clearance!`,
+      resourceType: 'organization',
+      resourceId: orgId,
+    });
+
+    return res.status(200).json({ data: approvedOrg, message: 'Organization verified and approved successfully' });
   } catch (err) {
     next(err);
   }
@@ -148,13 +173,15 @@ adminRouter.post('/verifications/:id/reject', async (req: Request, res: Response
   try {
     const orgId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
     const { reason } = req.body as { reason?: string };
+    const rejectReason = reason || 'Incomplete documentation or unverified business registry ID';
+    let rejectedOrg: any = null;
 
     try {
-      const org = await prisma.organization.update({
+      rejectedOrg = await prisma.organization.update({
         where: { id: orgId },
         data: {
           verificationStatus: 'REJECTED',
-          rejectionReason: reason || 'Documentation could not be verified by compliance team',
+          rejectionReason: rejectReason,
         },
       });
 
@@ -163,24 +190,34 @@ adminRouter.post('/verifications/:id/reject', async (req: Request, res: Response
         actorRole: req.user!.role,
         action: 'ORGANIZATION_REJECTED',
         resourceType: 'organization',
-        resourceId: org.id,
-        details: { reason },
+        resourceId: rejectedOrg.id,
+        details: { reason: rejectReason },
         ipAddress: req.ip,
       });
+    } catch (_dbErr) {}
 
-      publishDomainEvent('organization.rejected', org.id, 'organization', [`org:${org.id}`], req.user!.id);
-
-      return res.status(200).json({ data: org, message: 'Organization verification rejected' });
-    } catch (_dbErr) {
-      const mockOrg = mockPendingOrganizations.find((o) => o.id === orgId);
-      if (mockOrg) {
-        mockOrg.verificationStatus = 'REJECTED';
-        mockOrg.rejectionReason = reason || 'Documentation could not be verified by compliance team';
-        publishDomainEvent('organization.rejected', mockOrg.id, 'organization', [`org:${mockOrg.id}`], req.user!.id);
-        return res.status(200).json({ data: mockOrg, message: 'Organization verification rejected' });
-      }
-      return res.status(200).json({ data: { id: orgId, verificationStatus: 'REJECTED' }, message: 'Organization verification rejected' });
+    const mockOrg = mockPendingOrganizations.find((o) => o.id === orgId);
+    if (mockOrg) {
+      mockOrg.verificationStatus = 'REJECTED';
+      mockOrg.rejectionReason = rejectReason;
+      if (!rejectedOrg) rejectedOrg = mockOrg;
     }
+
+    if (!rejectedOrg) {
+      rejectedOrg = { id: orgId, verificationStatus: 'REJECTED', rejectionReason: rejectReason };
+    }
+
+    publishDomainEvent('organization.rejected', orgId, 'organization', [`org:${orgId}`], req.user!.id);
+
+    addNotification({
+      type: 'ORG_REJECTED',
+      title: 'Verification Request Update',
+      message: `Your organization verification could not be approved. Reason: ${rejectReason}`,
+      resourceType: 'organization',
+      resourceId: orgId,
+    });
+
+    return res.status(200).json({ data: rejectedOrg, message: 'Organization verification rejected' });
   } catch (err) {
     next(err);
   }

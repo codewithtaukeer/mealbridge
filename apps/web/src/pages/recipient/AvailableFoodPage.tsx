@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import { api } from '@/services/api';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Badge } from '@/components/ui/Badge';
@@ -14,10 +15,13 @@ import {
   MapPin,
   Building,
   HeartHandshake,
+  AlertCircle,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export function AvailableFoodPage() {
+  const { organization } = useAuth();
+  const isVerified = organization?.verificationStatus === 'VERIFIED';
   const [donations, setDonations] = useState<Donation[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
@@ -89,6 +93,27 @@ export function AvailableFoodPage() {
           Real-time food listings posted by verified donor restaurants, caterers, and hotels.
         </p>
       </div>
+
+      {!isVerified && (
+        <div className="p-4 rounded-xl bg-soft-coral/15 border border-soft-coral/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-soft-coral shrink-0 mt-0.5" />
+            <div className="text-xs text-pure-white space-y-1">
+              <p className="font-semibold text-soft-coral text-sm">
+                Food Reservation Restricted: Organization Not Verified
+              </p>
+              <p className="text-slate-text">
+                Your recipient organization status is <strong className="text-pure-white">{organization?.verificationStatus || 'PENDING'}</strong>. You are <strong className="text-pure-white">not allowed</strong> to claim surplus food until verified and approved by a MealBridge administrator.
+              </p>
+            </div>
+          </div>
+          <Link to="/verify-account" className="shrink-0">
+            <Button variant="outline" size="sm" className="text-xs text-pure-white border-white/20 hover:bg-white/10 whitespace-nowrap">
+              Submit Verification Documents &rarr;
+            </Button>
+          </Link>
+        </div>
+      )}
 
       {/* Filter and Search */}
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
@@ -190,13 +215,25 @@ export function AvailableFoodPage() {
                   Full Safety Specs
                 </Link>
 
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => setConfirmModalDonation(donation)}
-                >
-                  Claim Food
-                </Button>
+                {isVerified ? (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => setConfirmModalDonation(donation)}
+                  >
+                    Claim Food
+                  </Button>
+                ) : (
+                  <Link to="/verify-account">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="bg-black/5 text-slate-text border border-black/10 text-xs hover:bg-black/10"
+                    >
+                      Verify to Claim
+                    </Button>
+                  </Link>
+                )}
               </div>
             </GlassCard>
           ))}

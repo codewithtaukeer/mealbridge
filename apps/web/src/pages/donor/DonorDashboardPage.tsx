@@ -60,33 +60,35 @@ export function DonorDashboardPage() {
           </p>
         </div>
 
-        <Link to="/donor/donations/create">
+        <Link to={organization?.verificationStatus === 'VERIFIED' ? "/donor/donations/create" : "/verify-account"}>
           <Button
             variant="primary"
             size="md"
             leftIcon={<PlusCircle className="w-4 h-4 text-obsidian-shell" />}
             className="shadow-md hover:shadow-glow-mint whitespace-nowrap"
           >
-            Donate Surplus Food
+            {organization?.verificationStatus === 'VERIFIED' ? 'Donate Surplus Food' : 'Complete Verification to Donate'}
           </Button>
         </Link>
       </div>
 
       {/* Verification Notice Banner if not yet verified */}
       {organization?.verificationStatus !== 'VERIFIED' && (
-        <div className="p-4 rounded-card bg-signal-yellow/10 border border-signal-yellow/30 flex items-start justify-between gap-4">
+        <div className="p-4 rounded-card bg-soft-coral/15 border border-soft-coral/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-signal-yellow shrink-0 mt-0.5" />
-            <div className="text-xs text-obsidian-shell space-y-0.5">
-              <p className="font-bold">Organization Verification Under Evaluation</p>
-              <p className="text-obsidian-shell/80">
-                Your listings are active in pilot mode. Complete documentation verification to receive verified donor certification.
+            <AlertCircle className="w-5 h-5 text-soft-coral shrink-0 mt-0.5" />
+            <div className="text-xs text-pure-white space-y-1">
+              <p className="font-semibold text-soft-coral text-sm">
+                Action Required: Organization Not Verified ({organization?.verificationStatus || 'PENDING'})
+              </p>
+              <p className="text-slate-text">
+                You are <strong className="text-pure-white">not allowed</strong> to publish surplus food listings until your organization is verified and approved by a MealBridge administrator.
               </p>
             </div>
           </div>
-          <Link to="/verify-account">
-            <Button variant="outline" size="sm" className="text-xs whitespace-nowrap bg-white/60">
-              View Status
+          <Link to="/verify-account" className="shrink-0">
+            <Button variant="outline" size="sm" className="text-xs text-pure-white border-white/20 hover:bg-white/10 whitespace-nowrap">
+              Submit Verification Documents &rarr;
             </Button>
           </Link>
         </div>
